@@ -2,41 +2,50 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    /* Adjust as needed */
 }
+
 
 .card {
-    width: calc(33.33% - 10px);
-    /* Adjust width as needed for three cards per row */
     margin-bottom: 20px;
-    /* Adjust margin as needed */
     border: 1px solid #ccc;
-    /* Example border */
     padding: 20px;
-    /* Adjust padding as needed */
     box-sizing: border-box;
-    /* Ensure padding is included in the width calculation */
+    transition: .3s;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+ 
 .cardHeader {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-    /* Adjust margin as needed */
+}
+
+.cardHeader h3{
+    font-weight: bold;
+    margin: 0;
+
 }
 
 .icon {
     margin-right: 10px;
-    /* Adjust margin as needed */
+    width: 30px;
 }
 
 .separator {
-    height: 1px;
-    /* Adjust height as needed */
+    height: 2px;
     background-color: #ccc;
-    /* Example color */
     margin-bottom: 10px;
-    /* Adjust margin as needed */
 }
 
 .boldLabel {
@@ -44,30 +53,62 @@
 }
 
 .info {
-    margin-bottom: 5px;
-    /* Adjust margin as needed */
+    margin-bottom: 3px;
 }
 
-/* Define specific styles for different difficulty levels */
-.easy {
-    color: green;
-    /* Example color */
+.icon {
+    width: 30px;
+    height: 30px;
+    background: #1abc9c;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+
 }
+
+.difficulty {
+    display: inline-block;
+
+}
+
+.easy {
+    background-color: #EFE;
+    border: 1px solid #DED;
+    color: rgb(47, 145, 47);
+    cursor: pointer;
+    border-radius: 10%;
+}
+
 
 .medium {
-    color: orange;
-    /* Example color */
+    background-color: #FDF7DF;
+    border: 1px solid #FEEC6F;
+    color: #C9971C;
+    cursor: pointer;
+    border-radius: 10%;
 }
 
 .hard {
-    color: red;
-    /* Example color */
+    background-color: #FEE;
+    border: 1px solid #EDD;
+    color: #A66;
+    cursor: pointer;
+    border-radius: 10%;
+  
 }
-
+.easy,
+.medium,
+.hard {
+    display: inline-block;
+    padding: 2.4px;
+    
+}
 /* Media query for two cards per row on smaller screens */
 @media (max-width: 768px) {
     .card {
-        width: calc(50% - 20px);
+        width: calc(100% - 20px);
         /* Adjust width for two cards per row */
     }
 }
@@ -79,3 +120,5 @@
         /* Adjust width for one card per row */
     }
 }
+
+

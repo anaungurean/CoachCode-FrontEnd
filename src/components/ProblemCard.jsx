@@ -11,6 +11,9 @@ function ProblemCard({ problem }) {
     if (items.length < str.split(',').length) {
       formattedStr += ', etc.';
     }
+    if (str === '') {
+      formattedStr = '-';
+    }
     return formattedStr;
   };
 
