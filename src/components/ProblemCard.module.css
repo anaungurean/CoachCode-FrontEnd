@@ -1,0 +1,81 @@
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    /* Adjust as needed */
+}
+
+.card {
+    width: calc(33.33% - 10px);
+    /* Adjust width as needed for three cards per row */
+    margin-bottom: 20px;
+    /* Adjust margin as needed */
+    border: 1px solid #ccc;
+    /* Example border */
+    padding: 20px;
+    /* Adjust padding as needed */
+    box-sizing: border-box;
+    /* Ensure padding is included in the width calculation */
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    /* Adjust margin as needed */
+}
+
+.icon {
+    margin-right: 10px;
+    /* Adjust margin as needed */
+}
+
+.separator {
+    height: 1px;
+    /* Adjust height as needed */
+    background-color: #ccc;
+    /* Example color */
+    margin-bottom: 10px;
+    /* Adjust margin as needed */
+}
+
+.boldLabel {
+    font-weight: bold;
+}
+
+.info {
+    margin-bottom: 5px;
+    /* Adjust margin as needed */
+}
+
+/* Define specific styles for different difficulty levels */
+.easy {
+    color: green;
+    /* Example color */
+}
+
+.medium {
+    color: orange;
+    /* Example color */
+}
+
+.hard {
+    color: red;
+    /* Example color */
+}
+
+/* Media query for two cards per row on smaller screens */
+@media (max-width: 768px) {
+    .card {
+        width: calc(50% - 20px);
+        /* Adjust width for two cards per row */
+    }
+}
+
+/* Media query for one card per row on smaller screens */
+@media (max-width: 576px) {
+    .card {
+        width: 100%;
+        /* Adjust width for one card per row */
+    }
+}
