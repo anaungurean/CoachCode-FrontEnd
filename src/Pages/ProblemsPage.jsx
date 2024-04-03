@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import ProblemCard from '../../components/ProblemCard';  
-import NavBar from '../../components/NavBar';
-import Pagination from '../../components/Pagination';
+import ProblemCard from '../components/ProblemCard';  
+import NavBar from '../components/NavBar';
+import Pagination from '../components/Pagination';
 
 function ProblemsPage() {
   const [problems, setProblems] = useState([]);
