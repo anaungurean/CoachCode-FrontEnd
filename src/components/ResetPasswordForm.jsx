@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Info } from 'lucide-react';
 
 
-export default function ForgotPasswordForm () {
+export default function ResetPasswordForm () {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
 
@@ -47,8 +47,8 @@ export default function ForgotPasswordForm () {
     }
  return (
     <div className="w-9/12 bg-white px-10 py-20 rounded-3xl border-2 border-twilight-500 shadow-md shadow-twilight-100">
-        <h1 className='text-5xl pb-4 font-bold bg-gradient-to-r text-transparent from-twilight-500 to-twilight-100 bg-clip-text'>Forgot Password</h1>
-        <p className="font-semibold text-lg text-twilight-300 "> Enter your email address to reset your password</p>
+        <h1 className='text-5xl pb-4 font-bold bg-gradient-to-r text-transparent from-twilight-500 to-twilight-100 bg-clip-text'> Reset Password</h1>
+        <p className="font-semibold text-lg text-twilight-300 "> Enter your email address to reset your password </p>
         <form onSubmit={handleSubmit}>
         <div className="mt-8">
             <div>
