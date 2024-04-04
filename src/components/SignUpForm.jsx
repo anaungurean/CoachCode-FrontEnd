@@ -6,7 +6,7 @@ export default function SignUpForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState({ text: '', type: 'error' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,11 +21,11 @@ export default function SignUpForm() {
     const strongPasswordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[^\s]).{8,}$/;
 
     if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) {
-      setMessage('Please provide a valid email !');
+      setMessage({ text: 'Please provide a valid email!', type: 'error' });
     } else if (!password.trim() || !strongPasswordRegex.test(password)) {
-      setMessage('Please provide a stronger password !');
+      setMessage({ text: 'Please provide a stronger password!', type: 'error' });
     } else if (!confirmPassword.trim() || password !== confirmPassword) {
-      setMessage('Passwords do not match!');
+      setMessage({ text: 'Passwords do not match!', type: 'error' });
     } else {
       setMessage(''); 
       fetch('http://localhost:5000/users', {
@@ -46,7 +46,8 @@ export default function SignUpForm() {
           return response.json();
         })
         .then(data => {
-          console.log('User created successfully:', data);
+            setMessage({ text: data.message, type: 'success' });
+
         })
         .catch(error => {
           console.error('There was a problem with the fetch operation:', error.message);
@@ -99,11 +100,11 @@ export default function SignUpForm() {
           <button className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.02] ease-in-out py-3 rounded-xl md:bg-gradient-to-r from-twilight-500 to-twilight-100 text-white text-lg font-bold"> Sign Up</button>
         </div>
         <div className="flex flex-col gap-y-4">
-            {message && (
-            <p className="mt-2 flex items-center py-3 mb-4 text-lg font-semibold text-red-800 rounded-xl md:bg-gradient-to-r from-red-200 to-red-50 ">
-                <Info className="mr-2 ml-2" size={24} /> {message}
-              </p>
-            )}
+            {message.text && (
+            <p className={`mt-2 flex items-center py-3 mb-4 text-lg font-semibold rounded-xl ${message.type === 'success' ? 'text-green-800 bg-gradient-to-r from-green-200 to-green-50' : 'text-red-800 bg-gradient-to-r from-red-200 to-red-50'}`}>
+              <Info className="mr-2 ml-2" size={24} /> {message.text}
+            </p>
+          )}
           </div>
       </form>
       <div className="mt-4 flex items-center justify-center">

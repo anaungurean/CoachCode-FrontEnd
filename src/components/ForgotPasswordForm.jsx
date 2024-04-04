@@ -36,9 +36,10 @@ export default function ForgotPasswordForm () {
             }
             return response.json();
         })
-        .then(data => {
-            setMessage(data.message);
-            console.log('Password reset link sent:', data);
+        .then( () => {
+            localStorage.setItem('email', email);
+            window.location.href = '/validate-code';
+            
         })
         .catch(error => {
             console.error('There was a problem with the password reset:', error.message);

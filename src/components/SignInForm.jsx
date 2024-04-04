@@ -38,9 +38,9 @@ export default function SignInForm() {
         }
         return response.json();
       })
-      .then(data => {
-        setMessage(data.message);
-        console.log('Authentication successful:', data);
+      .then(()=> {
+        window.location.href = '/problems';
+         
       })
       .catch(error => {
         console.error('There was a problem with the authentication:', error.message);
