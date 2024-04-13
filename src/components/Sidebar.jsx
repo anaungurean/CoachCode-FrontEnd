@@ -1,5 +1,5 @@
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react"
-import logo from "../assets/logo.png"
+import logo from "../assets/Logo.png"
 import profile from "../assets/profile.png"
 import { createContext, useContext, useState } from "react"
 import { UserRound } from 'lucide-react';
@@ -7,13 +7,13 @@ import { UserRound } from 'lucide-react';
 const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
-    const [expanded, setExpanded] = useState(true)
+    const [expanded, setExpanded] = useState(true);
     return (
         <>
-            <aside className="h-screen fixed top-0">
-                <nav className="h-full flex flex-col bg-white border-r shadow-sm">
-                    <div className="p-4 pb-2 flex justify-between items-center">
-                        <img src={logo} className={`overflow-hidden transition-all ${expanded ? "w-32" : "w-0"}`} />
+            <aside className="fixed top-3 bottom-3 left-2">
+                <nav className={`h-full flex flex-col bg-white border-r shadow-sm ${expanded ? 'w-52' : 'w-16'} rounded-2xl transition-all`}>
+                    <div className="p-4 pb-2 flex justify-between items-center rounded-2xl">
+                        <img src={logo} className={`overflow-hidden transition-all ${expanded ? "w-32" : "w-0"}`} alt="Logo" />
                         <button onClick={() => setExpanded((curr) => !curr)} className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100">
                             {expanded ? <ChevronFirst /> : <ChevronLast />}
                         </button>
@@ -36,8 +36,9 @@ export default function Sidebar({ children }) {
                 </nav>
             </aside>
         </>
-    )
+    );
 }
+
 
 
 export function SidebarItem({ icon, text, active, alert }) {

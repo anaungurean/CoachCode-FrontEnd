@@ -25,11 +25,11 @@ export default function SignInForm() {
     })
       .then(response => {
         if (!response.ok ) {
-            if (response.status === 401) {
-                throw new Error('Invalid password !');
+            if (response.status === 404) {
+                throw new Error('Invalid email.');
             }
-            else if (response.status === 404) {
-                throw new Error('Invalid email !');
+            else if (response.status === 401 ) {
+                throw new Error('Invalid password.');
             } 
             else {
                 throw new Error('Something went wrong ! Please try again.');

@@ -38,7 +38,7 @@ export default function SignUpForm() {
         .then(response => {
           if (!response.ok) {
             if (response.status === 409) {
-              throw new Error('Email already exists !');
+              throw new Error('Email already exists !');       
             } else {
               throw new Error('Something went wrong ! Please try again.');
             }
@@ -51,14 +51,15 @@ export default function SignUpForm() {
         })
         .catch(error => {
           console.error('There was a problem with the fetch operation:', error.message);
-          setMessage(error.message);
-        });
+          setMessage({ text: error.message, type: 'fail' });
+
+         });
     }
   };
 
   return (
     <div className="w-9/12 bg-white px-10 py-20 rounded-3xl border-2 border-twilight-500 shadow-md shadow-twilight-100">
-      <h1 className='text-5xl font-bold bg-gradient-to-r text-transparent from-twilight-500 to-twilight-100 bg-clip-text'> Welcome to Genius</h1>
+      <h1 className='text-5xl font-bold bg-gradient-to-r text-transparent from-twilight-500 to-twilight-100 bg-clip-text'> Welcome to CoachCode</h1>
       <p className="font-semibold text-lg text-twilight-300 mt-4"> Create an account to get all features</p>
       <form onSubmit={handleSubmit}>
         <div className="mt-8">

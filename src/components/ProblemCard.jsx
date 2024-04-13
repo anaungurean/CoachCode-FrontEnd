@@ -3,7 +3,6 @@ import styles from './ProblemCard.module.css';
 import { BadgeX, Check } from 'lucide-react';
 
 function ProblemCard({ problem }) {
-  // Function to format topics and companies string
   const formatString = (str) => {
     const maxItems = 4;
     const items = str.split(',').map(item => item.trim()).slice(0, maxItems);
