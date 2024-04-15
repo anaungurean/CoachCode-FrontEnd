@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import ProblemCard from '../components/ProblemCard';  
-import ProblemPage from './ProblemPage';   
 import NavBar from '../components/SideNavBar';
 import Pagination from '../components/Pagination';
 import TopNavBar from '../components/TopNavBar';
@@ -10,7 +9,6 @@ function ProblemsPage() {
   const [originalProblems, setOriginalProblems] = useState([]);
   const [filteredProblems, setFilteredProblems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedProblem, setSelectedProblem] = useState(null);  
   const [problemsPerPage] = useState(9);
   const [totalPages, setTotalPages] = useState(1);  
 
@@ -35,17 +33,11 @@ function ProblemsPage() {
     setCurrentPage(pageNumber);
   };
 
-  const handleProblemCardClick = (problem) => {
-    setSelectedProblem(problem);
-  };
-  
   const handleFilter = (filteredProblems) => {
-  setFilteredProblems(filteredProblems);
-  setCurrentPage(1); // Resetați pagina curentă la prima pagină după aplicarea filtrului
-  setTotalPages(Math.ceil(filteredProblems.length / problemsPerPage)); // Recalculați numărul total de pagini
-};
-
-
+    setFilteredProblems([...filteredProblems]);
+    setCurrentPage(1);  
+    setTotalPages(Math.ceil(filteredProblems.length / problemsPerPage));  
+  };
 
   return (
     <div className="flex">
@@ -56,22 +48,19 @@ function ProblemsPage() {
         <TopNavBar currentPage={'Problems'}></TopNavBar>
         <FilterComponent onFilter={handleFilter} problems={originalProblems} />
         <div className="p-4"> 
-          {selectedProblem ? (   
-            <ProblemPage problem={selectedProblem} />
-          ) : (
             <div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {filteredProblems
                   .slice((currentPage - 1) * problemsPerPage, currentPage * problemsPerPage)
                   .map(problem => (
-                    <ProblemCard key={problem.id} problem={problem} onClick={() => handleProblemCardClick(problem)} />
+                    <ProblemCard key={problem.id} problem={problem} />
                   ))}
               </div>
               <div className="mt-4">
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
               </div>
             </div>
-          )}
+        
         </div>
       </div>
     </div>

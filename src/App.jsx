@@ -5,7 +5,7 @@ import ForgotPasswordPage from './Pages/ForgotPasswordPage';
 import ValidateCodePage from './Pages/ValidateCodePage';
 import ResetPasswordPage from './Pages/ResetPasswordPage';
 import ProblemsPage from './Pages/ProblemsPage';
-import ProblemPage from './Pages/ProblemPage'; // Import the ProfilePage component
+import ProblemPage from './Pages/ProblemPage';
 
 export default function App() {
   return (
@@ -17,7 +17,7 @@ export default function App() {
         <Route path="/validate-code" element={<ValidateCodePage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />  
         <Route path="/problems" element={<ProblemsPage />} />
-        <Route path="/problems/:problemId" element={<ProblemPage />} /> {/* New route for profile page */}
+        <Route path="/problems/:id" element={<ProblemPage />} />
       </Routes>
     </Router>
   );

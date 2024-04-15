@@ -340,7 +340,7 @@ export default function FilterComponent({ onFilter, problems }) {
 
      const renderBadges = (filters, setSelected) => {
         return filters.map((filter, index) => (
-            <span key={index} className="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 mr-2 mt-2 text-sm font-medium text-purple-700 ring-1 ring-inset border-dotted ring-purple-100 hover:ring-2 hover:ring-purple-400 shadow-sm">
+            <span key={index} className="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 mr-2 mt-2 text-sm font-medium text-purple-700  ring-1 ring-inset border-dotted ring-purple-200 hover:ring-2 shadow-sm">
                 {filter}
                 <button className="ml-1" onClick={() => removeFilter(filter, setSelected)}>
                 <MdOutlineCancel size={14} className="text-purple-300 hover:text-purple-700" />

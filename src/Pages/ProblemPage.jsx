@@ -1,43 +1,54 @@
-import  { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import NavBar from '../components/SideNavBar';
+import TopNavBar from '../components/TopNavBar';
+import ProblemDetailedInfo from '../components/ProblemDetailedInfo';
 
-const ProblemPage = ({ problemId }) => {
-  const [problem, setProblem] = useState(null);
+function ProblemPage() {
+  const { id } = useParams(); // Extract id from the route params
+  const [problem, setProblem] = useState(null); // State to hold the fetched problem
 
   useEffect(() => {
-   
-    const url = `http://localhost:5000/problems/1`;
-    fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Problem not found');
+    fetchProblem(id); // Fetch problem with the id from the route params
+  }, [id]); // Re-fetch problem whenever the id changes
+
+    const fetchProblem = (id) => {
+    fetch(`http://localhost:5000/problems/${id}`, {
+        method: 'GET', // Use GET method to fetch the problem
+        headers: {
+        'Content-Type': 'application/json'
         }
-        return response.json();
-      })
-      .then(data => setProblem(data))
-      .catch(error => console.error('Error fetching problem:', error));
-  }, [problemId]);
+    })
+    .then(response => {
+        if (!response.ok) {
+        throw new Error('Problem not found'); // Throw an error if problem not found
+        }
+        return response.json(); // Parse response JSON
+    })
+    .then(data => {
+        setProblem(data); // Update state with the fetched problem
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+    };
+
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">Profile Page</h1>
-      {problem ? (
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-2">{problem.title}</h2>
-          <p className="text-gray-700 mb-2">Description: {problem.description}</p>
-          <p className="text-gray-700 mb-2">Difficulty: {problem.difficulty}</p>
-          <p className="text-gray-700 mb-2">Companies: {problem.companies}</p>
-          <p className="text-gray-700 mb-2">Related Topics: {problem.related_topics}</p>
-          <p className="text-gray-700 mb-2">Asked by FAANG: {problem.asked_by_faang ? 'Yes' : 'No'}</p>
-          <p className="text-gray-700 mb-2">Similar Questions: {problem.similar_questions}</p>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+    <div className="flex">
+      <div className="w-1/6"> 
+        <NavBar/>
+      </div>
+      <div className='w-5/6'>
+        <TopNavBar currentPage={'Problems'}></TopNavBar>
+        {/* Render the fetched problem */}
+        {problem && (
+          <ProblemDetailedInfo problem={problem} />
+        )}
+      </div>
     </div>
   );
-};
-ProblemPage.propTypes = {
-  problemId: PropTypes.number.isRequired,
-};
+}
+
 export default ProblemPage;
