@@ -22,11 +22,12 @@ const DropdownCheckbox = ({ title, options, selectedOptions, setSelectedOptions 
     );
 
     return (
-        <div className="relative" onMouseLeave={() => setIsOpen(false)}>
+        // <div className="relative" onMouseLeave={() => setIsOpen(false)}>
+        <div className="relative"> 
             <button
                 type="button"
                 onClick={toggleDropdown}
-                className="inline-flex justify-between items-center w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-twilight-100"
+                className="inline-flex justify-between items-center w-full px-4 py-2  border border-gray-300 rounded-md focus:outline-none focus:border-twilight-100"
             >
                 <span className="text-gray-400">{title}</span>
                 <svg className={`w-6 h-6 ${isOpen ? "transform rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -40,13 +41,14 @@ const DropdownCheckbox = ({ title, options, selectedOptions, setSelectedOptions 
                             <div className="flex flex-col">
                                 {filteredOptions.slice(0, 3).map(option => (
                                     <label key={option.value} className="flex items-center">
-                                        <input
-                                            type="checkbox"
-                                            value={option.value}
-                                            checked={selectedOptions.includes(option.value)}
-                                            onChange={() => handleCheckboxChange(option.value)}
-                                            className="h-5 w-5 text-blue-600 bg-white rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
-                                        />
+                                     <input
+                                        type="checkbox"
+                                        value={option.value}
+                                        className="form-checkbox h-5 w-5 text-twilight-400 border-gray-300 rounded-xl" 
+                                        checked={selectedOptions.includes(option.value)}
+                                        onChange={() => handleCheckboxChange(option.value)}
+                                        
+                                     />
                                         <span className="ml-2">{option.label}</span>
                                     </label>
                                 ))}
@@ -60,10 +62,10 @@ const DropdownCheckbox = ({ title, options, selectedOptions, setSelectedOptions 
                                         placeholder="Search..."
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 mb-2 mr-2"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-twilight-200 mb-2 mr-2"
                                     />
                                 </div>
-                                <div className="overflow-y-auto max-h-32 w-full p-2">
+                                <div className="overflow-y-auto max-h-32 w-full p-2 ">
                                     {filteredOptions.slice(3).map(option => (
                                         <label key={option.value} className="flex items-center">
                                             <input
@@ -71,8 +73,9 @@ const DropdownCheckbox = ({ title, options, selectedOptions, setSelectedOptions 
                                                 value={option.value}
                                                 checked={selectedOptions.includes(option.value)}
                                                 onChange={() => handleCheckboxChange(option.value)}
-                                                className="h-5 w-5 text-blue-600 bg-white rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
-                                            />
+                                                className="form-checkbox h-5 w-5 text-twilight-400 border-gray-300 rounded-xl" 
+                                             />
+
                                             <span className="ml-2">{option.label}</span>
                                         </label>
                                     ))}

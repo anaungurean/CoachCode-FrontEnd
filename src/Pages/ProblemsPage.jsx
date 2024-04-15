@@ -7,22 +7,24 @@ import TopNavBar from '../components/TopNavBar';
 import FilterComponent from '../components/Filter';
 
 function ProblemsPage() {
-  const [problems, setProblems] = useState([]);
+  const [originalProblems, setOriginalProblems] = useState([]);
+  const [filteredProblems, setFilteredProblems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProblem, setSelectedProblem] = useState(null);  
   const [problemsPerPage] = useState(9);
-  const [totalPages, setTotalPages] = useState(1); // Initialize totalPages with a default value
-
+  const [totalPages, setTotalPages] = useState(1);  
 
   useEffect(() => {
     fetchProblems();
-  }, [currentPage]);
+  }, []);
 
   const fetchProblems = () => {
     fetch('http://localhost:5000/problems')
       .then(response => response.json())
       .then(data => {
-        setProblems(data);
+        setOriginalProblems(data);
+        setFilteredProblems(data);  
+        setTotalPages(Math.ceil(data.length / problemsPerPage));
       })
       .catch(error => {
         console.error('Error fetching data:', error);
@@ -33,18 +35,15 @@ function ProblemsPage() {
     setCurrentPage(pageNumber);
   };
 
-
   const handleProblemCardClick = (problem) => {
     setSelectedProblem(problem);
   };
 
   const handleFilter = (filteredProblems) => {
-    setProblems([...filteredProblems]);
-    setCurrentPage(1);
-    setTotalPages(Math.ceil(filteredProblems.length / problemsPerPage)); // Update totalPages after filtering
+    setFilteredProblems([...filteredProblems]);
+    setCurrentPage(1);  
+    setTotalPages(Math.ceil(filteredProblems.length / problemsPerPage));  
   };
-
-
 
   return (
     <div className="flex">
@@ -53,14 +52,14 @@ function ProblemsPage() {
       </div>
       <div className='w-5/6'>
         <TopNavBar currentPage={'Problems'}></TopNavBar>
-        <FilterComponent onFilter={handleFilter} problems={problems} />
+        <FilterComponent onFilter={handleFilter} problems={originalProblems} />
         <div className="p-4"> 
           {selectedProblem ? (   
             <ProblemPage problem={selectedProblem} />
           ) : (
             <div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {problems
+                {filteredProblems
                   .slice((currentPage - 1) * problemsPerPage, currentPage * problemsPerPage)
                   .map(problem => (
                     <ProblemCard key={problem.id} problem={problem} onClick={() => handleProblemCardClick(problem)} />

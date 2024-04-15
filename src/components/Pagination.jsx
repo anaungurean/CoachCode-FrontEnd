@@ -15,14 +15,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     }
   };
 
-  // Function to handle page click
   const handlePageClick = (pageNumber) => {
     onPageChange(pageNumber);
   };
 
-  // Function to generate an array of page numbers
   const generatePageNumbers = () => {
-    const visiblePages = 10; // Number of visible page links
+    const visiblePages = 10;  
     const pages = [];
     let startPage = Math.max(currentPage - Math.floor(visiblePages / 2), 1);
     let endPage = Math.min(startPage + visiblePages - 1, totalPages);
@@ -35,7 +33,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       pages.push(i);
     }
 
-    // Add ellipsis if necessary
     if (startPage > 1) {
       pages.unshift('...');
     }
@@ -47,7 +44,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 rounded-xl">
       <div>
         <p className="text-sm text-gray-700">
           Showing <span className="font-medium">{(currentPage - 1) * 10 + 1}</span> to{' '}
@@ -74,7 +71,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
               key={index}
               onClick={() => (typeof page === 'number' ? handlePageClick(page) : null)}
               className={`${
-                currentPage === page ? 'z-10 bg-indigo-600 text-white focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600' : ''
+                currentPage === page ? 'z-10 bg-twilight-200 text-white ' : ''
               } relative inline-flex items-center px-4 py-2 text-sm font-semibold`}
             >
               {page}

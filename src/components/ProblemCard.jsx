@@ -16,13 +16,18 @@ function ProblemCard({ problem }) {
     return formattedStr;
   };
 
+  const formatStringTitle = (str) => {
+    if (str.length <= 30) return str;
+    return str.slice(0, 30) + '...';
+  };
+
   return (
     <div className={styles.card}>
       <div className={styles.cardHeader}>
         <div className={styles.icon}>
           {problem.solved ? <Check size={20} /> : <BadgeX size={20} />}
         </div>
-        <h3>{problem.title}</h3>
+        <h3>{formatStringTitle(problem.title)}</h3>
       </div>
       <div className={styles.separator}></div>
       <p className={styles.info}><span className={styles.boldLabel}>Related Topics:</span> {formatString(problem.related_topics)}</p>

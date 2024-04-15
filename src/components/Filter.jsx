@@ -2,6 +2,8 @@ import { useState } from "react";
 import DropdownCheckbox from "./DropdownCheckbox";
 import { Search } from 'lucide-react';
 import PropTypes from 'prop-types';
+import { MdOutlineCancel } from "react-icons/md";
+
 
 export default function FilterComponent({ onFilter, problems }) {
 
@@ -319,7 +321,7 @@ export default function FilterComponent({ onFilter, problems }) {
 
         if (filterCriteria.askedByFaang && filterCriteria.askedByFaang.length > 0) {
         const askedByFaang = problem.asked_by_faang;
-        const askedByFaangMatches = filterCriteria.askedByFaang.includes(askedByFaang ? 'yes' : 'no');
+        const askedByFaangMatches = filterCriteria.askedByFaang.includes(askedByFaang ? 'Asked by FAANG' : 'Not asked by FAANG');
         if (!askedByFaangMatches) {
             return false;
         } 
@@ -328,8 +330,23 @@ export default function FilterComponent({ onFilter, problems }) {
         return true;
     });
 
-    console.log( filteredProblems.length)
     onFilter(filteredProblems);
+    };
+
+     const renderBadges = (filters, setSelected) => {
+        return filters.map((filter, index) => (
+            <span key={index} className="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 mr-2 mt-2 text-sm font-medium text-purple-700 ring-1 ring-inset border-dotted ring-purple-100 hover:ring-2 hover:ring-purple-400 shadow-sm">
+                {filter}
+                <button className="ml-1" onClick={() => removeFilter(filter, setSelected)}>
+                <MdOutlineCancel size={14} className="text-purple-300 hover:text-purple-700" />
+                </button>
+            </span>
+        ));
+    };
+
+    const removeFilter = (filter, setSelected) => {
+        setSelected(prevFilters => prevFilters.filter(item => item !== filter));
+        handleFilter(); // Trigger filtering again after removing a filter
     };
 
 
@@ -396,9 +413,9 @@ export default function FilterComponent({ onFilter, problems }) {
                         <DropdownCheckbox
                             title="Select difficulty"
                             options={[
-                                { label: 'Easy', value: 'easy' },
-                                { label: 'Medium', value: 'medium' },
-                                { label: 'Hard', value: 'hard' }
+                                { label: 'Easy', value: 'Easy' },
+                                { label: 'Medium', value: 'Medium' },
+                                { label: 'Hard', value: 'Hard' }
                             ]}
                             selectedOptions={selectedDifficulty}
                             setSelectedOptions={setSelectedDifficulty}
@@ -410,8 +427,8 @@ export default function FilterComponent({ onFilter, problems }) {
                         <DropdownCheckbox
                             title="Select choice"
                             options={[
-                                { label: 'Yes', value: 'yes' },
-                                { label: 'No', value: 'no' },
+                                { label: 'Yes', value: 'Asked by FAANG' },
+                                { label: 'No', value: 'Not asked by FAANG' },
                             ]}
                             selectedOptions={selectedAskedByFaang}
                             setSelectedOptions={setSelectedAskedByFaang}
@@ -428,8 +445,16 @@ export default function FilterComponent({ onFilter, problems }) {
                             <span className="text-twilight-500 text-xl font-semibold">Filter</span>
                         </div>
                     </button>
-                </div>
-                </div>
+        </div>
+
+         <div className="flex flex-wrap mt-4 ml-4 mr-2">
+                {renderBadges(selectedCompanies, setSelectedCompanies)}
+                {renderBadges(selectedTopics, setSelectedTopics)}
+                {renderBadges(selectedDifficulty, setSelectedDifficulty)}
+                {renderBadges(selectedAskedByFaang, setSelectedAskedByFaang)}
+        </div>
+
+    </div>
                 
             )}
         </div>
