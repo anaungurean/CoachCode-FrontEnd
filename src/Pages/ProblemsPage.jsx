@@ -38,12 +38,14 @@ function ProblemsPage() {
   const handleProblemCardClick = (problem) => {
     setSelectedProblem(problem);
   };
-
+  
   const handleFilter = (filteredProblems) => {
-    setFilteredProblems([...filteredProblems]);
-    setCurrentPage(1);  
-    setTotalPages(Math.ceil(filteredProblems.length / problemsPerPage));  
-  };
+  setFilteredProblems(filteredProblems);
+  setCurrentPage(1); // Resetați pagina curentă la prima pagină după aplicarea filtrului
+  setTotalPages(Math.ceil(filteredProblems.length / problemsPerPage)); // Recalculați numărul total de pagini
+};
+
+
 
   return (
     <div className="flex">

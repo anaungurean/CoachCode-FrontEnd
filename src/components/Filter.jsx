@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState,useEffect} from "react";
 import DropdownCheckbox from "./DropdownCheckbox";
-import { Search } from 'lucide-react';
+// import { Search } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { MdOutlineCancel } from "react-icons/md";
 
@@ -273,7 +273,7 @@ export default function FilterComponent({ onFilter, problems }) {
     };
 
     const handleFilter = () => {
-
+        
     const filterCriteria = {
         title: titleFilter,
         id: idFilter,
@@ -333,6 +333,11 @@ export default function FilterComponent({ onFilter, problems }) {
     onFilter(filteredProblems);
     };
 
+    useEffect(() => {
+        handleFilter(); // Apelează funcția de filtrare când se schimbă oricare dintre filtre
+    }, [titleFilter, idFilter, selectedCompanies, selectedTopics, selectedDifficulty, selectedAskedByFaang]);
+
+
      const renderBadges = (filters, setSelected) => {
         return filters.map((filter, index) => (
             <span key={index} className="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 mr-2 mt-2 text-sm font-medium text-purple-700 ring-1 ring-inset border-dotted ring-purple-100 hover:ring-2 hover:ring-purple-400 shadow-sm">
@@ -353,14 +358,14 @@ export default function FilterComponent({ onFilter, problems }) {
      return (
         <div className="w-full">
             <div className="flex items-center justify-between bg-gradient-to-r from-twilight-100 to-purple-100  px-4 py-3 rounded-2xl cursor-pointer text-twilight-500 mt-4 mr-2" onClick={toggleFilter}>
-                <h3 className="text-lg font-semibold">Find fast what you want to practice</h3>
+                <h3 className="text-lg font-semibold">Find faster what you want to practice </h3>
                 <svg className={`w-6 h-6 ${expanded ? "transform rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
             </div>
             {expanded && (
-                <div className="mt-4 mr-2 pt-4 pb-5 bg-white border border-twilight-100 rounded-2xl overflow-hidden">
-                <div className="grid grid-cols-2 gap-2 ">
+                <div className="mt-4 mr-2 pt-4 pb-20 bg-white border border-twilight-100 rounded-2xl overflow-hidden">
+                <div className="grid grid-cols-2 gap-1 ">
                     <div className="p-2 ml-2 ">
                         <label htmlFor="title" className="block mb-2 font-semibold">Title</label>
                         <input
@@ -436,7 +441,7 @@ export default function FilterComponent({ onFilter, problems }) {
                     </div>
 
                 </div>
-        <div className="flex mr-2 ml-2">
+        {/* <div className="flex mr-2 ml-2">
                     <button 
                         onClick={handleFilter} 
                         className="w-full mr-2 ml-2 mt-4 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl md:bg-gradient-to-r from-twilight-100 to-purple-100 text-white text-lg font-bold">
@@ -445,7 +450,7 @@ export default function FilterComponent({ onFilter, problems }) {
                             <span className="text-twilight-500 text-xl font-semibold">Filter</span>
                         </div>
                     </button>
-        </div>
+        </div> */}
 
          <div className="flex flex-wrap mt-4 ml-4 mr-2">
                 {renderBadges(selectedCompanies, setSelectedCompanies)}
