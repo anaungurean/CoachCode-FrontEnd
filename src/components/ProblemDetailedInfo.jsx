@@ -2,38 +2,7 @@ import PropTypes from 'prop-types';
 import { BadgeX, Check } from 'lucide-react';
 import styles from './ProblemCard.module.css';
 
-function extractExamplesAndConstraints(description) {
-  const examples = [];
-  let constraints = '';
-
-  const lines = description.split('\n');
-  let currentExample = null;
-  let isConstraintsSection = false;
-
-  for (const line of lines) {
-    if (line.startsWith('Example')) {
-      if (currentExample) {
-        examples.push(currentExample);
-      }
-      currentExample = { input: [], output: [] };
-      isConstraintsSection = false;
-    } else if (line.startsWith('Constraints')) {
-      isConstraintsSection = true;
-    } else if (isConstraintsSection) {
-      constraints += line.trim() + '\n';
-    } else if (line.startsWith('Input:')) {
-      currentExample.input.push(line.replace('Input: ', ''));
-    } else if (line.startsWith('Output:')) {
-      currentExample.output.push(line.replace('Output: ', ''));
-    }
-  }
-
-  if (currentExample) {
-    examples.push(currentExample);
-  }
-
-  return { examples, constraints: constraints.trim() };
-}
+ 
 
 function ProblemDetailedInfo({ problem }) {
   const relatedTopicsArray = problem.related_topics.split(',');
@@ -57,11 +26,10 @@ function ProblemDetailedInfo({ problem }) {
   let topicColorClass = 'bg-violet-50 text-violet-700 ring-violet-600/20';
   let companyColorClass = 'bg-fuchsia-50 text-fuchsia-700 ring-fuchsia-600/30';
 
-  const { examples, constraints } = extractExamplesAndConstraints(problem.description);
 
   return (
     <div className="card">
-      <div className="mt-10 mr-4 border pl-4 pt-4 pb-80 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md ">
+      <div className="mt-10 mr-4 border pl-4 pt-4 pb-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md ">
         <div className='flex items-center'>
           <div className={styles.icon}>
             {problem.solved ? <Check size={20} /> : <BadgeX size={20} />}
@@ -72,7 +40,6 @@ function ProblemDetailedInfo({ problem }) {
           <span className={`inline-flex items-center rounded-md px-2 py-1 ml-2 mt-2 text-sm font-medium ${difficultyColorClass} ring-1 ring-inset border-dotted hover:ring-2 shadow-sm`}>{problem.difficulty}</span>
 
           {firstTwoRelatedTopics.length > 0 && (
-            // Mapping over the first two related topics
             firstTwoRelatedTopics.map((topic, index) => (
                 <p key={index} className={`inline-flex items-center rounded-md px-2 py-1 ml-2 mt-2 text-sm font-medium ${topicColorClass} ring-1 ring-inset border-dotted hover:ring-2 shadow-sm`}>
                 {topic.trim()}
@@ -81,42 +48,92 @@ function ProblemDetailedInfo({ problem }) {
           )}
 
           {firstTwoCompanies.length > 0 && (
-            // Mapping over the first two companies
             firstTwoCompanies.map((company, index) => (
                 <p key={index} className={`inline-flex items-center rounded-md px-2 py-1 ml-2 mt-2 text-sm font-medium ${companyColorClass} ring-1 ring-inset border-dotted hover:ring-2 shadow-sm`}>
                 {company.trim()}
               </p>
             ))
           )}
+          </div>
+          </div>
 
-          {/* Display Examples */}
-          {examples.length > 0 && (
-            <div className="mt-4">
-              <h3 className="text-lg font-bold text-gray-800">Examples</h3>
-              {examples.map((example, index) => (
-                <div key={index} className="mt-2">
-                  <p><strong>Input:</strong> {example.input.join(', ')}</p>
-                  <p><strong>Output:</strong> {example.output.join(', ')}</p>
-                </div>
-              ))}
-            </div>
-          )}
-          
-          {/* Display Constraints */}
-          {constraints && (
-            <div className="mt-4">
-              <h3 className="text-lg font-bold text-gray-800">Constraints</h3>
-              <p className="mt-2 text-gray-600">{constraints}</p>
-            </div>
-          )}
-          
-          <div className="mt-4">
-            <h3 className="text-lg font-bold text-gray-800">Description</h3>
-            <p className="mt-2 text-gray-600">{problem.description}</p>
-           </div>
+            <div className="mt-2 mr-4 border pl-4 pt-4 pb-10 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md ">
+          {/* <h3 className="text-lg font-bold text-gray-800">Description</h3> */}
+          <div className="mt-2 text-black-900 text-base ">
+            {problem.description.split('\n').map((line, index) => (
+              <div key={index} className={(line.startsWith('Example') || line.startsWith('Constraints:')) ? 'font-bold pt-2 text-l text-twilight-400' : ''}>
+                {line.startsWith('`') && line.endsWith('`') ? (
+                  <div className="ml-6 mb-1">
+                    <ul className="list-disc list-inside">
+                    <li className="text-base text-gray-900 px-1 rounded-l ">
+                        <span className="bg-gray-100 hover:bg-gray-200">{line.substring(1, line.length - 1)}</span>
+                  </li>
+                    </ul>
+                  </div>
+                ) :
+                line.startsWith('Follow up') ? (
+                    <h1 className='mt-5'>
+                   {line.split(' ').map((word, wordIndex) => {
+
+                    if (word === 'Follow' || word === 'up:') {
+                      return (
+                        <span key={wordIndex} className="font-bold text-l text-twilight-400  ">
+                          {word}{' '}
+                        </span>
+                      );
+                    }
+                    else {
+                      return (
+                        <span key={wordIndex} className="text-base ml-1 text-gray-900 ">
+                          {word}{' '}
+                        </span>
+                      );
+                    }
+                    }
+                    )}
+                  </h1>
+                    
+                    
+                ):
+                (
+                  <p>
+                    {line.split(' ').map((word, wordIndex) => {
+                      if (word === 'Input:' || word === 'Output:' || word === 'Explanation:') {
+                        return (
+                          <span key={wordIndex} className="font-semibold text-base text-twilight-300 ml-4">
+                            {word}{' '}
+                          </span>
+                        );
+                      } else if ((line.includes('Input:') && word !== 'Input:') || (line.includes('Output:') && word !== 'Output:') || (line.includes('Explanation:') && word !== 'Explanation:')){
+                        return (
+                          <span key={wordIndex} className="text-base ml-1 text-gray-900 ">
+                            {word}{' '}
+                          </span>
+                        );
+                      } else if (word.startsWith('`')) {
+                        return (
+                          <span key={wordIndex} className='bg-gray-100 text-gray-900 px-1 rounded-md hover:bg-gray-200'>
+                            {word.replaceAll(/[`,]/g,'')}{' '}
+                          </span>
+                        );
+                      } 
+                      
+                      else
+                      {
+                        return (
+                          <span key={wordIndex} className=''>
+                            {word}{' '}
+                          </span>
+                        );
+                      }
+                    })}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </div>
+        </div>
   );
 }
 
