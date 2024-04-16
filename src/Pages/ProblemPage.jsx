@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import NavBar from '../components/SideNavBar';
 import TopNavBar from '../components/TopNavBar';
 import ProblemDetailedInfo from '../components/ProblemDetailedInfo';
+import { Code } from 'lucide-react';
+import CodePart from '../components/CodePart';
 
 function ProblemPage() {
   const { id } = useParams(); // Extract id from the route params
@@ -42,9 +44,11 @@ function ProblemPage() {
       </div>
       <div className='w-5/6'>
         <TopNavBar currentPage={'Problems'}></TopNavBar>
-        {/* Render the fetched problem */}
         {problem && (
           <ProblemDetailedInfo problem={problem} />
+        )}
+        {problem && (
+          <CodePart problem={problem} />
         )}
       </div>
     </div>
