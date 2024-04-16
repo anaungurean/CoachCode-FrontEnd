@@ -28,7 +28,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function LanguageDropdown() {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [iconRotation, setIconRotation] = useState(0);
 
