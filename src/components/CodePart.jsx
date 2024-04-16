@@ -10,13 +10,13 @@ function CodePart({ problem }) {
 
   const handleLanguageSelect = (language) => {
     setSelectedLanguage(language);
-    // Faceti ce trebuie cu limba selectată aici
+    // Do whatever you need with the selected language here
     console.log(language);
   };
 
   const handleThemeSelect = (theme) => {
     setSelectedTheme(theme);
-    // Faceti ce trebuie cu tema selectată aici
+    // Do whatever you need with the selected theme here
     console.log(theme);
   }
 
@@ -51,9 +51,14 @@ function CodePart({ problem }) {
                 return result;
               }console.log(fibonacci(10)); // Output: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
             `}
-                onChange={handleThemeSelect}
-                language={selectedLanguage ? selectedLanguage.value : "javascript"} // Utilizați limba selectată aici
-                theme={selectedTheme ? selectedTheme.value : "vs-dark"} // Utilizați tema selectată aici
+            onChange={(language, theme) => {
+                handleLanguageSelect({ value: language });
+                handleThemeSelect({ value: theme });
+            }}
+
+                language={selectedLanguage ? selectedLanguage.value : "javascript"} // Use selected language here
+                theme={selectedTheme ? (console.log("Tema selectată:", selectedTheme.value), selectedTheme.value) : "vs-dark"}
+
              />
         </div>
       </div>
