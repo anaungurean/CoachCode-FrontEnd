@@ -1,30 +1,35 @@
 import { Fragment, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDown } from 'lucide-react';
-import { languageOptions } from '../constants/languageOptions';
- 
+import monacoThemes from "monaco-themes/themes/themelist";
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function LanguageDropdown({ onLanguageSelect }) {
-  const [selectedLanguage, setSelectedLanguage] = useState(null);
+export default function ThemeDropdown ({ onThemeSelect }) {
+  const [selectedTheme, setSelectedTheme] = useState(null);
   const [iconRotation, setIconRotation] = useState(0);
 
   const rotateIcon = () => {
     setIconRotation(iconRotation === 0 ? 180 : 0);
   }
 
-  const handleLanguageSelect = (language) => {
-    setSelectedLanguage(language);
-    onLanguageSelect(language); // Notify parent component of selected language
+  const themesArray = Object.entries(monacoThemes).map(([value, label]) => ({
+    value,
+    label
+  }));
+
+  const handleThemeSelect = (theme) => {
+    setSelectedTheme(theme);
+    onThemeSelect(theme); // Notificați componenta părinte cu tema selectată
   }
 
   return (
-    <Menu as="div" className="relative text-left">
+    <Menu as="div" className="relative inline-block text-left mr-8">
       <div>
         <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-purple-50 px-3 py-2 text-sm font-semibold text-twilight-500 shadow-sm ring-1 ring-inset ring-twilight-300 hover:bg-twilight-100/10" onClick={rotateIcon}>
-          {selectedLanguage ? selectedLanguage.name : "Programming Language"}
+          {selectedTheme ? selectedTheme.label : "Select Theme"}
           <ChevronDown className={`-mr-1 h-5 w-5 text-twilight-400 transform transition-transform ${iconRotation === 180 ? 'rotate-180' : ''}`} aria-hidden="true" />
         </Menu.Button>
       </div>
@@ -40,7 +45,7 @@ export default function LanguageDropdown({ onLanguageSelect }) {
       >
         <Menu.Items className="absolute z-10 mt-2 w-52 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-twilight-500 ring-opacity-5 focus:outline-none overflow-y-auto max-h-40 right-0">
           <div className="py-1">
-            {languageOptions.map((language, index) => (
+            {themesArray.map((theme, index) => (
               <Menu.Item key={index}>
                 {({ active }) => (
                   <a
@@ -48,10 +53,9 @@ export default function LanguageDropdown({ onLanguageSelect }) {
                       active ? 'bg-twilight-100/10 text-twilight-400' : 'text-twilight-500',
                       'block px-4 py-2 text-sm'
                     )}
-                    onClick={() => handleLanguageSelect(language)} // Call handleLanguageSelect with selected language
-                  
+                    onClick={() => handleThemeSelect(theme)} // Apelați handleThemeSelect cu tema selectată
                   >
-                    {language.name}
+                    {theme.label}
                   </a>
                 )}
               </Menu.Item>

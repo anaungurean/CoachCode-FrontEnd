@@ -63,7 +63,7 @@ function ProblemDetailedInfo({ problem }) {
 
             <div className="mt-2 mr-4 border pl-4 pt-4 pb-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md ">
           <h1 className="text-xl font-bold text-twilight-500">Description</h1>
-          <div className="mt-2 text-black-900 text-base ">
+          <div className="mt-2 ml-4 mr-4 text-black-900 text-base ">
             {problem.description.split('\n').map((line, index) => (
               <div key={index} className={(line.startsWith('Example') || line.startsWith('Constraints:')) ? 'font-bold pt-2 text-l ml-2 text-twilight-400' : ''}>
                 {line.startsWith('`') && line.endsWith('`') ? (
