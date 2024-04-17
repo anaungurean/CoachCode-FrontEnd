@@ -21,9 +21,9 @@ export default function LanguageDropdown({ onLanguageSelect }) {
   }
 
   return (
-    <Menu as="div" className="relative text-left">
+    <Menu as="div" className="relative text-left mr-8">
       <div>
-        <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-purple-50 px-3 py-2 text-sm font-semibold text-twilight-500 shadow-sm ring-1 ring-inset ring-twilight-300 hover:bg-twilight-100/10" onClick={rotateIcon}>
+        <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-purple-50 px-3 py-2 text-sm font-semibold text-twilight-500 shadow-sm ring-1 ring-inset ring-twilight-300 hover:bg-purple-200" onClick={rotateIcon}>
           {selectedLanguage ? selectedLanguage.name : "Programming Language"}
           <ChevronDown className={`-mr-1 h-5 w-5 text-twilight-400 transform transition-transform ${iconRotation === 180 ? 'rotate-180' : ''}`} aria-hidden="true" />
         </Menu.Button>
@@ -40,7 +40,8 @@ export default function LanguageDropdown({ onLanguageSelect }) {
       >
         <Menu.Items className="absolute z-10 mt-2 w-52 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-twilight-500 ring-opacity-5 focus:outline-none overflow-y-auto max-h-40 right-0">
           <div className="py-1">
-            {languageOptions.map((language, index) => (
+            {languageOptions.sort((a, b) => a.name.localeCompare(b.name)).
+            map((language, index) => (
               <Menu.Item key={index}>
                 {({ active }) => (
                   <a

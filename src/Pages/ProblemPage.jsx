@@ -29,7 +29,6 @@ function ProblemPage() {
     })
     .then(data => {
         setProblem(data); // Update state with the fetched problem
-        console.log(data);
     })
     .catch(error => {
         console.error('Error fetching data:', error);

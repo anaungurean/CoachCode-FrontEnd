@@ -76,13 +76,10 @@ export default function AccordionProblemInfo({ related_topics, companies, simila
     fetchSimilarQuestionsIds();
   }, [similar_questions]);
 
-    console.log(similarQuestionsWithIds);
-
-
      return (
     <>
-    <div className="mt-4 mr-4 mb-4 border pl-4 pt-4 pb-4 pr-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md ">
-      <Accordion open={open === 1} className="mb-4 mr-8 px-4" animate={CUSTOM_ANIMATION} icon={<Icon id={1} open={open} />}>
+    <div className="mt-4 mr-4 mb-4 border pl-4 pt-2 pb-4 pr-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md ">
+      <Accordion open={open === 1} className="mt-4 mr-8 mb-4 px-4" animate={CUSTOM_ANIMATION} icon={<Icon id={1} open={open} />}>
       <div className="flex items-center">
         <Tag size={20} className="mr-2 text-twilight-300" />
         <AccordionHeader
@@ -94,7 +91,7 @@ export default function AccordionProblemInfo({ related_topics, companies, simila
         Related topics
         </AccordionHeader>
         </div>
-        <hr className="border-gray-300 mt-1" />  
+        <hr className="border-gray-300 " />  
         <AccordionBody className="pt-1 text-base">
            {
             relatedTopicsArray.map((topic, index) => (
@@ -106,7 +103,7 @@ export default function AccordionProblemInfo({ related_topics, companies, simila
         </AccordionBody>
       </Accordion>
 
-        <Accordion open={open === 2} className="mb-4 mr-8 px-4" animate={CUSTOM_ANIMATION} icon={<Icon id={2} open={open} />}>
+        <Accordion open={open === 2} className="mr-8 mb-4 px-4" animate={CUSTOM_ANIMATION} icon={<Icon id={2} open={open} />}>
         <div className="flex items-center">
             <Building2 size={20} className="mr-2 text-twilight-300" />
             <AccordionHeader
@@ -118,7 +115,7 @@ export default function AccordionProblemInfo({ related_topics, companies, simila
             Companies
             </AccordionHeader>
             </div>
-            <hr className="border-gray-300 mt-1" />  
+            <hr className="border-gray-300" />  
             <AccordionBody className="pt-1 text-base">
                 {
                 companiesArray.map((company, index) => (
@@ -130,7 +127,7 @@ export default function AccordionProblemInfo({ related_topics, companies, simila
             </AccordionBody>
         </Accordion>
 
-        <Accordion open={open === 3} className="mb-4 mr-8 rounded-b px-4" animate={CUSTOM_ANIMATION} icon={<Icon id={3} open={open} />}>
+        <Accordion open={open === 3} className="mr-8 mb-4 px-4" animate={CUSTOM_ANIMATION} icon={<Icon id={3} open={open} />}>
         <div className="flex items-center">
             <ShieldQuestion size={20} className="mr-2 text-twilight-300" />
             <AccordionHeader
@@ -142,7 +139,7 @@ export default function AccordionProblemInfo({ related_topics, companies, simila
             Similar questions
             </AccordionHeader>
             </div>
-            <hr className="border-gray-300 mt-1" />  
+            <hr className="border-gray-300" />  
             <AccordionBody className="pt-1 text-base">
                 {similar_questions_array.map((question, index) => {
                 return (
