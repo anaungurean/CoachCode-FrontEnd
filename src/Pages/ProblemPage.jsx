@@ -46,7 +46,7 @@ function ProblemPage() {
           <ProblemDetailedInfo problem={problem} />
         )}
         {problem && (
-          <CodePart tests={problem.tests} />
+          <CodePart problem={problem} />
         )}
       </div>
     </div>

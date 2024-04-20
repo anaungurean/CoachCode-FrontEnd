@@ -6,8 +6,10 @@ import { Play } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useCtrlEnterHandler from './useCtrlEnterHandler';
+import TestResults from './TestResults';
+import TestCase from './TestCase';
 
-function CodePart(tests) {
+function CodePart(problem) {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedTheme, setSelectedTheme] = useState({ value: 'vs-light' });
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -19,6 +21,9 @@ function CodePart(tests) {
   const [compilationError, setCompilationError] = useState(null);
   const [executionError, setExecutionError] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+ const tests = problem.problem.tests;
+  const input_variables = problem.problem.input_variables;
 
   useEffect(() => {
     const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -56,17 +61,17 @@ function CodePart(tests) {
     });
   };
 
-const showSuccessToast = (msg, timer) => {
-      toast.success(msg || `All tests passed successfully!`, {
-      position: "top-right",
-      autoClose: timer ? timer : 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
+// const showSuccessToast = (msg, timer) => {
+//       toast.success(msg || `All tests passed successfully!`, {
+//       position: "top-right",
+//       autoClose: timer ? timer : 2000,
+//       hideProgressBar: false,
+//       closeOnClick: true,
+//       pauseOnHover: true,
+//       draggable: true,
+//       progress: undefined,
+//     });
+//   };
 
   const handleHover = () => {
     setIsHovered(true);
@@ -95,7 +100,7 @@ const showSuccessToast = (msg, timer) => {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'X-RapidAPI-Key': '3ecb8a9802msh9977bfdf671faefp185bfajsnfa515dddbe87',
+          'X-RapidAPI-Key': '4a56b76aaemsh6ecc8c35a877da9p17eb47jsnd5868075e36e',
           'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
         },
         body: JSON.stringify({
@@ -112,28 +117,24 @@ const showSuccessToast = (msg, timer) => {
         checkStatus(result.token);
       } catch (error) {
         console.error(error);
+        showErrorToast('Too many requests.');
       }
     };
 
-    for (let i = 0; i < tests.tests.length; i++) {
-      await runCode(selectedLanguage, code, tests.tests[i].input, tests.tests[i].output);
+    for (let i = 0; i < tests.length; i++) {
+      await runCode(selectedLanguage, code, tests[i].input, tests[i].output);
 
       if (compilationError) {
-        showErrorToast(compilationError);
         break;
       }
       if (executionError) {
-        showErrorToast(executionError);
         break;
       }
     }
 
     // console.log(failedTests, compilationError, executionError, passedTests, tests.tests.length);
-    if (passedTests === tests.tests.length) {
-      showSuccessToast('All tests passed successfully!');
-    } else if (failedTests > 0){
-      showErrorToast('Some tests failed! Please check your code.');
-    }
+    setSubmitted(true);
+   
   };
 
   const checkStatus = async (token) => {
@@ -167,7 +168,7 @@ const showSuccessToast = (msg, timer) => {
       } else {
         showErrorToast('Something went wrong! Please try again.');
       }
-
+      console.log(result);  
       if (memory < result.memory) {
         setMemory(result.memory);
       }
@@ -180,9 +181,9 @@ const showSuccessToast = (msg, timer) => {
   };
 
   return (
-    <div className="card">
+    <div>
       <ToastContainer />
-      <div className="mt-4 mr-4 border pl-4 pt-4 pb-80 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md ">
+      <div className="mt-4 mr-4 border pl-4 pt-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md ">
         <div className="flex items-center ml-4">
           <FaCode size={28} className="text-twilight-400" />
           <h2 className="text-2xl font-bold text-twilight-400 px-2">Code</h2>
@@ -195,7 +196,7 @@ const showSuccessToast = (msg, timer) => {
             className="flex items-center mr-8  justify-center gap-x-1.5 rounded-md bg-purple-50 px-3 py-2 text-sm font-semibold text-twilight-500 shadow-sm ring-1 ring-inset ring-twilight-300 hover:bg-purple-200"
           >
             <Play size={18} />
-            Run
+            Run the tests
             {isHovered && (
               <button className="  ">
                 (Ctrl+Enter)
@@ -204,7 +205,7 @@ const showSuccessToast = (msg, timer) => {
           </button>
         </div>
         <hr className="border-twilight-200 mt-1 mr-8 ml-4" />
-        <div className="h-full mt-4 mr-8 ml-4">
+        <div className="h-auto mt-4 mr-8 ml-4 mb-4">
           <CodeEditorWindow
             code={code}
             onChange={handleCodeChange}
@@ -213,7 +214,29 @@ const showSuccessToast = (msg, timer) => {
           />
         </div>
       </div>
+   {submitted && (
+        <div>
+          <TestResults
+            memory={memory}
+            time={time}
+            passedTests={passedTests}
+            failedTests={failedTests}
+            compilationError={compilationError}
+            executionError={executionError}
+          />
+        </div>
+    )}
+    <div> 
+    <TestCase
+        input_variables={input_variables} 
+    />
     </div>
+
+    </div>
+    
+
+
+
   );
 }
 

@@ -26,6 +26,7 @@ function ProblemDetailedInfo({ problem }) {
   let topicColorClass = 'bg-violet-50 text-violet-700 ring-violet-600/20';
   let companyColorClass = 'bg-fuchsia-50 text-fuchsia-700 ring-fuchsia-600/30';
 
+  
   return (
     <div className="card">
       <div className="mt-4 mr-4 border pl-4 pt-4 pb-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md ">
@@ -166,7 +167,8 @@ ProblemDetailedInfo.propTypes = {
         input: PropTypes.string.isRequired,
         output: PropTypes.string.isRequired
       })
-    ).isRequired
+    ).isRequired,
+    input_variables: PropTypes.arrayOf(PropTypes.string) 
   }).isRequired
 };
 

@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 const CodeEditorWindow = ({ onChange, language, code, theme }) => {
   const [value, setValue] = useState(code || "");
   
-  // Array of supportive messages
   const supportiveMessages = [
   "You`ve got this!",
   "Believe in yourself, you can do it!",
@@ -55,7 +54,7 @@ const CodeEditorWindow = ({ onChange, language, code, theme }) => {
   return (
     <div className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl">
       <Editor
-        height="85vh"
+        height="60vh"
         width="100%"
         language={language ? language.value : "python"}
         value={value}
