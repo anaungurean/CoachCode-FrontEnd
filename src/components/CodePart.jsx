@@ -22,8 +22,9 @@ function CodePart(problem) {
   const [executionError, setExecutionError] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const [submitted, setSubmitted] = useState(false);
- const tests = problem.problem.tests;
+  const tests = problem.problem.tests;
   const input_variables = problem.problem.input_variables;
+  const solution = problem.problem.solution;
 
   useEffect(() => {
     const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -228,11 +229,14 @@ function CodePart(problem) {
     )}
     <div> 
     <TestCase
-        input_variables={input_variables} 
+        input_variables={input_variables}
+        solution={solution}
+        code = {code}
+        language = {selectedLanguage}
     />
     </div>
-
-    </div>
+ 
+  </div>
     
 
 

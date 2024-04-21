@@ -168,7 +168,13 @@ ProblemDetailedInfo.propTypes = {
         output: PropTypes.string.isRequired
       })
     ).isRequired,
-    input_variables: PropTypes.arrayOf(PropTypes.string) 
+    input_variables: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired
+      })
+    ).isRequired,
+    solution: PropTypes.string.isRequired
   }).isRequired
 };
 

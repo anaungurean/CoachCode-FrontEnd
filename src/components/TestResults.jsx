@@ -1,7 +1,7 @@
 import { Bug } from 'lucide-react';
 import { BadgeX, Check } from 'lucide-react';
 import PropTypes from 'prop-types';
-import 'react-circular-progressbar/dist/styles.css'; // Make sure to import the styles
+import 'react-circular-progressbar/dist/styles.css'; 
 import CircularProgressBar from './CircularProgressBar';
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
