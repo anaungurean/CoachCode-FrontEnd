@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import useCtrlEnterHandler from './useCtrlEnterHandler';
 import TestResults from './TestResults';
 import TestCase from './TestCase';
+import { showErrorToast, showSuccessToast } from './notifications';
 
 function CodePart(problem) {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
@@ -50,29 +51,8 @@ function CodePart(problem) {
     setSelectedTheme(isDarkMode ? { value: 'vs-dark' } : { value: 'vs-light' });
   }, [isDarkMode]);
 
-  const showErrorToast = (msg, timer) => {
-    toast.error(msg || `Something went wrong! Please try again.`, {
-      position: "top-right",
-      autoClose: timer ? timer : 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
+ 
 
-// const showSuccessToast = (msg, timer) => {
-//       toast.success(msg || `All tests passed successfully!`, {
-//       position: "top-right",
-//       autoClose: timer ? timer : 2000,
-//       hideProgressBar: false,
-//       closeOnClick: true,
-//       pauseOnHover: true,
-//       draggable: true,
-//       progress: undefined,
-//     });
-//   };
 
   const handleHover = () => {
     setIsHovered(true);
@@ -133,7 +113,11 @@ function CodePart(problem) {
       }
     }
 
-    // console.log(failedTests, compilationError, executionError, passedTests, tests.tests.length);
+    if (failedTests === 0)
+      showSuccessToast('All tests passed successfully!');
+    else if (failedTests > 0)
+      showErrorToast('Some tests failed!');
+
     setSubmitted(true);
    
   };
@@ -143,7 +127,7 @@ function CodePart(problem) {
     const options = {
       method: 'GET',
       headers: {
-        'X-RapidAPI-Key': '90b30b5ac0msh0106a7cb5e9a100p1f3f01jsn7c9472be0b73',
+        'X-RapidAPI-Key': '4a56b76aaemsh6ecc8c35a877da9p17eb47jsnd5868075e36e',
         'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
       }
     };
@@ -163,13 +147,14 @@ function CodePart(problem) {
         setFailedTests(prevState => prevState + 1);
       } else if (statusId === 6) {
         setCompilationError(atob(result.compile_output));
+        showErrorToast('Compilation Error!');
       } else if (statusId === 7 || statusId === 8 || statusId === 9 || statusId === 10 || statusId === 11 || statusId === 12) {
         setExecutionError(atob(result.stderr));
-        console.log(executionError);
+        showErrorToast('Execution Error!');
       } else {
         showErrorToast('Something went wrong! Please try again.');
       }
-      console.log(result);  
+      // console.log(result);  
       if (memory < result.memory) {
         setMemory(result.memory);
       }
@@ -232,15 +217,12 @@ function CodePart(problem) {
         input_variables={input_variables}
         solution={solution}
         code = {code}
-        language = {selectedLanguage}
+        languageId = {selectedLanguage}
     />
     </div>
  
   </div>
     
-
-
-
   );
 }
 

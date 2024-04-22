@@ -5,14 +5,18 @@ import { Play } from 'lucide-react';
 import useCtrlShiftHandler from './useCtrlShiftHandler';
 import { Info } from 'lucide-react';
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { IoAlertCircleOutline } from "react-icons/io5";
+import { Bug } from 'lucide-react';
+import { toast } from 'react-toastify';
 
-
-function TestCase({input_variables, solution, code, language}) {
+function TestCase({input_variables, solution, code, languageId}) {
   const [isHovered, setIsHovered] = useState(false);
-  const [resultCode, setResultCode] = useState('');
-  const [resultSolution, setResultSolution] = useState('');
-  
+  const [errorCode, setErrorCode] = useState(null);
+  const [errorSolution, setErrorSolution] = useState(null);
+  const [stdoutCode, setStdoutCode] = useState(null);
+  const [stdoutSolution, setStdoutSolution] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleHover = () => {
     setIsHovered(true);
@@ -24,12 +28,17 @@ function TestCase({input_variables, solution, code, language}) {
 
 
   const runCode = async (idLanguage, codeToTest, input, type) => {
+      setErrorCode(null);
+      setErrorSolution(null);
+      setStdoutCode(null);
+      setStdoutSolution(null);
+      setSubmitted(false);
       const url = 'https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&fields=*';
       const options = {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'X-RapidAPI-Key': '90b30b5ac0msh0106a7cb5e9a100p1f3f01jsn7c9472be0b73',
+          'X-RapidAPI-Key': ' 0ea15304d5msh2365b7bc32ad907p1e5449jsn133d427f0308',
           'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
         },
         body: JSON.stringify({
@@ -42,14 +51,37 @@ function TestCase({input_variables, solution, code, language}) {
       try {
         const response = await fetch(url, options);
         const result = await response.json();
-        checkStatus(result.token, type);
-      } catch (error) {
+        if (type === 1) {
+          checkStatusCode(result.token);
+        }
+        else if (type === 2) {
+          checkStatusSolution(result.token);
+          setSubmitted(true);
+        }
+        
+       } catch (error) {
         console.error(error);
       }
     };
 
+const showErrorToast = (msg, timer) => {
+    toast.error(msg || `Something went wrong! Please try again.`, {
+      position: "top-right",
+      autoClose: timer ? timer : 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
 
-    const handleSubmit = () => {
+const handleSubmit = () => {
+      if (!languageId) {
+        showErrorToast('Please select a language!');
+        return;
+      }
+      setIsLoading(true);       
       const inputFields = document.querySelectorAll('input[type="text"]');
       let values = '';
       inputFields.forEach((input, index) => {
@@ -59,22 +91,18 @@ function TestCase({input_variables, solution, code, language}) {
         values += input.value;
       });
 
-      runCode('71', code, values, 1);
+      runCode(languageId.id, code, values, 1);
       runCode('71', solution, values, 2);
-      console.log("resultCode:")
-      console.log(resultCode)
-      console.log("resultSolution:")
-      console.log(resultSolution)
-  
+
     };
 
 
-const checkStatus = async (token, type ) => {
+const checkStatusSolution  = async (token ) => {
     const url = `https://judge0-ce.p.rapidapi.com/submissions/${token}?base64_encoded=true`;
     const options = {
       method: 'GET',
       headers: {
-        'X-RapidAPI-Key': '90b30b5ac0msh0106a7cb5e9a100p1f3f01jsn7c9472be0b73',
+        'X-RapidAPI-Key': ' 0ea15304d5msh2365b7bc32ad907p1e5449jsn133d427f0308',
         'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
       }
     };
@@ -83,36 +111,76 @@ const checkStatus = async (token, type ) => {
       const response = await fetch(url, options);
       const result = await response.json();
       const statusId = result.status?.id;
+      console.log('Solution');
+      console.log('result', result);
 
       if (statusId === 1 || statusId === 2) {
         setTimeout(() => {
-          checkStatus(token);
+          checkStatusSolution(token);
         }, 1000);
       }
-      // console.log(atob(result.stdout));
-      // console.log(result)
-      // PUNEM CONDITII DE STATUS
-      if (type === 1) {
-        useEffect(() => {
-        console.log("resultCode:", resultCode);
-      }, [resultCode]);
+      else if (statusId === 3  || statusId === 4 || statusId === 5){
+          setStdoutSolution(atob(result.stdout));
+  
+      }
+      else if (statusId === 6) {
+          setErrorSolution(atob(result.compile_output));
+      }
+      else if (statusId === 7 || statusId === 8 || statusId === 9 || statusId === 10 || statusId === 11 || statusId === 12) 
+        {
+          setErrorSolution(atob(result.stderr))
+        }
+        setIsLoading(false);
+      }
+    catch (error) {
+      console.error(error);
+    }     
+};
 
-    }
-    if (type === 2) {
-      useEffect(() => {
-        console.log("resultSolution:", resultSolution);
-      }, [resultSolution]);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-  };
+const checkStatusCode = async (token ) => {
+    const url = `https://judge0-ce.p.rapidapi.com/submissions/${token}?base64_encoded=true`;
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': ' 0ea15304d5msh2365b7bc32ad907p1e5449jsn133d427f0308',
+        'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
+      }
+    };
 
+    try {
+      const response = await fetch(url, options);
+      const result = await response.json();
+      const statusId = result.status?.id;
+  
+      if (statusId === 1 || statusId === 2) {
+        setTimeout(() => {
+          checkStatusCode(token);
+        }, 1000);
+      }
+      else if (statusId === 3  || statusId === 4 || statusId === 5){
+          setStdoutCode(atob(result.stdout));
+  
+      }
+      else if (statusId === 6) {
+          setErrorCode(atob(result.compile_output));
+      }
+      else if (statusId === 7 || statusId === 8 || statusId === 9 || statusId === 10 || statusId === 11 || statusId === 12) 
+        {
+          setErrorCode(atob(result.stderr))
+        }
+      
+      }
+    catch (error) {
+      console.error(error);
+    }     
+};
 
+ 
 
 
  const handleSubmitWithCtrlShift = () => {
     handleSubmit();
+    setIsLoading(true);
   };
   useCtrlShiftHandler(handleSubmitWithCtrlShift);
  
@@ -129,14 +197,22 @@ const checkStatus = async (token, type ) => {
             onMouseEnter={handleHover}
             onMouseLeave={handleHoverOut}
             className="flex items-center mr-8  justify-center gap-x-1.5 rounded-md bg-purple-50 px-3 py-2 text-sm font-semibold text-twilight-500 shadow-sm ring-1 ring-inset ring-twilight-300 hover:bg-purple-200"
+            disabled={isLoading}
           >
+              {isLoading ? (  
+                <div className="flex items-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-purple-500"></div>
+                  <span className="ml-2">Loading</span>
+                </div>
+        ) : (
+          <>
             <Play size={18} />
-            Run the case
-            {isHovered && (
-              <button className="  ">
-                (Ctrl+Shift)
-              </button>
-            )}
+              Run the case
+              {isHovered && (
+                <span className="ml-2">(Ctrl+Shift)</span>
+              )}
+          </>
+        )}
           </button>
       </div>
       <hr className="border-twilight-200 mt-1 mr-8 ml-4" />
@@ -168,47 +244,60 @@ const checkStatus = async (token, type ) => {
      
      <div className="mt-4 mr-8 ml-4 mb-4">
       
-      {resultCode && resultSolution ? (
-        resultCode.stdout === resultSolution.stdout ? (
+      {submitted? (
+        stdoutCode && stdoutCode === stdoutSolution ? (
           <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
-            <p className="font-bold">Test Passed</p>
-            <p>Your code passed the test case successfully!</p>
+            <p className="font-bold text-xl">Test Passed</p>
+            <p>Your code passed this test case successfully!</p>
             <ul className="list-disc ml-4">
               <li>
-                <p className="text-twilight-400 text-lg font-semibold">Expected output: {resultCode.stdout ? atob(resultCode.stdout) : 'a'}</p>
+                <p className="text-green-800 text-lg font-semibold">Expected output: {stdoutSolution}</p>
               </li>
               <li>
-                <p className="text-twilight-400 text-lg font-semibold">Your output: {resultSolution.stdout ? atob(resultSolution.stdout) : 'a'}</p>
+                <p className="text-green-800 text-lg font-semibold">Your output: {stdoutCode} </p>
               </li>
             </ul>
-            <div className='mt-4 mr-8 ml-4 mb-2 flex items-center bg-twilight-100/10 rounded-md p-2'>
-              <Info size={24} className="mr-2 ml-4 text-twilight-400" />
-              <p className="text-twilight-400">Run all the tests to determine if the code has passed all of them successfully.</p>
+            <div className='mt-4 mr-8 ml-4 mb-2 flex items-center bg-green-600/10 rounded-md p-2'>
+              <div className='flex items-center'>
+              <IoAlertCircleOutline size={24} className="mr-2 ml-4 text-green-800" />
+              </div>
+              <p className="text-green-800">Run all the tests to determine if the code can pass all of them successfully.</p>
             </div>
           </div>
-        ) : resultCode.stderr ? (
+        ) : errorCode ? (
           <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
-            <p className="font-bold">Test Failed</p>
+            <p className="font-bold text-xl">Test Failed</p>
             <div>
-              <p>Your code has an error.</p>
-              <p>{resultCode.stderr}</p>
+              <p>Your code has an error:</p>
+              <div className='mt-2 mr-8 ml-4 mb-2 flex items-center bg-red-600/10 rounded-md p-2'>
+                <div className='flex items-center'>
+                <Bug size={24} className="mr-2 ml-4 text-red-800" />
+                </div>
+                <p className='ml-4 text-lg font-semibold'>{errorCode}</p>
+              </div>
             </div>
           </div>
-        ) : (
+        ) : stdoutCode && stdoutCode !== stdoutSolution ? (
           <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+            <p className="font-bold text-xl">Test Failed</p>
             <p>Your code failed the test case.</p>
             <ul className="list-disc ml-4">
               <li>
-                <p className="text-twilight-400 text-lg font-semibold">Expected output: {resultCode.stdout ? atob(resultCode.stdout) : 'a'}</p>
+                <p className="text-red-800 text-lg font-semibold">Expected output: {stdoutSolution}</p>
               </li>
               <li>
-                <p className="text-twilight-400 text-lg font-semibold">Your output: {resultSolution.stdout ? atob(resultSolution.stdout) : 'a'}</p>
+                <p className="text-red-800 text-lg font-semibold">Your output: {stdoutCode} </p>
               </li>
             </ul>
+            <div className='mt-4 mr-8 ml-4 mb-2 flex items-center bg-red-600/10 rounded-md p-2'>
+              <div className='flex items-center'>
+              <Bug size={24} className="mr-2 ml-4 text-red-800" />
+              </div>
+              <p className="text-red-800">Review your code and try again. </p>
+            </div>
           </div>
-        )
+        ) : null
       ) : null}
-
     </div>
 </div>
 );
@@ -223,6 +312,6 @@ TestCase.propTypes = {
     ).isRequired,
   solution: PropTypes.string,
   code: PropTypes.string,
-  language: PropTypes.string
+  languageId: PropTypes.string,
 };
 export default TestCase;
