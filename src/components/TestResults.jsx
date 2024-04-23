@@ -2,7 +2,6 @@ import { Bug } from 'lucide-react';
 import { BadgeX, Check } from 'lucide-react';
 import PropTypes from 'prop-types';
 import 'react-circular-progressbar/dist/styles.css'; 
-import CircularProgressBar from './CircularProgressBar';
 import { IoAlertCircleOutline } from "react-icons/io5";
 import { useState, useEffect } from 'react';
 

@@ -8,7 +8,7 @@ import {
 import {Tag} from 'lucide-react';
 import { Building2 } from 'lucide-react';
 import { ShieldQuestion } from 'lucide-react';
-
+import { Lightbulb } from 'lucide-react';
 
 const CUSTOM_ANIMATION = {
   mount: { scale: 1 },
@@ -57,9 +57,45 @@ const fetchProblemIdByTitle = async (title) => {
 
 
 
-export default function AccordionProblemInfo({ related_topics, companies, similar_questions }) {
-    const [open, setOpen] = React.useState(-1);
-    const handleOpen = (value) => setOpen(open === value ? 0 : value);
+export default function AccordionProblemInfo({ related_topics, companies, similar_questions, hints }) {
+
+     const [openRelatedTopics, setOpenRelatedTopics] = React.useState(false);
+     const [openCompanies, setOpenCompanies] = React.useState(false);
+     const [openSimilarQuestions, setOpenSimilarQuestions] = React.useState(false);
+     const [openHints, setOpenHints] = React.useState(new Array(hints.length).fill(false));
+
+    const handleOpenRelatedTopics = () => {
+      setOpenRelatedTopics(!openRelatedTopics);
+      setOpenCompanies(false);
+      setOpenSimilarQuestions(false);
+      setOpenHints(new Array(hints.length).fill(false));
+    };
+
+    const handleOpenCompanies = () => {
+      setOpenCompanies(!openCompanies);
+      setOpenRelatedTopics(false);
+      setOpenSimilarQuestions(false);
+      setOpenHints(new Array(hints.length).fill(false));
+    };
+
+    const handleOpenSimilarQuestions = () => {
+      setOpenSimilarQuestions(!openSimilarQuestions);
+      setOpenRelatedTopics(false);
+      setOpenCompanies(false);
+      setOpenHints(new Array(hints.length).fill(false));
+    };
+
+    const handleOpenHints = (index) => {
+      const newOpenHints = new Array(hints.length).fill(false);
+      newOpenHints[index] = !openHints[index];
+      setOpenHints(newOpenHints);
+      setOpenRelatedTopics(false);
+      setOpenCompanies(false);
+      setOpenSimilarQuestions(false);
+    };
+
+
+
     const relatedTopicsArray = related_topics.split(',');
     const companiesArray = companies.split(',');
     const similar_questions_array = extractTitlesofSimilarQuestions(similar_questions);
@@ -79,13 +115,13 @@ export default function AccordionProblemInfo({ related_topics, companies, simila
      return (
     <>
     <div className="mt-4 mr-4 mb-4 border pl-4 pt-2 pb-4 pr-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md ">
-      <Accordion open={open === 1} className="mt-4 mr-8 mb-4 px-4" animate={CUSTOM_ANIMATION} icon={<Icon id={1} open={open} />}>
+      <Accordion open={openRelatedTopics} className="mt-4 mr-8 mb-4 px-4" animate={CUSTOM_ANIMATION} icon={<Icon id={1} open={open} />}>
       <div className="flex items-center">
         <Tag size={20} className="mr-2 text-twilight-300" />
         <AccordionHeader
-          onClick={() => handleOpen(1)}
+          onClick={() => handleOpenRelatedTopics()}
           className={`transition-colors text-twilight-300  ${
-            open === 1 ? "text-twilight-200 hover:!text-twilight-300" : ""
+            openRelatedTopics ? "text-twilight-200 hover:!text-twilight-300" : ""
           }`}
         >
         Related topics
@@ -103,14 +139,14 @@ export default function AccordionProblemInfo({ related_topics, companies, simila
         </AccordionBody>
       </Accordion>
 
-        <Accordion open={open === 2} className="mr-8 mb-4 px-4" animate={CUSTOM_ANIMATION} icon={<Icon id={2} open={open} />}>
+        <Accordion open={openCompanies} className="mr-8 mb-4 px-4" animate={CUSTOM_ANIMATION} icon={<Icon id={2} open={open} />}>
         <div className="flex items-center">
             <Building2 size={20} className="mr-2 text-twilight-300" />
             <AccordionHeader
-                onClick={() => handleOpen(2)}
-                className={`transition-colors   text-twilight-300  ${
-                open === 2 ? "text-twilight-200 hover:!text-twilight-300" : ""
-                }`}
+                onClick={() => handleOpenCompanies()}
+              className={`transition-colors text-twilight-300 ${
+              openCompanies ? "text-twilight-200 hover:!text-twilight-300" : ""
+            }`}
             >
             Companies
             </AccordionHeader>
@@ -127,14 +163,14 @@ export default function AccordionProblemInfo({ related_topics, companies, simila
             </AccordionBody>
         </Accordion>
 
-        <Accordion open={open === 3} className="mr-8 mb-4 px-4" animate={CUSTOM_ANIMATION} icon={<Icon id={3} open={open} />}>
+        <Accordion open={openSimilarQuestions} className="mr-8 mb-4 px-4" animate={CUSTOM_ANIMATION} icon={<Icon id={3} open={open} />}>
         <div className="flex items-center">
             <ShieldQuestion size={20} className="mr-2 text-twilight-300" />
             <AccordionHeader
-                onClick={() => handleOpen(3)}
-                className={`transition-colors text-twilight-300 ${
-                open === 3 ? "text-twilight-200 hover:!text-twilight-300" : ""
-                }`}
+                onClick={() => handleOpenSimilarQuestions()}
+              className={`transition-colors text-twilight-300 ${
+              openSimilarQuestions ? "text-twilight-200 hover:!text-twilight-300" : ""
+            }`}
             >
             Similar questions
             </AccordionHeader>
@@ -151,11 +187,37 @@ export default function AccordionProblemInfo({ related_topics, companies, simila
                 );
             })}
             </AccordionBody>
-
         </Accordion>
-
-
-
+      
+      {
+  hints && hints.map((hint, index) => (
+    <Accordion
+      key={index}
+      open={openHints[index]}  
+      className="mr-8 mb-4 px-4"
+      animate={CUSTOM_ANIMATION}
+      icon={<Icon id={index} open={open} />}
+    >
+      <div className="flex items-center">
+        <Lightbulb size={20} className="mr-2 text-twilight-300" />
+        <AccordionHeader
+          onClick={() => handleOpenHints(index)}  
+          className={`transition-colors text-twilight-300 ${
+        openHints[index] ? "text-twilight-200 hover:!text-twilight-300" : ""
+      }`}
+        >
+          {"Hint " + (index + 1)} {}
+        </AccordionHeader>
+      </div>
+      <hr className="border-gray-300" />
+      <AccordionBody className="pt-1 text-base">
+        <p key={index} className="inline-flex items-center rounded-md px-2 py-1 ml-2 mt-2 text-sm font-medium bg-purple-100 text-twilight-400 ring-twilight-400/10 ring-1 ring-inset border-dotted hover:ring-2 shadow-sm">
+          {hint}
+        </p>
+      </AccordionBody>
+    </Accordion>
+  ))
+}
 
     </div>
     </>
@@ -167,4 +229,5 @@ AccordionProblemInfo.propTypes = {
   related_topics: PropTypes.string.isRequired,
   companies: PropTypes.string.isRequired,
   similar_questions: PropTypes.string.isRequired,
+  hints: PropTypes.array,
 };

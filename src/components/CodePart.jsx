@@ -3,7 +3,7 @@ import { FaCode } from "react-icons/fa";
 import LanguageDropdown from "./LanguageDropdown";
 import CodeEditorWindow from "./CodeEditor";
 import { Play } from 'lucide-react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useCtrlEnterHandler from './useCtrlEnterHandler';
 import TestResults from './TestResults';

@@ -4,36 +4,47 @@ import NavBar from '../components/SideNavBar';
 import TopNavBar from '../components/TopNavBar';
 import ProblemDetailedInfo from '../components/ProblemDetailedInfo';
 import CodePart from '../components/CodePart';
+import Solution from '../components/Solution';
+import Popup from '../components/PopUp'; // Corrected import statement for Popup component
 
 function ProblemPage() {
   const { id } = useParams();  
   const [problem, setProblem] = useState(null);  
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // State for managing popup visibility
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false); // State for tracking answer correctness
 
   useEffect(() => {
     fetchProblem(id);  
   }, [id]); 
 
-    const fetchProblem = (id) => {
+  const fetchProblem = (id) => {
     fetch(`http://localhost:5000/problems/${id}`, {
-        method: 'GET',  
-        headers: {
+      method: 'GET',  
+      headers: {
         'Content-Type': 'application/json'
-        }
+      }
     })
     .then(response => {
-        if (!response.ok) {
+      if (!response.ok) {
         throw new Error('Problem not found'); 
-        }
-        return response.json();  
+      }
+      return response.json();  
     })
     .then(data => {
-        setProblem(data);  
+      setProblem(data); 
+      console.log(data);
     })
     .catch(error => {
-        console.error('Error fetching data:', error);
+      console.error('Error fetching data:', error);
     });
-    };
+  };
 
+  const togglePopup = (isAnswerCorrect) => {
+    setIsPopupOpen(!isPopupOpen);  
+    setIsAnswerCorrect(isAnswerCorrect);  
+    
+  };
+ 
 
   return (
     <div className="flex">
@@ -48,9 +59,17 @@ function ProblemPage() {
         {problem && (
           <CodePart problem={problem} />
         )}
+        {problem && (
+          <Solution togglePopup={togglePopup} isAnswerCorrect={isAnswerCorrect} problem={problem} />
+        )}
+        {isPopupOpen && (
+          <Popup question={problem.question} togglePopup={togglePopup} />
+        )}
+
       </div>
-    </div>
+      </div>
   );
+  
 }
 
 export default ProblemPage;

@@ -38,7 +38,7 @@ function TestCase({input_variables, solution, code, languageId}) {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'X-RapidAPI-Key': ' 0ea15304d5msh2365b7bc32ad907p1e5449jsn133d427f0308',
+          'X-RapidAPI-Key': ' 4a56b76aaemsh6ecc8c35a877da9p17eb47jsnd5868075e36e',
           'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
         },
         body: JSON.stringify({
@@ -102,7 +102,7 @@ const checkStatusSolution  = async (token ) => {
     const options = {
       method: 'GET',
       headers: {
-        'X-RapidAPI-Key': ' 0ea15304d5msh2365b7bc32ad907p1e5449jsn133d427f0308',
+        'X-RapidAPI-Key': ' 4a56b76aaemsh6ecc8c35a877da9p17eb47jsnd5868075e36e',
         'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
       }
     };
@@ -142,7 +142,7 @@ const checkStatusCode = async (token ) => {
     const options = {
       method: 'GET',
       headers: {
-        'X-RapidAPI-Key': ' 0ea15304d5msh2365b7bc32ad907p1e5449jsn133d427f0308',
+        'X-RapidAPI-Key': ' 4a56b76aaemsh6ecc8c35a877da9p17eb47jsnd5868075e36e',
         'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
       }
     };

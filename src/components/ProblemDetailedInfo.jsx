@@ -25,7 +25,6 @@ function ProblemDetailedInfo({ problem }) {
 
   let topicColorClass = 'bg-violet-50 text-violet-700 ring-violet-600/20';
   let companyColorClass = 'bg-fuchsia-50 text-fuchsia-700 ring-fuchsia-600/30';
-
   
   return (
     <div className="card">
@@ -145,7 +144,7 @@ function ProblemDetailedInfo({ problem }) {
           </div>
         </div>
 
-        <AccordionProblemInfo related_topics={problem.related_topics} companies={problem.companies} similar_questions={problem.similar_questions} />
+        <AccordionProblemInfo related_topics={problem.related_topics} companies={problem.companies} similar_questions={problem.similar_questions} hints={problem.hints} />
 
         </div>
   );
@@ -174,7 +173,10 @@ ProblemDetailedInfo.propTypes = {
         value: PropTypes.string.isRequired
       })
     ).isRequired,
-    solution: PropTypes.string.isRequired
+    solution: PropTypes.string.isRequired,
+    hints : PropTypes.arrayOf(
+      PropTypes.string.isRequired
+    ).isRequired
   }).isRequired
 };
 
