@@ -1,10 +1,10 @@
-import SignInForm from "../components/SignInForm";
+import ResetPasswordForm from "./components/ResetPasswordForm";
 
-function SignInPage() {
+function ResetPasswordPage() {
     return (
         <div className="flex w-full h-screen">
         <div className="w-full flex items-center justify-center lg:w-1/2">
-            <SignInForm />
+            <ResetPasswordForm />
         </div>
         <div className="hidden relative lg:flex h-full w-1/2 items-center justify-center bg-gradient-to-tr from-twilight-100 to-twilight-400">
            
@@ -12,4 +12,4 @@ function SignInPage() {
         </div>);
     }
 
-export default SignInPage;
+export default ResetPasswordPage;

@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 
 const TopNavBarContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export default function Navbar({ currentPage, children }) {
     const [expanded, setExpanded] = useState(true);
 

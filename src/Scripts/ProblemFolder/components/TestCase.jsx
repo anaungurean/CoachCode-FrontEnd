@@ -12,11 +12,14 @@ import { toast } from 'react-toastify';
 function TestCase({input_variables, solution, code, languageId}) {
   const [isHovered, setIsHovered] = useState(false);
   const [errorCode, setErrorCode] = useState(null);
-  const [errorSolution, setErrorSolution] = useState(null);
+  const [, setErrorSolution] = useState(null);
   const [stdoutCode, setStdoutCode] = useState(null);
   const [stdoutSolution, setStdoutSolution] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  console.log('Solution: ')
+  console.log(solution)
 
   const handleHover = () => {
     setIsHovered(true);
@@ -38,7 +41,7 @@ function TestCase({input_variables, solution, code, languageId}) {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'X-RapidAPI-Key': ' 4a56b76aaemsh6ecc8c35a877da9p17eb47jsnd5868075e36e',
+          'X-RapidAPI-Key': ' 90b30b5ac0msh0106a7cb5e9a100p1f3f01jsn7c9472be0b73',
           'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
         },
         body: JSON.stringify({
@@ -92,7 +95,7 @@ const handleSubmit = () => {
       });
 
       runCode(languageId.id, code, values, 1);
-      runCode('71', solution, values, 2);
+      runCode(languageId.id, solution, values, 2);
 
     };
 
@@ -102,7 +105,7 @@ const checkStatusSolution  = async (token ) => {
     const options = {
       method: 'GET',
       headers: {
-        'X-RapidAPI-Key': ' 4a56b76aaemsh6ecc8c35a877da9p17eb47jsnd5868075e36e',
+        'X-RapidAPI-Key': ' 90b30b5ac0msh0106a7cb5e9a100p1f3f01jsn7c9472be0b73',
         'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
       }
     };
@@ -111,9 +114,7 @@ const checkStatusSolution  = async (token ) => {
       const response = await fetch(url, options);
       const result = await response.json();
       const statusId = result.status?.id;
-      console.log('Solution');
-      console.log('result', result);
-
+    
       if (statusId === 1 || statusId === 2) {
         setTimeout(() => {
           checkStatusSolution(token);
@@ -142,7 +143,7 @@ const checkStatusCode = async (token ) => {
     const options = {
       method: 'GET',
       headers: {
-        'X-RapidAPI-Key': ' 4a56b76aaemsh6ecc8c35a877da9p17eb47jsnd5868075e36e',
+        'X-RapidAPI-Key': ' 90b30b5ac0msh0106a7cb5e9a100p1f3f01jsn7c9472be0b73',
         'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
       }
     };

@@ -1,7 +1,8 @@
 import { Fragment, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDown } from 'lucide-react';
-import { languageOptions } from '../constants/languageOptions';
+import { languageOptions } from '../../../constants/languageOptions'
+import PropTypes from 'prop-types';
  
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -63,3 +64,7 @@ export default function LanguageDropdown({ onLanguageSelect }) {
     </Menu>
   )
 }
+
+LanguageDropdown.propTypes = {
+  onLanguageSelect: PropTypes.func.isRequired,
+};

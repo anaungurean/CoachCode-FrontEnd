@@ -1,6 +1,5 @@
 import { useState,useEffect} from "react";
 import DropdownCheckbox from "./DropdownCheckbox";
-// import { Search } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { MdOutlineCancel } from "react-icons/md";
 

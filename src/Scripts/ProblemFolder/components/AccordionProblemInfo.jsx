@@ -1,5 +1,7 @@
 import React, { useEffect, useState} from "react";
 import PropTypes from "prop-types";
+
+
 import {
   Accordion,
   AccordionHeader,
@@ -15,6 +17,7 @@ const CUSTOM_ANIMATION = {
   unmount: { scale: 0.9 },
 };
 
+// eslint-disable-next-line react/prop-types
 function Icon({ id, open }) {
   return (
     <svg

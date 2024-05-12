@@ -1,5 +1,3 @@
-// notifications.js
-
 import { toast } from 'react-toastify';
 
 export const showErrorToast = (msg, timer) => {

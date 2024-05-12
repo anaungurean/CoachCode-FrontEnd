@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import NavBar from '../components/SideNavBar';
-import TopNavBar from '../components/TopNavBar';
-import ProblemDetailedInfo from '../components/ProblemDetailedInfo';
-import CodePart from '../components/CodePart';
-import Solution from '../components/Solution';
-import Popup from '../components/PopUp'; // Corrected import statement for Popup component
+import NavBar from '../../components/SideNavBar';
+import TopNavBar from '../../components/TopNavBar';
+import ProblemDetailedInfo from './components/ProblemDetailedInfo';
+import CodePart from './components/CodePart';
+import Solution from './components/Solution';
+import Popup from './components/PopUp'; 
 
 function ProblemPage() {
   const { id } = useParams();  
@@ -32,7 +32,6 @@ function ProblemPage() {
     })
     .then(data => {
       setProblem(data); 
-      console.log(data);
     })
     .catch(error => {
       console.error('Error fetching data:', error);

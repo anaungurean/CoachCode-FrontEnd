@@ -1,4 +1,4 @@
-import ResetPasswordForm from "../components/ValidateCodeForm";
+import ResetPasswordForm from "./components/ValidateCodeForm";
 
 function ValidateCodePage() {
     return (

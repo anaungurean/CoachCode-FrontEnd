@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { BadgeX, Check } from 'lucide-react';
-import styles from './ProblemCard.module.css';
+import styles from '../../../Styles/ProblemCard.module.css';
 import AccordionProblemInfo from './AccordionProblemInfo';
  
 
@@ -164,7 +164,8 @@ ProblemDetailedInfo.propTypes = {
     tests: PropTypes.arrayOf(
       PropTypes.shape({
         input: PropTypes.string.isRequired,
-        output: PropTypes.string.isRequired
+        output_python: PropTypes.string.isRequired,
+        output_java: PropTypes.string.isRequired
       })
     ).isRequired,
     input_variables: PropTypes.arrayOf(
@@ -173,9 +174,20 @@ ProblemDetailedInfo.propTypes = {
         value: PropTypes.string.isRequired
       })
     ).isRequired,
-    solution: PropTypes.string.isRequired,
+    solution: PropTypes.arrayOf(
+      PropTypes.shape({
+        python: PropTypes.string.isRequired,
+        java: PropTypes.string.isRequired
+      })
+    ).isRequired,
     hints : PropTypes.arrayOf(
       PropTypes.string.isRequired
+    ).isRequired,
+      base_code: PropTypes.arrayOf(
+      PropTypes.shape({
+        language: PropTypes.string.isRequired,
+        base_code: PropTypes.string.isRequired
+      })
     ).isRequired
   }).isRequired
 };

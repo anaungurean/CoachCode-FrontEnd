@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import styles from './ProblemCard.module.css';
+import styles from '../../../Styles/ProblemCard.module.css';
 import { BadgeX, Check } from 'lucide-react';
 
 

@@ -1,5 +1,5 @@
-import SignUpForm from "../components/SignUpForm";
-import SlideWall from "../assets/SlideWall.jpg"
+import SignUpForm from "./components/SignUpForm";
+import SlideWall from "../../assets/SlideWall.jpg"
 
 function SignUpPage() {
     return (

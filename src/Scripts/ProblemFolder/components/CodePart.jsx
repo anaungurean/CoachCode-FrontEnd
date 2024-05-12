@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaCode } from "react-icons/fa";
 import LanguageDropdown from "./LanguageDropdown";
 import CodeEditorWindow from "./CodeEditor";
@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import useCtrlEnterHandler from './useCtrlEnterHandler';
 import TestResults from './TestResults';
 import TestCase from './TestCase';
-import { showErrorToast, showSuccessToast } from './notifications';
+import { showErrorToast } from './notifications';
 
 function CodePart(problem) {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
@@ -23,10 +23,10 @@ function CodePart(problem) {
   const [executionError, setExecutionError] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [solution, setSolution] = useState(null);
   const tests = problem.problem.tests;
   const input_variables = problem.problem.input_variables;
-  const solution = problem.problem.solution;
-
+  
   useEffect(() => {
     const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     setIsDarkMode(prefersDarkMode);
@@ -39,20 +39,32 @@ function CodePart(problem) {
   useCtrlEnterHandler(handleSubmitWithCtrlEnter);
 
   const handleLanguageSelect = (language) => {
-    setSelectedLanguage(language);
-  };
+  setSelectedLanguage(language);
+  
+  if (language.value === 'python') {
+      setSolution(problem.problem.solution.python);
+    }
+    else if (language.value === 'java') {
+      setSolution(problem.problem.solution.java);
+    }
+  
+
+  for (let i = 0; i < problem.problem.base_code.length; i++) {
+    if (language.value === problem.problem.base_code[i].language) {
+      setCode(problem.problem.base_code[i].base_code);
+      break;
+    }
+  }
+};
+
 
   const handleCodeChange = (newCode) => {
     setCode(newCode);
-    handleLanguageSelect(selectedLanguage);
   };
 
   useEffect(() => {
     setSelectedTheme(isDarkMode ? { value: 'vs-dark' } : { value: 'vs-light' });
   }, [isDarkMode]);
-
- 
-
 
   const handleHover = () => {
     setIsHovered(true);
@@ -63,17 +75,18 @@ function CodePart(problem) {
   };
 
   const handleSubmit = async () => {
-    if (!selectedLanguage) {
-      showErrorToast('Please select a language!');
-      return;
-    }
-
     setMemory(0);
     setTime(0);
     setPassedTests(0);
     setFailedTests(0);
+    setSubmitted(false);
     setCompilationError(null);
     setExecutionError(null);
+
+    if (!selectedLanguage) {
+      showErrorToast('Please select a language.');
+      return;
+    }
 
     const runCode = async (selectedLanguage, code, input, expectedOutput) => {
       const url = 'https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&fields=*';
@@ -95,31 +108,28 @@ function CodePart(problem) {
       try {
         const response = await fetch(url, options);
         const result = await response.json();
-        checkStatus(result.token);
+        await checkStatus(result.token);
       } catch (error) {
         console.error(error);
-        showErrorToast('Too many requests.');
       }
     };
-
+        
     for (let i = 0; i < tests.length; i++) {
-      await runCode(selectedLanguage, code, tests[i].input, tests[i].output);
 
-      if (compilationError) {
-        break;
+      if (selectedLanguage.value === 'python') {
+        await runCode(selectedLanguage, code, tests[i].input, tests[i].output_python);
       }
-      if (executionError) {
-        break;
+      else if (selectedLanguage.value === 'java') {
+        await runCode(selectedLanguage, code, tests[i].input, tests[i].output_java);
       }
+
     }
 
-    if (failedTests === 0)
-      showSuccessToast('All tests passed successfully!');
-    else if (failedTests > 0)
-      showErrorToast('Some tests failed!');
+     setTimeout(() => {
+      setSubmitted(true);
+    }, 1000);
 
-    setSubmitted(true);
-   
+
   };
 
   const checkStatus = async (token) => {
@@ -136,6 +146,8 @@ function CodePart(problem) {
       const response = await fetch(url, options);
       const result = await response.json();
       const statusId = result.status?.id;
+      
+
 
       if (statusId === 1 || statusId === 2) {
         setTimeout(() => {
@@ -143,18 +155,20 @@ function CodePart(problem) {
         }, 1000);
       } else if (statusId === 3) {
         setPassedTests(prevState => prevState + 1);
+
       } else if (statusId === 4) {
         setFailedTests(prevState => prevState + 1);
+  
       } else if (statusId === 6) {
         setCompilationError(atob(result.compile_output));
-        showErrorToast('Compilation Error!');
+  
       } else if (statusId === 7 || statusId === 8 || statusId === 9 || statusId === 10 || statusId === 11 || statusId === 12) {
         setExecutionError(atob(result.stderr));
-        showErrorToast('Execution Error!');
+       
       } else {
-        showErrorToast('Something went wrong! Please try again.');
+        console.error('An error occurred while checking the status of the submission.');
       }
-      // console.log(result);  
+
       if (memory < result.memory) {
         setMemory(result.memory);
       }
@@ -166,6 +180,9 @@ function CodePart(problem) {
     }
   };
 
+
+
+  
   return (
     <div>
       <ToastContainer />
@@ -200,7 +217,7 @@ function CodePart(problem) {
           />
         </div>
       </div>
-   {submitted && (
+   {submitted &&  (
         <div>
           <TestResults
             memory={memory}
@@ -210,7 +227,7 @@ function CodePart(problem) {
             compilationError={compilationError}
             executionError={executionError}
           />
-        </div>
+      </div>
     )}
     <div> 
     <TestCase
