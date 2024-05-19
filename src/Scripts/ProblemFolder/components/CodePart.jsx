@@ -9,6 +9,7 @@ import useCtrlEnterHandler from './useCtrlEnterHandler';
 import TestResults from './TestResults';
 import TestCase from './TestCase';
 import { showErrorToast } from './notifications';
+import { Info } from 'lucide-react';
 
 function CodePart(problem) {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
@@ -216,6 +217,11 @@ function CodePart(problem) {
             theme={selectedTheme.value}
           />
         </div>
+        <div className='mt-4 mr-8 ml-4 mb-2 flex items-center bg-twilight-100/10 rounded-md p-2'>
+          <Info size={24} className="mr-2 ml-4 text-twilight-400" />
+          <p className="text-twilight-400">Please complete the code based on the programming language. </p>
+      </div>
+
       </div>
    {submitted &&  (
         <div>
