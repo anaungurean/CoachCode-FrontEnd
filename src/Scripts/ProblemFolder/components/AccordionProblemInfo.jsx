@@ -47,9 +47,13 @@ const extractTitlesofSimilarQuestions = (similar_questions) => {
 }
 
 const fetchProblemIdByTitle = async (title) => {
+  const token = localStorage.getItem('authToken');  
   try {
-
-    const response = await fetch(`http://localhost:5000/problems/${encodeURIComponent(title)}`);
+    const response = await fetch(`http://localhost:5000/problems/${encodeURIComponent(title)}`, {
+      headers: {
+        'Authorization': `Bearer ${token}` // adaugă tokenul JWT în header-ul cererii
+      }
+    });
     const data = await response.json();
     return { title, id: data };
   } catch (error) {
@@ -57,7 +61,6 @@ const fetchProblemIdByTitle = async (title) => {
     return null;
   }
 };
-
 
 
 export default function AccordionProblemInfo({ related_topics, companies, similar_questions, hints }) {

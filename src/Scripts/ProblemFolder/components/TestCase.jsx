@@ -18,8 +18,6 @@ function TestCase({input_variables, solution, code, languageId}) {
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log('Solution: ')
-  console.log(solution)
 
   const handleHover = () => {
     setIsHovered(true);

@@ -18,10 +18,12 @@ function ProblemPage() {
   }, [id]); 
 
   const fetchProblem = (id) => {
+    const token = localStorage.getItem('authToken');  
     fetch(`http://localhost:5000/problems/${id}`, {
       method: 'GET',  
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
       }
     })
     .then(response => {

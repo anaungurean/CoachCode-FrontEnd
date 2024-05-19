@@ -70,7 +70,7 @@ export default function ValidateCodeForm() {
     };
 
     useEffect(() => {
-        inputRefs.current[0].focus(); // Focus on the first input when the component mounts
+        inputRefs.current[0].focus();  
     }, []);
 
     return (

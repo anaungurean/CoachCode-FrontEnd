@@ -17,8 +17,18 @@ function ProblemsPage() {
   }, []);
 
   const fetchProblems = () => {
-    fetch('http://localhost:5000/problems')
-      .then(response => response.json())
+    const token = localStorage.getItem('authToken');  
+    fetch('http://localhost:5000/problems', {
+      headers: {
+        'Authorization': `Bearer ${token}`  
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Authentication error');  
+        }
+        return response.json();
+      })
       .then(data => {
         setOriginalProblems(data);
         setFilteredProblems(data);  
@@ -60,7 +70,6 @@ function ProblemsPage() {
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
               </div>
             </div>
-        
         </div>
       </div>
     </div>

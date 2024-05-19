@@ -6,6 +6,7 @@ import ValidateCodePage from './Scripts/ValidateCodeFolder/ValidateCodePage';
 import ResetPasswordPage from './Scripts/ResetPasswordFolder/ResetPasswordPage'
 import ProblemsPage from './Scripts/ProblemsFolder/ProblemsPage';
 import ProblemPage from './Scripts/ProblemFolder/ProblemPage';
+import SubmissionsPage from './Scripts/SubmissionsFolder/SubmissionsPage';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/reset-password" element={<ResetPasswordPage />} />  
         <Route path="/problems" element={<ProblemsPage />} />
         <Route path="/problems/:id" element={<ProblemPage />} />
+        <Route path="/submissions" element={<SubmissionsPage />} />
       </Routes>
     </Router>
   );

@@ -6,7 +6,7 @@ import { IoAlertCircleOutline } from "react-icons/io5";
 import { useState, useEffect } from 'react';
 import { showErrorToast, showSuccessToast } from './notifications';
 
-function TestResults({ memory, time, passedTests, failedTests, compilationError, executionError }) {
+function TestResults({ memory, time, passedTests, failedTests, compilationError, executionError, language, submission, problem_id }) {
   
   const [loading, setLoading] = useState(true);
   const [notificationShown, setNotificationShown] = useState(false);
@@ -40,6 +40,34 @@ function TestResults({ memory, time, passedTests, failedTests, compilationError,
 
     showNotification();
   }, [compilationError, executionError, failedTests, notificationShown]);
+
+   const handleSubmit = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/submissions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify({
+          problem_id : problem_id,
+          programming_language: language.name,
+          submission: submission,
+          memory: memory,
+          runtime : time
+        })
+      });
+
+      if (response.ok) {
+        showSuccessToast('Submission saved successfully!');
+      } else {
+        showErrorToast('Failed to save test submission!');
+      }
+    } catch (error) {
+      console.error('Error saving test results:', error);
+      showErrorToast('An error occurred while saving the submission !');
+    }
+  };
 
   return (
     <div className="mt-4 mr-4 border pl-4 pt-4 pb-8 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md">
@@ -130,8 +158,11 @@ function TestResults({ memory, time, passedTests, failedTests, compilationError,
                 </ul>
               </div>
               <div className="flex justify mt-3 justify-end ml-1">
-                <button className="flex items-center justify-center gap-x-1.5 rounded-md bg-green-800 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-green-600 hover:bg-green-900">
-                  Submit your solution
+                <button 
+                    className="flex items-center justify-center gap-x-1.5 rounded-md bg-green-800 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-green-600 hover:bg-green-900"
+                    onClick={handleSubmit}
+                  >
+                    Submit your solution
                 </button>
               </div>
             </div>
@@ -149,6 +180,9 @@ TestResults.propTypes = {
   failedTests: PropTypes.number,
   compilationError: PropTypes.string,
   executionError: PropTypes.string,
+  language: PropTypes.string,
+  submission : PropTypes.string,
+  problem_id : PropTypes.number
 };
 
 export default TestResults;

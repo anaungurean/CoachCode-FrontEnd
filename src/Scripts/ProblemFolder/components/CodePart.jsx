@@ -232,6 +232,9 @@ function CodePart(problem) {
             failedTests={failedTests}
             compilationError={compilationError}
             executionError={executionError}
+            language={selectedLanguage}
+            submission = {code}
+            problem_id = {problem.problem.id}
           />
       </div>
     )}
