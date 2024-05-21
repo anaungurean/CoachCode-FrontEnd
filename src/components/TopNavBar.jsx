@@ -1,21 +1,32 @@
-import { createContext, useState } from "react";
+/* eslint-disable react/prop-types */
+import { Home, ChevronRight } from 'lucide-react';
 
-const TopNavBarContext = createContext();
+const Breadcrumb = ({ items }) => {
+  return (
+    <nav className="flex px-5 py-4 mt-4 mr-2 text-twilight-400 border border-gray-200 rounded-xl bg-white" aria-label="Breadcrumb">
+      <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+        {items.map((item, index) => (
+          <li key={index} className="inline-flex items-center">
+            {item.link ? (
+              <a href={item.link} className="inline-flex items-center font-medium text-twilight-300 hover:text-twilight-500">
+                {index === 0 && (
+                  <Home className="w-4 h-4 me-2.5" />
+                )}
+                {item.name}
+              </a>
+            ) : (
+              <span className="inline-flex items-center  font-medium text-twilight-300 ">
+                {item.name}
+              </span>
+            )}
+            {index < items.length - 1 && (
+              <ChevronRight className="rtl:rotate-180 block w-4 h-4 mx-1 text-twilight-300" />
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+};
 
-// eslint-disable-next-line react/prop-types
-export default function Navbar({ currentPage, children }) {
-    const [expanded, setExpanded] = useState(true);
-
-    return (
-        <TopNavBarContext.Provider value={{ expanded, setExpanded }}>
-            <div className="mt-3 mr-3">
-                <nav className={`flex items-center justify-between bg-white border-r shadow-sm px-4 py-5 rounded-2xl ${expanded ? 'h-16' : 'h-auto'}`}>
-                    <div className={`flex items-center ${expanded ? "" : "hidden"}`}>
-                        <span className="mr-2 text-gray-600">{currentPage}</span>
-                        {children}
-                    </div>
-                </nav>
-            </div>
-        </TopNavBarContext.Provider>
-    );
-}
+export default Breadcrumb;

@@ -44,7 +44,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 rounded-xl">
+    <div className="flex items-center justify-between border border-gray-200 bg-white px-4 py-3 sm:px-6 rounded-xl">
       <div>
         <p className="text-sm text-gray-700">
           Showing <span className="font-medium">{(currentPage - 1) * 10 + 1}</span> to{' '}

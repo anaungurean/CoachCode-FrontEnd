@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from '../../components/SideNavBar';
-import TopNavBar from '../../components/TopNavBar';
+import Breadcrumb from '../../components/TopNavBar';
 import ProblemDetailedInfo from './components/ProblemDetailedInfo';
 import CodePart from './components/CodePart';
 import Solution from './components/Solution';
@@ -46,6 +46,11 @@ function ProblemPage() {
     
   };
  
+  const breadcrumbItems = [
+    { name: 'Home', link: '/' },
+    { name: 'Coding Practice', link:'/problems' },
+    { name: problem ? problem.title : '', link: null }
+    ];
 
   return (
     <div className="flex">
@@ -53,7 +58,7 @@ function ProblemPage() {
         <NavBar/>
       </div>
       <div className='w-5/6'>
-        <TopNavBar currentPage={'Problems'}></TopNavBar>
+        <Breadcrumb items={breadcrumbItems} />
         {problem && (
           <ProblemDetailedInfo problem={problem} />
         )}

@@ -1,8 +1,8 @@
 import NavBar from '../../components/SideNavBar';
-import TopNavBar from '../../components/TopNavBar';
 import { useState, useEffect } from 'react';
 import { jwtDecode } from "jwt-decode";
 import SubmissionDetails from './components/SubmissionsTable';
+import Breadcrumb from '../../components/TopNavBar';
 
 function SubmissionsPage() {
 
@@ -35,6 +35,12 @@ function SubmissionsPage() {
     
   };
   
+   const breadcrumbItems = [
+    { name: 'Home', link: '/' },
+    { name: 'My Submissions', link:null },
+  ];
+
+
 
   return (
     <div className="flex">
@@ -42,8 +48,7 @@ function SubmissionsPage() {
         <NavBar/>
       </div>
       <div className='w-5/6'>
-        <TopNavBar currentPage={'Submissions'}></TopNavBar>
-
+                <Breadcrumb items={breadcrumbItems} />
         <div className="mt-4 mr-4">
           <SubmissionDetails SubmissionsDetails={submissions} />
         </div>

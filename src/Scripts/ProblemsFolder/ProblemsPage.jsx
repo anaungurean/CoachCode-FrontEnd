@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import ProblemCard from './components/ProblemCard';  
 import NavBar from '../../components/SideNavBar';
 import Pagination from './components/Pagination';
-import TopNavBar from '../../components/TopNavBar';
+import Breadcrumb from '../../components/TopNavBar';
 import FilterComponent from './components/Filter';
 
 function ProblemsPage() {
@@ -49,13 +49,18 @@ function ProblemsPage() {
     setTotalPages(Math.ceil(filteredProblems.length / problemsPerPage));  
   };
 
+   const breadcrumbItems = [
+    { name: 'Home', link: '/' },
+    { name: 'Coding Practice', link:null },
+  ];
+
   return (
     <div className="flex">
       <div className="w-1/6"> 
         <NavBar/>
       </div>
       <div className='w-5/6'>
-        <TopNavBar currentPage={'Problems'}></TopNavBar>
+        <Breadcrumb items={breadcrumbItems} />
         <FilterComponent onFilter={handleFilter} problems={originalProblems} />
         <div className="p-4"> 
             <div>
