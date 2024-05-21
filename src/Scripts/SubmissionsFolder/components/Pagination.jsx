@@ -20,7 +20,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   const generatePageNumbers = () => {
-    const visiblePages = 10;  
+    const visiblePages = 5;  
     const pages = [];
     let startPage = Math.max(currentPage - Math.floor(visiblePages / 2), 1);
     let endPage = Math.min(startPage + visiblePages - 1, totalPages);
@@ -44,14 +44,14 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 rounded-xl">
+    <div className="flex items-center justify-between border border-gray-200 bg-white px-4 py-3 sm:px-6 rounded-xl">
       <div>
         <p className="text-sm text-gray-700">
-          Showing <span className="font-medium">{(currentPage - 1) * 10 + 1}</span> to{' '}
+          Showing <span className="font-medium">{(currentPage - 1) * 5 + 1}</span> to{' '}
           <span className="font-medium">
-            {Math.min(currentPage * 10, totalPages === currentPage ? totalPages * 10 : currentPage * 10)}
+            {Math.min(currentPage * 5, totalPages === currentPage ? totalPages * 5 : currentPage * 5)}
           </span>{' '}
-          of <span className="font-medium">{totalPages * 10}</span> results
+          of <span className="font-medium">{totalPages * 5}</span> results
         </p>
       </div>
       <div>

@@ -31,7 +31,7 @@ function ProblemDetailedInfo({ problem }) {
       <div className="mt-4 mr-4 border pl-4 pt-4 pb-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md ">
         <div className='flex items-center'>
           <div className={styles.icon}>
-            {problem.solved ? <Check size={20} /> : <BadgeX size={20} />}
+            {problem.is_solved ? <Check size={20} /> : <BadgeX size={20} />}
           </div>
           <div className="text-2xl font-bold text-twilight-400">{problem.id}. {problem.title}</div>
         </div>
@@ -160,7 +160,7 @@ ProblemDetailedInfo.propTypes = {
     companies: PropTypes.string.isRequired,
     similar_questions: PropTypes.string.isRequired,
     asked_by_faang: PropTypes.bool.isRequired,
-    solved: PropTypes.bool,
+    is_solved: PropTypes.bool,
     tests: PropTypes.arrayOf(
       PropTypes.shape({
         input: PropTypes.string.isRequired,

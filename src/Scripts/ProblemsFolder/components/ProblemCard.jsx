@@ -40,7 +40,7 @@ function ProblemCard({ problem }) {
     <div className={styles.card} onClick={handleClick}> {/* Attach onClick event handler */}
       <div className={styles.cardHeader}>
         <div className={styles.icon}>
-          {problem.solved ? <Check size={20} /> : <BadgeX size={20} />}
+          {problem.is_solved ? <Check size={20} /> : <BadgeX size={20} />}
         </div>
         <h3>{formatStringTitle(problem.title)}</h3>
       </div>
@@ -60,7 +60,7 @@ ProblemCard.propTypes = {
     related_topics: PropTypes.string.isRequired,
     difficulty: PropTypes.string.isRequired,
     companies: PropTypes.string.isRequired,
-    solved: PropTypes.bool
+    is_solved: PropTypes.bool
   }).isRequired
 };
 

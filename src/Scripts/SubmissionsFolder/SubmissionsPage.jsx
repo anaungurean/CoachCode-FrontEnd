@@ -44,7 +44,7 @@ function SubmissionsPage() {
       <div className='w-5/6'>
         <TopNavBar currentPage={'Submissions'}></TopNavBar>
 
-        <div className="flex justify-center">
+        <div className="mt-4 mr-4">
           <SubmissionDetails SubmissionsDetails={submissions} />
         </div>
       </div>
