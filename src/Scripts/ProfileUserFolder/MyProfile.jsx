@@ -2,6 +2,9 @@ import NavBar from '../../components/SideNavBar';
 import Breadcrumb from '../../components/TopNavBar';
 import { useEffect, useState } from 'react';
 import PhotoComponent from './components/PhotoComponent';
+import SocialAccountsComponent from './components/SocialAccountsComponent';
+import GeneralInformationComponent from './components/GeneralInformationComponent';
+import PasswordInformation from './components/PasswordInformation';
 
 function MyProfile() {
 
@@ -36,20 +39,49 @@ function MyProfile() {
         { name: 'My Profile', link:null },
     ];
 
+
+ 
+    
     return (
-        <div className="flex">
+        <div className="flex mr-4">
             <div className="w-1/6"> 
                 <NavBar/>
             </div>
+
             <div className='w-5/6'>
                 <Breadcrumb items={breadcrumbItems} />
+
+                <div className='flex'>
+
+                <div className='w-2/6 mt-4 flex flex-col bg-white border shadow-sm rounded-2xl p-4 '>
+                    <PhotoComponent photo_url={profile?.photo_url} first_name={profile?.first_name} last_name={profile?.last_name} status={profile?.status} />
+                </div>
+
+                {profile && (
+                <div className='w-4/6 mt-4 ml-4 flex flex-col bg-white border shadow-sm rounded-2xl p-4 '>
+                    <SocialAccountsComponent user={profile}/>
+                </div>
+                )}
             </div>
 
-            <div className="flex flex-col items-center">
-                <PhotoComponent photo_url={profile?.photo_url} username={profile?.username} />
-            </div>
 
-            
+            {profile && (
+            <div className='w-5/6>'>
+                 <div className='w-full mt-4 bg-white border shadow-sm rounded-2xl p-4 '>
+                    <GeneralInformationComponent user={profile}/>
+                </div>
+            </div>
+            )}
+
+            {profile && (
+            <div className='w-5/6>'>
+                 <div className='w-full mt-4 bg-white border shadow-sm rounded-2xl  '>
+                    <PasswordInformation/>
+                </div>
+            </div>
+            )}
+
+        </div>
 
 
         </div> 
