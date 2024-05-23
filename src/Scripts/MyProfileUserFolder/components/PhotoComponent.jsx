@@ -60,8 +60,8 @@ const PhotoComponent = ({ first_name, last_name, status}) => {
         </div>
 
         <div className='text-center mt-4 border-twilight-300 rounded-md text-twilight-500 bg-purple-50'>
-            <h1 className='text-2xl font-bold text-twilight-400'>{first_name} {last_name}</h1>
-            <h2 className='text-xl font-semibold text-twilight-300'>{status}</h2>
+            <h1 className='text-2xl font-bold text-twilight-400'>{first_name ?? 'No'} {last_name ?? 'name'}</h1>
+            <h2 className='text-xl font-semibold text-twilight-300'>{status ?? 'No status'}</h2>
         </div>
 
 

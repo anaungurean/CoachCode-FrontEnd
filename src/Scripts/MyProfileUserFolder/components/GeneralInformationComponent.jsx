@@ -79,7 +79,7 @@ const GeneralInformationComponent = ({ user }) => {
                         type='text'
                         id='firstName'
                         name='first_name'
-                        value={editedProfile.first_name}
+                        value={editedProfile.first_name ?? 'Not provided'}
                         onChange={handleChange}
                         className='p-2 border border-twilight-300 rounded bg-purple-50'
                         disabled={!editProfile}
@@ -91,7 +91,7 @@ const GeneralInformationComponent = ({ user }) => {
                         type='text'
                         id='lastName'
                         name='last_name'
-                        value={editedProfile.last_name}
+                        value={editedProfile.last_name ?? 'Not provided'}
                         onChange={handleChange}
                         className='p-2 border border-twilight-300 rounded bg-purple-50'
                         disabled={!editProfile}
@@ -103,7 +103,7 @@ const GeneralInformationComponent = ({ user }) => {
                         type='text'
                         id='username'
                         name='username'
-                        value={editedProfile.username}
+                        value={editedProfile.username ?? 'Not provided'}
                         onChange={handleChange}
                         className='p-2 border border-twilight-300 rounded bg-purple-50'
                         disabled={!editProfile}
@@ -115,7 +115,7 @@ const GeneralInformationComponent = ({ user }) => {
                         type='email'
                         id='email'
                         name='email'
-                        value={editedProfile.email}
+                        value={editedProfile.email ?? 'Not provided'}
                         onChange={handleChange}
                         className='p-2 border border-twilight-300 rounded text-twilight-500 bg-purple-50'
                         disabled= {true}
@@ -127,7 +127,7 @@ const GeneralInformationComponent = ({ user }) => {
                     <select
                         id='status'
                         name='status'
-                        value={editedProfile.status}
+                        value={editedProfile.status ?? 'Not provided'}
                         onChange={handleChange}
                         className='p-2 border border-twilight-300 rounded text-twilight-500 bg-purple-50'
                        disabled={!editProfile}
@@ -154,7 +154,7 @@ const GeneralInformationComponent = ({ user }) => {
                     <select
                         id='goal'
                         name='goal'
-                        value={editedProfile.goal}
+                        value={editedProfile.goal }
                         onChange={handleChange}
                         className='p-2 border border-twilight-300 rounded text-twilight-500 bg-purple-50'
                         disabled={!editProfile}

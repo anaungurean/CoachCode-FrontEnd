@@ -76,7 +76,7 @@ const SocialAccountsComponent = ({ user}) => {
                                 className='block w-full  border-twilight-300 rounded bg-purple-50  px-2'
                             />
                         ) : (
-                            <a href={editedUrls.linkedin_url} target='_blank' rel='noreferrer' className='text-base font-medium text-twilight-400 hover:underline'>{editedUrls.linkedin_url}</a>
+                            <a href={editedUrls.linkedin_url} target='_blank' rel='noreferrer' className='text-base font-medium text-twilight-400 hover:underline'>{editedUrls.linkedin_url ?? 'Not provided'}</a>
                         )}
                     </div>
                 </div>
@@ -93,7 +93,7 @@ const SocialAccountsComponent = ({ user}) => {
                                 className='block w-full border-twilight-300 rounded bg-purple-50 px-2'
                             />
                         ) : (
-                            <a href={editedUrls.github_url} target='_blank' rel='noreferrer' className='text-base font-medium text-twilight-400 hover:underline'>{editedUrls.github_url}</a>
+                            <a href={editedUrls.github_url} target='_blank' rel='noreferrer' className='text-base font-medium text-twilight-400 hover:underline'>{editedUrls.github_url ?? 'Not provided'}</a>
                         )}
                     </div>
                 </div>
@@ -110,7 +110,7 @@ const SocialAccountsComponent = ({ user}) => {
                                 className='block w-full border-twilight-300 rounded bg-purple-50 px-2'
                             />
                         ) : (
-                            <a href={editedUrls.facebook_url} target='_blank' rel='noreferrer' className='text-base font-medium text-twilight-400 hover:underline'>{editedUrls.facebook_url}</a>
+                            <a href={editedUrls.facebook_url} target='_blank' rel='noreferrer' className='text-base font-medium text-twilight-400 hover:underline'>{editedUrls.facebook_url ?? 'Not provided'}</a>
                         )}
                     </div>
                 </div>

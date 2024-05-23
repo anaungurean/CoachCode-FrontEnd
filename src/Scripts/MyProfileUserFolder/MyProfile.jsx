@@ -28,7 +28,8 @@ function MyProfile() {
         })
         .then(response => response.json())
         .then(data => {
-            setProfile(data);
+            setProfile(data); 
+
         })
         .catch((error) => {
             console.error('Error:', error);
