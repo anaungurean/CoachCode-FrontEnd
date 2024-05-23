@@ -2,7 +2,8 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Save } from 'lucide-react';
 import { Edit } from 'lucide-react';
-
+import { showSuccessToast } from './notifications';
+import { ToastContainer } from 'react-toastify';
 const SocialAccountsComponent = ({ user}) => {
     
     const [editProfile, setEditProfile] = useState(false);
@@ -37,6 +38,7 @@ const SocialAccountsComponent = ({ user}) => {
             })
             .then(response => response.json())
             .then(data => {
+                showSuccessToast('Social accounts updated successfully!');
                 console.log(data);
                 setEditProfile(false);
             })
@@ -71,7 +73,7 @@ const SocialAccountsComponent = ({ user}) => {
                                 name="linkedin_url"
                                 value={editedUrls.linkedin_url}
                                 onChange={handleChange}
-                                className='block w-full  border-twilight-300 rounded bg-purple-50 '
+                                className='block w-full  border-twilight-300 rounded bg-purple-50  px-2'
                             />
                         ) : (
                             <a href={editedUrls.linkedin_url} target='_blank' rel='noreferrer' className='text-base font-medium text-twilight-400 hover:underline'>{editedUrls.linkedin_url}</a>
@@ -88,7 +90,7 @@ const SocialAccountsComponent = ({ user}) => {
                                 name="github_url"
                                 value={editedUrls.github_url}
                                 onChange={handleChange}
-                                className='block w-full border-twilight-300 rounded bg-purple-50'
+                                className='block w-full border-twilight-300 rounded bg-purple-50 px-2'
                             />
                         ) : (
                             <a href={editedUrls.github_url} target='_blank' rel='noreferrer' className='text-base font-medium text-twilight-400 hover:underline'>{editedUrls.github_url}</a>
@@ -105,7 +107,7 @@ const SocialAccountsComponent = ({ user}) => {
                                 name="facebook_url"
                                 value={editedUrls.facebook_url}
                                 onChange={handleChange}
-                                className='block w-full border-twilight-300 rounded bg-purple-50'
+                                className='block w-full border-twilight-300 rounded bg-purple-50 px-2'
                             />
                         ) : (
                             <a href={editedUrls.facebook_url} target='_blank' rel='noreferrer' className='text-base font-medium text-twilight-400 hover:underline'>{editedUrls.facebook_url}</a>
@@ -121,6 +123,7 @@ const SocialAccountsComponent = ({ user}) => {
                     </button>
                 </div>
             )}
+            <ToastContainer />
         </div>
     );
 };

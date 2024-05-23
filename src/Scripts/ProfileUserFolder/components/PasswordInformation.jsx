@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Save, Edit } from 'lucide-react';
 import { showErrorToast, showSuccessToast } from './notifications';
+import { ToastContainer } from 'react-toastify';
+
 
 const PasswordInformation = () => {
     const [editProfile, setEditProfile] = useState(false);
@@ -21,12 +23,18 @@ const PasswordInformation = () => {
     const handleSaveProfile = () => {
 
         const token = localStorage.getItem('authToken');
+
         if (editedPassword.new_password !== editedPassword.confirm_password) {
             showErrorToast('Passwords do not match');
-            console.log('Passwords do not match');
             return;
         }
 
+        const strongPasswordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[^\s]).{8,}$/;
+
+        if (!strongPasswordRegex.test(editedPassword.new_password)) {
+            showErrorToast('The password is not strong enough.');
+            return;
+        }
 
         fetch('http://localhost:5000/update_password', {
             method: 'PUT',
@@ -90,6 +98,7 @@ const PasswordInformation = () => {
                     </div>
                 </div>
             }
+            <ToastContainer />
         </div>
     );
 }

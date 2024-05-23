@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Save } from 'lucide-react';
 import { Edit } from 'lucide-react';
+import { ToastContainer} from 'react-toastify';
 import { showErrorToast, showSuccessToast } from './notifications';
-
 
 const GeneralInformationComponent = ({ user }) => {
 
@@ -26,9 +26,7 @@ const GeneralInformationComponent = ({ user }) => {
             [name]: value
         }));
     };
-
-
-    
+ 
     const handleSaveProfile = () => {
         const token = localStorage.getItem('authToken');
         fetch('http://localhost:5000/update_general_information', {
@@ -43,11 +41,10 @@ const GeneralInformationComponent = ({ user }) => {
             console.log (editedProfile)
             console.log(response);
             if (response.status === 400) {
-                alert('This username is already taken. Please choose another one.');
                 showErrorToast('This username is already taken. Please choose another one.');
             }
             else {
-                showSuccessToast('Profile updated successfully!');
+                showSuccessToast('General information updated successfully!');
                 setEditProfile(false);
             }
             return response.json();
@@ -187,6 +184,8 @@ const GeneralInformationComponent = ({ user }) => {
                     </button>
                 </div>
             )}
+
+            <ToastContainer />
 
         </div>
     );
