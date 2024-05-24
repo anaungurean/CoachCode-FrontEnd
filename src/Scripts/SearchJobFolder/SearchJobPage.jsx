@@ -25,7 +25,6 @@ function SearchJobPage() {
                 <Search size={20} className="text-twilight-500 mr-2"/>
                 <h3 className="text-lg font-semibold">Search jobs based on your preferences </h3>
             </div>
-
             <FilterJob/>
             
         </div>

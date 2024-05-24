@@ -4,7 +4,7 @@ import styles from '../../../Styles/ProblemCard.module.css';
 function JobCard({ job }) {
  
   const handleClick = () => {
-    window.location.href = job.job_url; // Redirect to the job page
+    window.location.href = `/job-profile/${job.id}`;
   };
 
  
@@ -31,6 +31,7 @@ function JobCard({ job }) {
 
 JobCard.propTypes = {
   job: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     company: PropTypes.shape({
       name: PropTypes.string.isRequired,
