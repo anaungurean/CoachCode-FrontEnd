@@ -30,6 +30,8 @@ function SearchJobPage() {
             
         </div>
 
+        
+
 
         </div>
         </div>
