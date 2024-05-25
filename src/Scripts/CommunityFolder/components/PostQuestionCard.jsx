@@ -1,29 +1,80 @@
 import { useState } from 'react';
 import { Camera, Users, Send } from 'lucide-react';
 import DropdownCheckbox from './DropdownCheckbox';
+import { showErrorToast, showSuccessToast } from './notifications';
 
 export default function PostQuestionCard() {
+    const [selectedImage, setSelectedImage] = useState(null);
     const [selectedImageName, setSelectedImageName] = useState('');
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
     const [selectedOptions, setSelectedOptions] = useState([]);
 
-   const options = [
-    { label: 'Programming', value: 'Programming' },
-    { label: 'Tools', value: 'Tools' },
-    { label: 'Career', value: 'Career' },
-    { label: 'Companies', value: 'Companies' },
-    { label: 'Problems', value: 'Problems' },
-    { label: 'Community', value: 'Community' },
-    { label: 'Education', value: 'Education' },
-    { label: 'Projects', value: 'Projects' }
-];
+    const options = [
+        { label: 'Programming', value: 'Programming' },
+        { label: 'Tools', value: 'Tools' },
+        { label: 'Career', value: 'Career' },
+        { label: 'Companies', value: 'Companies' },
+        { label: 'Problems', value: 'Problems' },
+        { label: 'Community', value: 'Community' },
+        { label: 'Education', value: 'Education' },
+        { label: 'Projects', value: 'Projects' }
+    ];
 
- 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
+            setSelectedImage(file);
             setSelectedImageName(file.name);
         }
     };
+
+const handleSubmit = async () => {
+    const token = localStorage.getItem('authToken');
+    console.log('Token:', token);
+
+    if (!title) {
+        showErrorToast('Please add a title to your thought', 3000);
+        return;
+    }
+
+    if (!content) {
+        showErrorToast('Please add some content to your thought', 3000);
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('topic', selectedOptions.join(','));
+
+    if (selectedImage) {
+        formData.append('photo', selectedImage);
+    }
+
+    fetch('http://localhost:5000/questions', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        showSuccessToast('Post created successfully', 3000);
+        setTitle('');
+        setContent('');
+        setSelectedOptions([]);
+        setSelectedImage(null);
+        setSelectedImageName('');
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        showErrorToast('Something went wrong! Please try again.', 3000);
+        console.error('Error:', error);
+    });
+};
+
 
    
 
@@ -47,7 +98,10 @@ export default function PostQuestionCard() {
                     <div className="flex items-center justify-center">  
                         <input
                             className="w-full h-10 border border-twilight-100 rounded-md p-2 bg-purple-50 bg-opacity-80 shadow-md backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-twilight-300 focus:border-transparent transition-all ease-in-out hover:ring-2 hover:ring-twilight-300 hover:border-transparent text-twilight-300 font-semibold placeholder-twilight-300 placeholder-opacity-80"
-                            placeholder="Add a title to your thought">
+                            placeholder="Add a title to your thought"
+                             value={title}
+                            onChange={event => setTitle(event.target.value)}
+                        >
                         </input>
                     </div>
                 </div>
@@ -56,7 +110,10 @@ export default function PostQuestionCard() {
                     <div className="flex items-center justify-center">  
                         <textarea
                             className="w-full h-24 border border-twilight-100 rounded-md p-2 bg-purple-50 bg-opacity-80 shadow-md backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-twilight-300 focus:border-transparent transition-all ease-in-out hover:ring-2 hover:ring-twilight-300 hover:border-transparent text-twilight-300 font-semibold placeholder-twilight-300 placeholder-opacity-80"
-                            placeholder="What's on your mind ?">
+                            placeholder="What's on your mind ?"
+                            value={content}
+                            onChange={event => setContent(event.target.value)}
+                            >
                         </textarea>
                     </div>
                 </div>
@@ -90,7 +147,9 @@ export default function PostQuestionCard() {
                     </div>
                 </div>
                 <div className="flex justify-end mr-4">
-                    <button className="bg-gradient-to-r from-twilight-300 to-twilight-100 text-white font-bold py-2 px-4 rounded active:scale-[.98] active:duration-75 transition-all hover:scale-[1.02] ease-in-out">
+                    <button className="bg-gradient-to-r from-twilight-300 to-twilight-100 text-white font-bold py-2 px-4 rounded active:scale-[.98] active:duration-75 transition-all hover:scale-[1.02] ease-in-out"
+                                              onClick={handleSubmit}
+                            >
                         <div className="flex items-start">
                             <Send size={20} className="mr-2" />
                             Post

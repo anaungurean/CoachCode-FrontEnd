@@ -1,7 +1,7 @@
 import NavBar from '../../components/SideNavBar';
 import Breadcrumb from '../../components/TopNavBar';
 import PostQuestionCard from './components/PostQuestionCard';
- 
+import { ToastContainer } from 'react-toastify';
 function Community() {
     
     const breadcrumbItems = [
@@ -19,10 +19,10 @@ function Community() {
                 <Breadcrumb items={breadcrumbItems} />
 
                 <PostQuestionCard />
-
-
-  
+                
             </div>
+            <ToastContainer />
+
         </div> 
     );
 }
