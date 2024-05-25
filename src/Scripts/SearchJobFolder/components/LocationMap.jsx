@@ -5,12 +5,12 @@ import { MapPin, ChevronDown, ChevronUp } from 'lucide-react';
 
 function LocationMap({ location }) {
   const [coordinates, setCoordinates] = useState(null);
-  const [isExpanded, setIsExpanded] = useState(false); // Inițializăm starea cu valoarea false pentru a afișa harta doar la clic pe butonul de expansiune
+  const [isExpanded, setIsExpanded] = useState(false);  
 
   useEffect(() => {
     const getCoordinates = async () => {
       try {
-        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location.address)}&key=AIzaSyAiPRV87qnlMEYTB6wUjK7bc7o1SVp0R8Q`);
+        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=AIzaSyAiPRV87qnlMEYTB6wUjK7bc7o1SVp0R8Q`);
         const data = await response.json();
         if (data.results && data.results.length > 0) {
           const { lat, lng } = data.results[0].geometry.location;

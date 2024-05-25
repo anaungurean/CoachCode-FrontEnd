@@ -38,6 +38,15 @@ export default function SignInForm() {
       .then(data => {
         if (data.token) {
           localStorage.setItem('authToken', data.token);
+          localStorage.setItem('selectedJobTypes', JSON.stringify(null));
+          localStorage.setItem('selectedExperienceLevels', JSON.stringify(null));
+          localStorage.setItem('selectedPostedTime', JSON.stringify(null));
+          localStorage.setItem('selectedFlexibility', JSON.stringify(null));
+          localStorage.setItem('selectedLocation', JSON.stringify(null));
+          localStorage.setItem('selectedCompany', JSON.stringify(null));
+          localStorage.setItem('jobs', JSON.stringify(null));
+          localStorage.setItem('currentPage', JSON.stringify(1));
+
           window.location.href = '/problems';
         } else {
           throw new Error('Token not provided.');
