@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Home, HeartHandshake, BrainCircuit, Bot, Landmark, Settings } from "lucide-react";
+import { Home, HeartHandshake, BrainCircuit, Bot, Landmark, Settings, Users } from "lucide-react";
 import Sidebar, { SidebarItem } from "./Sidebar";
 import { Link } from 'react-router-dom';
 
@@ -25,6 +25,9 @@ export default function NavBar() {
         <SidebarItem icon={<Landmark size={20} />} text="Salary Test" activeItem={activeItem}  />
         <Link to="/search-job" onClick={() => handleItemClick("Search jobs")}>
           <SidebarItem icon={<HeartHandshake size={20} />} text="Search jobs" activeItem={activeItem} />
+        </Link>
+         <Link to="/community" onClick={() => handleItemClick("Community")}>
+          <SidebarItem icon={<Users size={20} />} text="Community" activeItem={activeItem} />
         </Link>
         <hr className="my-3" />
         <SidebarItem icon={<Settings size={20} />} text="Settings" activeItem={activeItem}  />
