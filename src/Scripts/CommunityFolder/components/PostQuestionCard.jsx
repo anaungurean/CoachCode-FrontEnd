@@ -31,7 +31,6 @@ export default function PostQuestionCard() {
 
 const handleSubmit = async () => {
     const token = localStorage.getItem('authToken');
-    console.log('Token:', token);
 
     if (!title) {
         showErrorToast('Please add a title to your thought', 3000);
