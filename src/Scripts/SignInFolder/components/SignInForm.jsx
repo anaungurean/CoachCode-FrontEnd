@@ -46,6 +46,7 @@ export default function SignInForm() {
           localStorage.setItem('selectedCompany', JSON.stringify(null));
           localStorage.setItem('jobs', JSON.stringify(null));
           localStorage.setItem('currentPage', JSON.stringify(1));
+  
 
           window.location.href = '/problems';
         } else {

@@ -1,25 +1,29 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { formatDistanceToNowStrict } from 'date-fns';
-import { BiLike } from "react-icons/bi";
-import { BiSolidLike } from "react-icons/bi";
+import { BiLike, BiSolidLike } from "react-icons/bi";
 import { FaComments } from "react-icons/fa";
-import { ChevronDown, ChevronUp } from 'lucide-react';
-
+import { ChevronDown, ChevronUp, Send } from 'lucide-react';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 function PostCard({ post, toggleImageSize }) {
-    const timeAgo = formatDistanceToNowStrict(new Date(post.posting_date), { addSuffix: true });
+      const calculateTimeAgo = (date) => {
+        let postingDate = new Date(date);
+        return formatDistanceToNowStrict(postingDate, { addSuffix: true});
+
+    };
+    const timeAgo = calculateTimeAgo(post.posting_date);
+
     const [isLiked, setIsLiked] = useState(false);
     const [likes, setLikes] = useState('');
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [showComments, setShowComments] = useState(false);
+    const [visibleCommentsCount, setVisibleCommentsCount] = useState(5);
+    const [isExpanded, setIsExpanded] = useState(false);
     
     const token = localStorage.getItem('authToken');
 
-    const calculateTimeAgo = (date) => {
-        return formatDistanceToNowStrict(new Date(date), { addSuffix: true });
-    };
+  
 
     useEffect(() => {
         checkIfLiked();
@@ -118,6 +122,9 @@ function PostCard({ post, toggleImageSize }) {
 
     const handleAddComment = (e) => {
         e.preventDefault();
+        if (!newComment) {
+            return;
+        }
         fetch(`http://localhost:5000/questions/${post.id}/answers`, {  
             method: 'POST',
             headers: {
@@ -135,10 +142,20 @@ function PostCard({ post, toggleImageSize }) {
         .catch((error) => {
             console.error('Error:', error);
         });
-        };
+    };
+
+    const handleShowMoreComments = () => {
+        setVisibleCommentsCount(prevCount => prevCount + 5);
+        setIsExpanded(true);
+    };
+
+    const handleShowLessComments = () => {
+        setVisibleCommentsCount(5);
+        setIsExpanded(false);
+    };
 
     return (
-        <div className="mt-4 mr-4 border pl-4 pt-4 pb-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md">
+        <div className="mt-4 mr-3 border  pl-4 pt-4 pb-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md z-10">
             <div className="flex items-center">
                 <div className="flex-shrink-0">
                     <img src={`http://localhost:5000/user_photo/${post.user_id}`} className="w-10 h-10 rounded-full" alt="User" />
@@ -146,11 +163,17 @@ function PostCard({ post, toggleImageSize }) {
                 <div className="ml-4">
                     <p className="text-base font-bold text-twilight-500">{post.first_name} {post.last_name}</p>
                     <p className="text-sm text-gray-600">{timeAgo}</p>
-                </div>
+                    {post.topic && (
+                        post.topic.split(',').map((topic, index) => (
+                            <span key={index} className="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 mr-2 mt-2 text-sm font-medium text-purple-700  ring-1 ring-inset border-dotted ring-purple-200 hover:ring-2 shadow-sm">{topic}</span>
+                        ))
+                    )}
+                    </div>
+                
             </div>
-            <div className="mt-2">
-                <h2 className="text-lg font-semibold">{post.title}</h2>
-                <p className="mt-1 text-gray-600">{post.content}</p>
+            <div className="mt-2 mr-4 border border-twilight-200 rounded-md p-2 mb-2 bg-purple-50 focus:outline-none bg-opacity-80 ">
+                <h2 className="text-lg font-semibold text-twilight-400">{post.title}</h2>
+                <p className="mt-1 text-twilight-400">{post.content}</p>
                 {post.photo && (
                     <div className="mt-2 flex justify-center">
                         <img
@@ -175,39 +198,63 @@ function PostCard({ post, toggleImageSize }) {
                     <FaComments size={22} color={'#56437c'}/>
                 </button>
                 <p className="text-sm text-twilight-500 ml-1">{comments.length} Comments</p>
-    
             </div>
             
-            
-             <div className="mt-4 mr-4 border pl-4 pt-2 pb-2 border border-twilight-100 rounded-md p-2 bg-purple-50 bg-opacity-80 shadow-md backdrop-blur-md  ">
-            <div className="flex items-center">
-                <h3 className="text-base font-semibold">Comments</h3>
-                <button className="ml-auto mr-4 text-sm text-gray-600 hover:text-twilight-500 focus:outline-none" onClick={() => setShowComments(!showComments)}>
-                    {showComments ? <ChevronUp size={22} color={'#56437c'}/> : <ChevronDown size={22} color={'#56437c'}/>}
-                </button>
-            </div>
-            {showComments && (
-                comments.map(comment => (
-                    <div key={comment.id} className=" mt-2 mr-4 border-gray-300 rounded-lg bg-twilight-100/10 ">
-
-                        <div className="flex items-center">
-                        <div className="flex ml-2 ">
-                            <img src={`http://localhost:5000/user_photo/${comment.user_id}`} className="w-10 h-10 rounded-full" alt="User" />
-                        </div>
-                        <div className="ml-4">
-                            <p className="text-base font-bold text-twilight-500">{comment.first_name} {comment.last_name} </p>
-                            <p className="text-sm text-twilight-500">{calculateTimeAgo(comment.posting_date)}</p>
-                            <div className="">
-                                <p className="text-base text-twilight-500 ">{comment.content}</p>
+            <div className="mt-4 mr-4 pl-4 pt-2 pb-2 border border-twilight-200 rounded-md p-2 bg-purple-50 bg-opacity-80   ">
+                <div className="flex items-center">
+                    <h3 className="text-base font-semibold text-twilight-400">Comments</h3>
+                    <button className="ml-auto mr-4 text-sm text-gray-600 hover:text-twilight-500 focus:outline-none" onClick={() => setShowComments(!showComments)}>
+                        {showComments ? <ChevronUp size={22} color={'#56437c'}/> : <ChevronDown size={22} color={'#56437c'}/>}
+                    </button>
+                </div>
+                {showComments && (
+                    <>
+                        {comments.slice(0, visibleCommentsCount).map(comment => (
+                            <div key={comment.id} className="mt-2 mr-4  rounded-md bg-twilight-100/10">
+                                <div className="flex items-center">
+                                    <div className="flex ml-2">
+                                        <img src={`http://localhost:5000/user_photo/${comment.user_id}`} className="w-10 h-10 rounded-full" alt="User" />
+                                    </div>
+                                    <div className="ml-4">
+                                        <p className="text-base font-bold text-twilight-500">{comment.first_name} {comment.last_name}</p>
+                                        <p className="text-sm text-twilight-500">{calculateTimeAgo(comment.posting_date)}</p>
+                                        <div className="">
+                                            <p className="text-base text-twilight-500">{comment.content}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                        {visibleCommentsCount < comments.length && !isExpanded && (
+                            <button className="mt-2 text-sm font-medium text-twilight-500 hover:text-twilight-700 focus:outline-none" onClick={handleShowMoreComments}>
+                                Show more
+                            </button>
+                        )}
+                        {isExpanded && (
+                            <button className="mt-2 text-sm font-medium text-twilight-500 hover:text-twilight-700 focus:outline-none" onClick={handleShowLessComments}>
+                                Show less
+                            </button>
+                        )}
+                        <div className="mt-2 mr-4 flex items-center">
+                            <div className="relative w-full">
+                                <input
+                                    type="text"
+                                    className="w-full h-10 pl-10 pr-10 border border-twilight-200 rounded-md p-2 mb-2 bg-twilight-100/10 focus:outline-none text-twilight-300"
+                                    placeholder="Add a comment..."
+                                    value={newComment}
+                                    onChange={(e) => setNewComment(e.target.value)}
+                                />
+                                <Send
+                                    size={28}
+                                    color={'#56437c'}
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer pb-2"
+                                    onClick={handleAddComment}
+                                />
                             </div>
                         </div>
-                        </div>
-                         
-                    </div>
-                ))
-            )}
-        </div>
-                 
+                    </>
+                )}
+            </div>
         </div>
     );
 }
@@ -222,6 +269,7 @@ PostCard.propTypes = {
         content: PropTypes.string.isRequired,
         posting_date: PropTypes.string.isRequired,
         photo: PropTypes.string,
+        topic: PropTypes.string.isRequired,
     }).isRequired,
     toggleImageSize: PropTypes.func.isRequired,
 };

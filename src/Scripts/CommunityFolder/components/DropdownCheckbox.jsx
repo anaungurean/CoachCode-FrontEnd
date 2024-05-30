@@ -34,7 +34,7 @@ const DropdownCheckbox = ({ title, options, selectedOptions, setSelectedOptions 
                 </svg>
             </button>
             {isOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                <div className="absolute z-100 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
                     <div className="py-1 px-2">
                         <div className="flex flex-col">
                             {options.map(option => (

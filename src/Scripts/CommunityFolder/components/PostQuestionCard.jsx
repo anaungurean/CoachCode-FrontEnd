@@ -136,7 +136,7 @@ const handleSubmit = async () => {
                         onChange={handleImageUpload}
                     />
 
-                    <div className="flex items-center justify-center ">
+                    <div className="flex items-center justify-center">
                          <DropdownCheckbox
                             title="Select Tags"
                             options={options}
