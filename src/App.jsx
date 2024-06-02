@@ -11,6 +11,7 @@ import MyProfile from './Scripts/MyProfileUserFolder/MyProfile';
 import SearchJobPage from './Scripts/SearchJobFolder/SearchJobPage';
 import JobProfilePage from './Scripts/SearchJobFolder/JobProfilePage';
 import Community from './Scripts/CommunityFolder/CommunityPage';
+import UserProfile from './Scripts/AnotherProfileUser/AnotherProfile';
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/search-job" element={<SearchJobPage />} />
         <Route path="/job-profile/:job_id" element={<JobProfilePage />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/user-profile/:userId" element={<UserProfile />} />
       </Routes>
     </Router>
   );

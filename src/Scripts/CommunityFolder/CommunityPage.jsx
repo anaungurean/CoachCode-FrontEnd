@@ -11,6 +11,7 @@ import { jwtDecode } from "jwt-decode";
 import DropdownSort from './components/DropdownSort';
 import DeletePostPopup from './components/DeletePostPopup';
 import EditPostPopup from './components/EditPostPopup';
+import DeleteCommentPopup from './components/DeleteCommentPopup';
 
 function Community() {
     const [posts, setPosts] = useState([]);
@@ -25,8 +26,8 @@ function Community() {
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [postId, setPostId] = useState(null);
+    const [showDeleteCommentPopup, setShowDeleteCommentPopup] = useState(false);
   
-
 
     const sortOptions = [
         { value: 'Newest', label: 'Newest' },
@@ -159,6 +160,7 @@ function Community() {
                             setShowDeletePopup={() => setShowDeletePopup(true)}
                             setShowEditPopup={() => setShowEditPopup(true)}
                             setPostId={() => setPostId(post.id)}
+                            setShowDeleteCommentPopup={() => setShowDeleteCommentPopup(true)}
                         />
                         
                     ))}
@@ -192,6 +194,14 @@ function Community() {
                             
                         )
                         
+            }
+
+            {
+                showDeleteCommentPopup && (
+                    <DeleteCommentPopup
+                        togglePopup={setShowDeleteCommentPopup}
+                    />
+                )
             }
 
             <ToastContainer />

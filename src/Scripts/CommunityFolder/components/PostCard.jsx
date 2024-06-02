@@ -7,7 +7,7 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import { Menu, Edit, Trash } from 'lucide-react';
 import { jwtDecode } from "jwt-decode";
 
-function PostCard({ post, toggleImageSize, setShowDeletePopup, setPostId, setShowEditPopup}) {
+function PostCard({ post, toggleImageSize, setShowDeletePopup, setPostId, setShowEditPopup, setShowDeleteCommentPopup}) {
       const calculateTimeAgo = (date) => {
         let postingDate = new Date(date);
         return formatDistanceToNowStrict(postingDate, { addSuffix: true});
@@ -172,12 +172,28 @@ function PostCard({ post, toggleImageSize, setShowDeletePopup, setPostId, setSho
         setPostId(post.id);
         setShowDeletePopup(true);
     }
+
+
+    const handleDeleteComment = (commentId) => {
+        console.log(commentId);
+        setIsExpanded(false);
+        localStorage.setItem('commentToDelete', commentId);
+        setShowDeleteCommentPopup(true);
+       
+    }
+
     return (
         <div className="mt-4 mr-3 border  pl-4 pt-4 pb-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md z-10">
             <div className="flex items-center">
             
                 <div className="flex-shrink-0">
-                    <img src={`http://localhost:5000/user_photo/${post.user_id}`} className="w-10 h-10 rounded-full" alt="User" />
+                    <a href={`http://localhost:5173/user-profile/${post.user_id}`}>
+                        <img 
+                            src={`http://localhost:5000/user_photo/${post.user_id}`} 
+                            className="w-10 h-10 rounded-full" 
+                            alt="User" 
+                        />
+                        </a>
                 </div>
                 <div className="ml-4">
                     <p className="text-base font-bold text-twilight-500">{post.first_name} {post.last_name}</p>
@@ -254,14 +270,24 @@ function PostCard({ post, toggleImageSize, setShowDeletePopup, setPostId, setSho
                                 <div className="flex items-center">
                                     <div className="flex ml-2">
                                         <img src={`http://localhost:5000/user_photo/${comment.user_id}`} className="w-10 h-10 rounded-full" alt="User" />
+
                                     </div>
-                                    <div className="ml-4">
+                                    <div className="ml-4 w-full">
+                                        <div className="flex items-center justify-between mt-1">
                                         <p className="text-base font-bold text-twilight-500">{comment.first_name} {comment.last_name}</p>
+                                        {post.user_id === userId && (
+                                            <button className="flex items-center rounded-full p-1 mr-2 text-sm text-twilight-400 hover:bg-purple-50 focus:outline-none"
+                                                onClick={() => handleDeleteComment(comment.id)}>    
+                                                <Trash size={16} className="" /> 
+                                            </button>
+                                        )}    
+                                        </div>                                     
                                         <p className="text-sm text-twilight-500">{calculateTimeAgo(comment.posting_date)}</p>
                                         <div className="">
                                             <p className="text-base text-twilight-500">{comment.content}</p>
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                         ))}
@@ -316,6 +342,7 @@ PostCard.propTypes = {
     setShowDeletePopup: PropTypes.func.isRequired,
     setPostId: PropTypes.func.isRequired,
     setShowEditPopup: PropTypes.func.isRequired,
+    setShowDeleteCommentPopup: PropTypes.func.isRequired,
 };
 
 export default PostCard;
