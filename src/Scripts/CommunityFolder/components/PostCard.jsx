@@ -4,15 +4,17 @@ import { BiLike, BiSolidLike } from "react-icons/bi";
 import { FaComments } from "react-icons/fa";
 import { ChevronDown, ChevronUp, Send } from 'lucide-react';
 import { formatDistanceToNowStrict } from 'date-fns';
+import { Menu, Edit, Trash } from 'lucide-react';
+import { jwtDecode } from "jwt-decode";
 
-function PostCard({ post, toggleImageSize }) {
+function PostCard({ post, toggleImageSize, setShowDeletePopup, setPostId, setShowEditPopup}) {
       const calculateTimeAgo = (date) => {
         let postingDate = new Date(date);
         return formatDistanceToNowStrict(postingDate, { addSuffix: true});
 
     };
+    
     const timeAgo = calculateTimeAgo(post.posting_date);
-
     const [isLiked, setIsLiked] = useState(false);
     const [likes, setLikes] = useState('');
     const [comments, setComments] = useState([]);
@@ -20,11 +22,12 @@ function PostCard({ post, toggleImageSize }) {
     const [showComments, setShowComments] = useState(false);
     const [visibleCommentsCount, setVisibleCommentsCount] = useState(5);
     const [isExpanded, setIsExpanded] = useState(false);
-    
     const token = localStorage.getItem('authToken');
-
+    const decodedToken = jwtDecode(token);
+    const userId = decodedToken.user_id;
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    
   
-
     useEffect(() => {
         checkIfLiked();
         fetchLikes();
@@ -154,9 +157,25 @@ function PostCard({ post, toggleImageSize }) {
         setIsExpanded(false);
     };
 
+    const handleMenuClick = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
+    const handleEdit = () => {
+        setIsExpanded(false);
+        setPostId(post.id);
+        setShowEditPopup(true);
+    };
+
+    const handleDelete = () => {
+        setIsExpanded(false);
+        setPostId(post.id);
+        setShowDeletePopup(true);
+    }
     return (
         <div className="mt-4 mr-3 border  pl-4 pt-4 pb-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md z-10">
             <div className="flex items-center">
+            
                 <div className="flex-shrink-0">
                     <img src={`http://localhost:5000/user_photo/${post.user_id}`} className="w-10 h-10 rounded-full" alt="User" />
                 </div>
@@ -168,9 +187,30 @@ function PostCard({ post, toggleImageSize }) {
                             <span key={index} className="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 mr-2 mt-2 text-sm font-medium text-purple-700  ring-1 ring-inset border-dotted ring-purple-200 hover:ring-2 shadow-sm">{topic}</span>
                         ))
                     )}
-                    </div>
-                
+                </div>
+            {post.user_id === userId && (
+    <div className="ml-auto mr-4">
+        <div className="relative">
+            <button className="text-sm rounded-full bg-purple-50 text-gray-600 p-1 ring-1 ring-inset ring-twilight-200 hover:text-twilight-500 focus:outline-none" onClick={handleMenuClick}>
+                <Menu size={18} color={'#56437c'}/>
+            </button>
+             {isMenuOpen && (
+                <div className="absolute top-8 right-0 bg-white shadow-md rounded-md">
+                    <button className="flex items-center  w-full py-2 px-4 text-sm text-twilight-400 hover:bg-purple-50 focus:outline-none" onClick={handleEdit}>
+                        <Edit size={16} className="mr-2" /> Edit
+                    </button>
+                    <button className="flex items-center w-full py-2 px-4 text-sm text-twilight-400 hover:bg-purple-50 focus:outline-none"
+                         onClick={handleDelete}>
+                        <Trash size={16} className="mr-2" /> Delete
+                    </button>
+                </div>
+            )}
+        </div>
+    </div>
+)}
+                 
             </div>
+            
             <div className="mt-2 mr-4 border border-twilight-200 rounded-md p-2 mb-2 bg-purple-50 focus:outline-none bg-opacity-80 ">
                 <h2 className="text-lg font-semibold text-twilight-400">{post.title}</h2>
                 <p className="mt-1 text-twilight-400">{post.content}</p>
@@ -252,6 +292,7 @@ function PostCard({ post, toggleImageSize }) {
                                 />
                             </div>
                         </div>
+                    
                     </>
                 )}
             </div>
@@ -272,6 +313,9 @@ PostCard.propTypes = {
         topic: PropTypes.string.isRequired,
     }).isRequired,
     toggleImageSize: PropTypes.func.isRequired,
+    setShowDeletePopup: PropTypes.func.isRequired,
+    setPostId: PropTypes.func.isRequired,
+    setShowEditPopup: PropTypes.func.isRequired,
 };
 
 export default PostCard;

@@ -9,6 +9,8 @@ import { ToastContainer } from 'react-toastify';
 import { Search } from 'lucide-react';
 import { jwtDecode } from "jwt-decode";
 import DropdownSort from './components/DropdownSort';
+import DeletePostPopup from './components/DeletePostPopup';
+import EditPostPopup from './components/EditPostPopup';
 
 function Community() {
     const [posts, setPosts] = useState([]);
@@ -20,6 +22,11 @@ function Community() {
     const [expandedImageUrl, setExpandedImageUrl] = useState('');
     const [searchedPosts, setSearchedPosts] = useState('');
     const [sortBy, setSortBy] = useState([]);
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [showEditPopup, setShowEditPopup] = useState(false);
+    const [postId, setPostId] = useState(null);
+  
+
 
     const sortOptions = [
         { value: 'Newest', label: 'Newest' },
@@ -119,8 +126,8 @@ function Community() {
                     <PostQuestionCard />
                 </div>
 
-                <div className="mr-4 mt-2 flex items-center">
-                    <div className="relative w-full mr-4 ">
+            <div className="mr-4 mt-4 flex items-center">
+                <div className="relative w-full mr-4">
                         <Search
                             size={22}
                             color={'#56437c'}
@@ -128,21 +135,19 @@ function Community() {
                         />
                         <input
                             type="text"
-                            className="w-full h-10 pl-10 pr-10 border border-gray-100 rounded-md p-2 mb-2 bg-white shadow-md focus:outline-none text-twilight-300"
+                            className="h-10 w-full pl-10 pr-10 border border-gray-100 rounded-md p-2 mb-2 bg-white shadow-md focus:outline-none text-twilight-300"
                             placeholder="Search for a post"
                             value={searchedPosts}
                             onChange={handleSearchInputChange}
                         />
                     </div>
-                    <div className="">
-                        <DropdownSort
-                            title="Newest"
-                            options={sortOptions}
-                            selectedOptions={sortBy}
-                            setSelectedOptions={setSortBy}
-                            sortByOption={sortByOption}
-                        />
-                    </div>
+                    <DropdownSort
+                        title="Newest"
+                        options={sortOptions}
+                        selectedOptions={sortBy}
+                        setSelectedOptions={setSortBy}
+                        sortByOption={sortByOption}
+                    />
                 </div>
                 <div className="mt-4 z-10 ">
                     {filteredPosts.map((post, index) => (  
@@ -150,8 +155,12 @@ function Community() {
                             key={index} 
                             post={post} 
                             isImageExpanded={isImageExpanded} 
-                            toggleImageSize={() => toggleImageSize(`http://localhost:5000/questions_photo/${post.id}`)} 
+                            toggleImageSize={() => toggleImageSize(`http://localhost:5000/questions_photo/${post.id}`)}
+                            setShowDeletePopup={() => setShowDeletePopup(true)}
+                            setShowEditPopup={() => setShowEditPopup(true)}
+                            setPostId={() => setPostId(post.id)}
                         />
+                        
                     ))}
                 </div>
                 
@@ -163,6 +172,28 @@ function Community() {
             {isImageExpanded && (
                 <Popup imageURL={expandedImageUrl} toggleImageSize={() => toggleImageSize('')} />
             )}
+            { 
+                        showDeletePopup && (
+                            <DeletePostPopup
+                                togglePopup={setShowDeletePopup}
+                                postId= {postId}
+                            />
+                            
+                        )
+                        
+            }
+
+            { 
+                        showEditPopup && (
+                            <EditPostPopup
+                                togglePopup={setShowEditPopup}
+                                post = {posts.find(post => post.id === postId)}
+                            />
+                            
+                        )
+                        
+            }
+
             <ToastContainer />
         </div> 
     );
