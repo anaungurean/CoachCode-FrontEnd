@@ -8,7 +8,6 @@ function Form() {
     firstName: '',
     lastName: '',
     email: '',
-    address: '',
     phone: '',
     linkedin: '',
     github: '',
@@ -140,9 +139,35 @@ function Form() {
     setFormData({ ...formData, projects: updatedProjects });
   }
 
-  const handleSubmit = () => {
-    console.log(formData);
-  }
+      const handleSubmit = async () => {
+        console.log('Form data:', formData);
+      try {
+        const response = await fetch('http://localhost:5000/generate_pdf', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        console.log('Response:', response);
+        if (response.ok) {
+          console.log('PDF generated successfully');
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'resume.pdf';
+          document.body.appendChild(a); // Append to the document body to initiate download
+          a.click();
+          a.remove(); // Clean up after download
+        } else {
+          console.error('Failed to generate PDF');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
 
 
 
