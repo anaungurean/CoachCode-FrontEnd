@@ -3,7 +3,7 @@ import { Check, ChevronRight, ChevronLeft, School, Plus, Trash, User, Building2,
 import { showErrorToast } from './notifications';
 
 function Form() {
-  const [currentStep, setCurrentStep] = useState(4);
+  const [currentStep, setCurrentStep] = useState(5);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -19,6 +19,23 @@ function Form() {
     technicalSkills_frameworks: '',
     technicalSkills_developmentTools: '',
     softSkills: '',
+  });
+
+   const [formData1, ] = useState({
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@example.com',
+    phone: '123-456-7890',
+    linkedin: 'linkedin.com/in/johndoe',
+    github: 'github.com/johndoe',
+    description: 'Passionate software developer with experience in web development.',
+    schools: [{ school: 'University of Example', degree: 'Bachelor of Science', graduationYear: '2020', city: 'Example City' }],
+    workExperiences: [{ position: 'Software Engineer', company: 'Example Corp', location: 'Example City', startDate: '2018-01-01', endDate: '2022-01-01', responsibilities: 'Developed web applications using React.' }],
+    projects: [{ name: 'Project X', description: 'Built a full-stack web application.', technologies: 'React, Node.js, MongoDB', link: 'example.com/projectx' }],
+    technicalSkills_languages: 'JavaScript, Python',
+    technicalSkills_frameworks: 'React, Flask',
+    technicalSkills_developmentTools: 'VSCode, Git',
+    softSkills: 'Teamwork, Communication',
   });
 
   const nextStep = () => {
@@ -140,14 +157,14 @@ function Form() {
   }
 
       const handleSubmit = async () => {
-        console.log('Form data:', formData);
+        console.log('Form data:', formData1);
       try {
         const response = await fetch('http://localhost:5000/generate_pdf', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(formData1),
         });
         console.log('Response:', response);
         if (response.ok) {
