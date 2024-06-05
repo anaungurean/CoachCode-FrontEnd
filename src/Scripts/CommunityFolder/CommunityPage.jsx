@@ -15,6 +15,7 @@ import DeleteCommentPopup from './components/DeleteCommentPopup';
 
 function Community() {
     const [posts, setPosts] = useState([]);
+    const [initialPosts, setInitialPosts] = useState([]);
     const [filteredPosts, setFilteredPosts] = useState([]);  
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -36,7 +37,7 @@ function Community() {
     ];
 
     const sortByOption = (option) => {
-        let sortedPosts = [...posts]; 
+        let sortedPosts = [...initialPosts];
         const token = localStorage.getItem('authToken');
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.user_id;
@@ -82,6 +83,7 @@ function Community() {
         .then(response => response.json())
         .then(data => {
             setPosts(data);
+            setInitialPosts(data);
             setTotalPages(Math.ceil(data.length / postsPerPage));
         })
         .catch((error) => {
@@ -123,10 +125,8 @@ function Community() {
 
             <div className="w-5/6">
                 <Breadcrumb items={breadcrumbItems} />
-                <div className="z-100"> 
-                    <PostQuestionCard />
-                </div>
-
+                     <PostQuestionCard />
+ 
             <div className="mr-4 mt-4 flex items-center">
                 <div className="relative w-full mr-4">
                         <Search

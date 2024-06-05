@@ -36,6 +36,7 @@ function PostCard({ post, toggleImageSize, setShowDeletePopup, setPostId, setSho
 
     const handleLike = () => {
         setIsLiked(true);
+        
         fetch(`http://localhost:5000/questions/${post.id}/like`, {
             method: 'POST',
             headers: {
@@ -51,6 +52,8 @@ function PostCard({ post, toggleImageSize, setShowDeletePopup, setPostId, setSho
         .catch((error) => {
             console.error('Error:', error);
         });
+
+        sendNotification('like');
     };
 
     const handleUnlike = () => {
@@ -145,6 +148,8 @@ function PostCard({ post, toggleImageSize, setShowDeletePopup, setPostId, setSho
         .catch((error) => {
             console.error('Error:', error);
         });
+
+        sendNotification('comment');
     };
 
     const handleShowMoreComments = () => {
@@ -181,6 +186,60 @@ function PostCard({ post, toggleImageSize, setShowDeletePopup, setPostId, setSho
         setShowDeleteCommentPopup(true);
        
     }
+
+
+    const sendNotification = (notificationType) => {
+
+        const user_id_to_be_notified = post.user_id;
+        const user_id_that_triggered_notification = userId;
+        const notification_type = notificationType;
+        const question_id = post.id;
+        
+        if (user_id_to_be_notified !== user_id_that_triggered_notification) {
+            fetch(`http://localhost:5000/notifications`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ user_id_to_be_notified, user_id_that_triggered_notification, notification_type, question_id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     return (
         <div className="mt-4 mr-3 border  pl-4 pt-4 pb-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md z-10">

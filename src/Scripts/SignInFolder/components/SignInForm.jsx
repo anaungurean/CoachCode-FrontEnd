@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Info } from 'lucide-react';
+import { jwtDecode } from "jwt-decode";
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');
@@ -11,6 +12,37 @@ export default function SignInForm() {
     const { name, value } = e.target;
     if (name === 'email') setEmail(value);
     else if (name === 'password') setPassword(value);
+  };
+
+    const getUserName = (userId) => {
+    const token = localStorage.getItem('authToken');
+    fetch ('http://localhost:5000/user_name/' + userId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Something went wrong! Please try again.');
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.firstName) {
+        console.log(data.firstName);
+        localStorage.setItem('firstName', data.firstName);
+        window.location.href = '/problems';
+
+      } else {
+        throw new Error('Name not provided.');
+      }
+    })
+    .catch(error => {
+      console.error('There was a problem with the authentication:', error.message);
+      setMessage(error.message);
+    });
   };
 
   const handleSubmit = (e) => {
@@ -37,6 +69,7 @@ export default function SignInForm() {
       })
       .then(data => {
         if (data.token) {
+    
           localStorage.setItem('authToken', data.token);
           localStorage.setItem('selectedJobTypes', JSON.stringify(null));
           localStorage.setItem('selectedExperienceLevels', JSON.stringify(null));
@@ -46,9 +79,11 @@ export default function SignInForm() {
           localStorage.setItem('selectedCompany', JSON.stringify(null));
           localStorage.setItem('jobs', JSON.stringify(null));
           localStorage.setItem('currentPage', JSON.stringify(1));
-  
+          const decodedToken = jwtDecode(data.token);
+          const userId = decodedToken.user_id;
+          localStorage.setItem('userId', JSON.stringify(userId));
+          getUserName(userId);
 
-          window.location.href = '/problems';
         } else {
           throw new Error('Token not provided.');
         }
@@ -58,6 +93,9 @@ export default function SignInForm() {
         setMessage(error.message);
       });
   };
+
+
+     
 
   return (
     <div className="w-9/12 bg-white px-10 py-20 rounded-3xl border-2 border-twilight-500 shadow-md shadow-twilight-100">

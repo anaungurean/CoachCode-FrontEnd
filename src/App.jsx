@@ -13,6 +13,7 @@ import JobProfilePage from './Scripts/SearchJobFolder/JobProfilePage';
 import Community from './Scripts/CommunityFolder/CommunityPage';
 import UserProfile from './Scripts/AnotherProfileUser/AnotherProfile';
 import CreateCVPage from './Scripts/CreateCVFolder/CreateCVPage';
+import PostPage from './Scripts/CommunityFolder/PostPage';
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
         <Route path="/community" element={<Community />} />
         <Route path="/user-profile/:userId" element={<UserProfile />} />
         <Route path="/create-cv" element={<CreateCVPage />} />
+        <Route path="/post/:idPost" element={<PostPage />} />
       </Routes>
     </Router>
   );
