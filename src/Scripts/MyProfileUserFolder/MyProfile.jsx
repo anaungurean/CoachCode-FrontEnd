@@ -7,6 +7,7 @@ import GeneralInformationComponent from './components/GeneralInformationComponen
 import PasswordInformation from './components/PasswordInformation';
 import { BadgeX } from 'lucide-react';
 import DeleteAccountPopup from './components/DeleteAccountPopup';
+import CVComponent from './components/CVComponent';
 
 function MyProfile() {
     const [profile, setProfile] = useState(null);
@@ -73,6 +74,14 @@ function MyProfile() {
                         <PasswordInformation />
                     </div>
                 )}
+
+                {
+                    profile && (
+                        <div className="w-full mt-4 bg-white border shadow-sm rounded-2xl p-4">
+                            <CVComponent user={profile} />
+                        </div>
+                    )
+                }
 
                 {profile && (
                     <div className="flex justify-end w-full mt-4">

@@ -1,43 +1,29 @@
 import { useState } from 'react';
-import { Check, ChevronRight, ChevronLeft, School, Plus, Trash, User, Building2, Code } from 'lucide-react';
-import { showErrorToast } from './notifications';
+import { Check, ChevronRight, ChevronLeft, School, Plus, Trash, User, Building2, Code, BrainCircuit  } from 'lucide-react';
+import { showErrorToast, showSuccessToast } from './notifications';
+import PropTypes from 'prop-types';
 
-function Form() {
-  const [currentStep, setCurrentStep] = useState(5);
+function Form(cvData) {
+  const [currentStep, setCurrentStep] = useState(1);
+
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    linkedin: '',
-    github: '',
-    description: '',
-    schools: [{ school: '', degree: '', graduationYear: '', city: '' }],  
-    workExperiences: [{ position: '', company: '', location: '', startDate: '', endDate: '', responsibilities: '' }],
-    projects: [{ name: '', description: '', technologies: '', link: '' }],
-    technicalSkills_languages: '',
-    technicalSkills_frameworks: '',
-    technicalSkills_developmentTools: '',
-    softSkills: '',
+    firstName: cvData.cvData.first_name,
+    lastName: cvData.cvData.last_name,
+    email: cvData.cvData.email,
+    phone: cvData.cvData.phone,
+    linkedin: cvData.cvData.linkedin,
+    github: cvData.cvData.github,
+    description: cvData.cvData.description,
+    schools: cvData.cvData.schools || [{ school: '', degree: '', graduation_year: '', city: '' }],
+    workExperiences: cvData.cvData.workExperiences|| [{ position: '', company: '', location: '', startDate: '', endDate: '', responsibilities: '' }],
+    projects: cvData.cvData.projects || [{ name: '', description: '', technologies: '', link: '' }],
+    technicalSkills_languages: cvData.cvData.technical_skills_languages,
+    technicalSkills_frameworks: cvData.cvData.technical_skills_frameworks,
+    technicalSkills_developmentTools: cvData.cvData.technical_skills_development_tools,
+    softSkills: cvData.cvData.soft_skills,
   });
 
-   const [formData1, ] = useState({
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    phone: '123-456-7890',
-    linkedin: 'linkedin.com/in/johndoe',
-    github: 'github.com/johndoe',
-    description: 'Passionate software developer with experience in web development.',
-    schools: [{ school: 'University of Example', degree: 'Bachelor of Science', graduationYear: '2020', city: 'Example City' }],
-    workExperiences: [{ position: 'Software Engineer', company: 'Example Corp', location: 'Example City', startDate: '2018-01-01', endDate: '2022-01-01', responsibilities: 'Developed web applications using React.' }],
-    projects: [{ name: 'Project X', description: 'Built a full-stack web application.', technologies: 'React, Node.js, MongoDB', link: 'example.com/projectx' }],
-    technicalSkills_languages: 'JavaScript, Python',
-    technicalSkills_frameworks: 'React, Flask',
-    technicalSkills_developmentTools: 'VSCode, Git',
-    softSkills: 'Teamwork, Communication',
-  });
-
+ 
   const nextStep = () => {
 
     if(currentStep === 1){
@@ -49,7 +35,7 @@ function Form() {
 
     if(currentStep === 2){
       for (let i = 0; i < formData.schools.length; i++) {
-        if (!formData.schools[i].school || !formData.schools[i].degree || !formData.schools[i].graduationYear || !formData.schools[i].city) {
+        if (!formData.schools[i].school || !formData.schools[i].degree || !formData.schools[i].graduation_year || !formData.schools[i].city) {
           showErrorToast('Please fill all the fields');
           return;
         }
@@ -81,11 +67,6 @@ function Form() {
       }
     }
 
-
-
-
-
-
     setCurrentStep(currentStep + 1);
   };
 
@@ -97,7 +78,7 @@ function Form() {
     const addSchool = () => {
     setFormData({
       ...formData,
-      schools: [...formData.schools, { school: '', degree: '', graduationYear: '', city: '' }],
+      schools: [...formData.schools, { school: '', degree: '', graduation_year: '', city: '' }],
     });
   };
 
@@ -157,26 +138,29 @@ function Form() {
   }
 
       const handleSubmit = async () => {
-        console.log('Form data:', formData1);
+        console.log('Form data:', formData);
+        const token = localStorage.getItem('authToken');
       try {
         const response = await fetch('http://localhost:5000/generate_pdf', {
           method: 'POST',
           headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData1),
+          body: JSON.stringify(formData),
         });
         console.log('Response:', response);
         if (response.ok) {
+          showSuccessToast('PDF generated successfully');
           console.log('PDF generated successfully');
           const blob = await response.blob();
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = 'resume.pdf';
-          document.body.appendChild(a); // Append to the document body to initiate download
+          a.download = `resume_${formData.firstName}_${formData.lastName}.pdf`;
+          document.body.appendChild(a);  
           a.click();
-          a.remove(); // Clean up after download
+          a.remove();  
         } else {
           console.error('Failed to generate PDF');
         }
@@ -185,6 +169,48 @@ function Form() {
       }
     };
 
+  const rephraseText = (text, field, index) => {
+    const token = localStorage.getItem('authToken');
+    try {
+      fetch('http://localhost:5000/rephrase_text', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text }),
+      })
+      .then(response => response.json())
+      .then(data => {
+  
+      
+        if (index !== undefined){
+          if (field.includes('workExperiences')){
+            const updatedWorkExperiences = [...formData.workExperiences];
+            updatedWorkExperiences[index].responsibilities = data.rephrasedText;
+            setFormData({ ...formData, workExperiences: updatedWorkExperiences });
+          }
+          if (field.includes('projects')){
+            const updatedProjects = [...formData.projects];
+            updatedProjects[index].description = data.rephrasedText;
+            setFormData({ ...formData, projects: updatedProjects });
+          }
+        }
+
+        else {
+          setFormData({ ...formData, [field]: data.rephrasedText });
+        }
+
+
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
 
 
 
@@ -325,7 +351,7 @@ function Form() {
           
           <div className='flex flex-col mt-2'>
               <label htmlFor='description' className='font-medium text-base'>Tell us something about you:</label>
-                            <div className='flex items-center justify-between relative'>
+              <div className='flex items-center justify-between relative'>
               <textarea
                 id='description'
                 name='description'
@@ -339,7 +365,17 @@ function Form() {
                 formData.description && formData.description.length > 2 &&
                 <Check size={20} className='text-twilight-500 rounded-3xl absolute right-2 bg-twilight-100  shadow-lg ring-1 ring-twilight-500 ' />
               }
+              
               </div>
+              <button 
+                  onClick={() => rephraseText(formData.description, 'description')}              
+                  className="w-1/4 mt-2 bg-gradient-to-r from-twilight-300 to-twilight-100 text-white font-semibold py-2 px-2 rounded active:scale-[.98] active:duration-75 transition-all hover:scale-[1.02] ease-in-out"
+                >
+                  <div className="flex items-center">
+                    <BrainCircuit size={20} className="mr-2" />
+                    Make it to sound better with AI
+                  </div>
+                </button>
           </div>
           
         <div className="flex items-center justify-end mt-4">
@@ -405,17 +441,17 @@ function Form() {
               </div>
               </div>
               <div className="flex flex-col">
-                <label htmlFor={`graduationYear${index}`} className="font-medium text-base">Graduation Year:</label>
+                <label htmlFor={`graduation_year${index}`} className="font-medium text-base">Graduation Year:</label>
                 <div className='flex items-center justify-between relative'>
                 <input
                   type="text"
-                  id={`graduationYear${index}`}
-                  value={school.graduationYear}
-                  onChange={(e) => handleSchoolChange(index, 'graduationYear', e.target.value)}
+                  id={`graduation_year${index}`}
+                  value={school.graduation_year}
+                  onChange={(e) => handleSchoolChange(index, 'graduation_year', e.target.value)}
                   className="p-2 border border-twilight-300 rounded text-twilight-500 bg-purple-50 w-full"
                   placeholder='2020'
                 />
-                {school.graduationYear && school.graduationYear.length > 3 && (
+                {school.graduation_year  && (
                     <Check size={20} className='text-twilight-500 rounded-3xl absolute right-2 bg-twilight-100 shadow-lg ring-1 ring-twilight-500' />
                 )}
               </div>
@@ -598,6 +634,16 @@ function Form() {
                   </div>
             </div>
 
+             <button 
+                  onClick={() => rephraseText(formData.workExperiences[index].responsibilities, `workExperiences`, index)}        
+                  className="w-1/4 mt-2 bg-gradient-to-r from-twilight-300 to-twilight-100 text-white font-semibold py-2 px-2 rounded active:scale-[.98] active:duration-75 transition-all hover:scale-[1.02] ease-in-out"
+                >
+                  <div className="flex items-center">
+                    <BrainCircuit size={20} className="mr-2" />
+                    Make it to sound better with AI
+                  </div>
+                </button>
+
             </div>
           ))}
           
@@ -673,42 +719,7 @@ function Form() {
               </div>
             </div>
 
-            <div className="flex flex-col">
-              <label htmlFor={`description${index}`} className="font-medium text-base">Description:</label>
-              <div className='flex items-center justify-between relative'>
-                <input
-                  type="text"
-                  id={`description${index}`}
-                  value={project.description}
-                  onChange={(e) => handleProjectChange(index, 'description', e.target.value)}
-                  className="p-2 border border-twilight-300 rounded text-twilight-500 bg-purple-50 w-full"
-                  placeholder='Developed an e-commerce website using React and Node.js'
-                />
-                {project.description && project.description.length > 2 && (
-                  <Check size={20} className='text-twilight-500 rounded-3xl absolute right-2 bg-twilight-100 shadow-lg ring-1 ring-twilight-500' />
-                )}
-              </div>
-
-            </div>
-
-            <div className="flex flex-col">
-              <label htmlFor={`technologies${index}`} className="font-medium text-base">Technologies:</label>
-              <div className='flex items-center justify-between relative'>
-                <input
-                  type="text"
-                  id={`technologies${index}`}
-                  value={project.technologies}
-                  onChange={(e) => handleProjectChange(index, 'technologies', e.target.value)}
-                  className="p-2 border border-twilight-300 rounded text-twilight-500 bg-purple-50 w-full"
-                  placeholder='React, Node.js, MongoDB'
-                />
-                {project.technologies && project.technologies.length > 2 && (
-                  <Check size={20} className='text-twilight-500 rounded-3xl absolute right-2 bg-twilight-100 shadow-lg ring-1 ring-twilight-500' />
-                )}
-              </div>
-            </div>
-
-            <div className="flex flex-col">
+             <div className="flex flex-col ">
               <label htmlFor={`link${index}`} className="font-medium text-base">Link:</label>
               <div className='flex items-center justify-between relative'>
                 <input
@@ -725,8 +736,53 @@ function Form() {
 
               </div>
             </div>
+            </div>
+              <div className="flex flex-col mt-2">
+              <label htmlFor={`technologies${index}`} className="font-medium text-base">Technologies:</label>
+              <div className='flex items-center justify-between relative'>
+                <input
+                  type="text"
+                  id={`technologies${index}`}
+                  value={project.technologies}
+                  onChange={(e) => handleProjectChange(index, 'technologies', e.target.value)}
+                  className="p-2 border border-twilight-300 rounded text-twilight-500 bg-purple-50 w-full"
+                  placeholder='React, Node.js, MongoDB'
+                />
+                {project.technologies && project.technologies.length > 2 && (
+                  <Check size={20} className='text-twilight-500 rounded-3xl absolute right-2 bg-twilight-100 shadow-lg ring-1 ring-twilight-500' />
+                )}
+              </div>
+            </div>
+            
+            <div className="flex flex-col mt-2">
+              <label htmlFor={`description${index}`} className="font-medium text-base">Description:</label>
+              <div className='flex items-center justify-between relative'>
+                <textarea
+                  type="text"
+                  id={`description${index}`}
+                  value={project.description}
+                  onChange={(e) => handleProjectChange(index, 'description', e.target.value)}
+                  className="p-2 border border-twilight-300 rounded text-twilight-500 bg-purple-50 w-full"
+                  placeholder='Developed an e-commerce website using React and Node.js'
+                />
+                {project.description && project.description.length > 2 && (
+                  <Check size={20} className='text-twilight-500 rounded-3xl absolute right-2 bg-twilight-100 shadow-lg ring-1 ring-twilight-500' />
+                )}
+              </div>
+                <button 
+                  onClick={() => rephraseText(formData.projects[index].description, `projects`, index)}     
+                  className="w-1/4 mt-2 bg-gradient-to-r from-twilight-300 to-twilight-100 text-white font-semibold py-2 px-2 rounded active:scale-[.98] active:duration-75 transition-all hover:scale-[1.02] ease-in-out"
+                >
+                  <div className="flex items-center">
+                    <BrainCircuit size={20} className="mr-2" />
+                    Make it to sound better with AI
+                  </div>
+                </button>
+
+            </div>
+
+      
           </div>
-        </div>
       ))}
       <div className="flex w-full mt-4">
         <button
@@ -878,4 +934,9 @@ function Form() {
     </div>
 )}
 
+Form.propTypes = {
+  cvData: PropTypes.object.isRequired,
+}
 export default Form;
+
+

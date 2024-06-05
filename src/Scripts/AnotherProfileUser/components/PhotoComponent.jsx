@@ -32,7 +32,7 @@ PhotoComponent.propTypes = {
     first_name: PropTypes.string,
     last_name: PropTypes.string,
     status: PropTypes.string,
-    userId: PropTypes.number
+    userId: PropTypes.string
 };
 
 export default PhotoComponent;

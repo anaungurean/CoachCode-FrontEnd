@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react';
 import PhotoComponent from './components/PhotoComponent';
 import SocialAccountsComponent from './components/SocialAccountsComponent';
 import GeneralInformationComponent from './components/GeneralInformationComponent';
+import { useParams } from 'react-router-dom';
+import CVComponent from './components/CVComponent';
  
 
 function UserProfile() {
     const [profile, setProfile] = useState(null);
-    const userId = window.location.pathname.split('/')[2];
+    const { userId } = useParams();
 
     useEffect(() => {
         fetchProfile();
@@ -17,7 +19,7 @@ function UserProfile() {
     const fetchProfile = () => {
         const token = localStorage.getItem('authToken');
     
-        fetch('http://localhost:5000/my_profile', {
+        fetch('http://localhost:5000/user/' + userId, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -27,6 +29,7 @@ function UserProfile() {
         .then(response => response.json())
         .then(data => {
             setProfile(data); 
+            console.log(data);
 
         })
         .catch((error) => {
@@ -65,6 +68,15 @@ function UserProfile() {
                         <GeneralInformationComponent user={profile} />
                     </div>
                 )}
+
+                {
+                    profile && (
+                        <div className="">
+                            <CVComponent user={profile} />
+                        </div>
+                    )
+                }
+
 
                   
             </div>

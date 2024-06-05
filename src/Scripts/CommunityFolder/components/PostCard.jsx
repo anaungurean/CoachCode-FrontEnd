@@ -269,13 +269,14 @@ function PostCard({ post, toggleImageSize, setShowDeletePopup, setPostId, setSho
                             <div key={comment.id} className="mt-2 mr-4  rounded-md bg-twilight-100/10">
                                 <div className="flex items-center">
                                     <div className="flex ml-2">
+                                        <a href={`http://localhost:5173/user-profile/${comment.user_id}`}>
                                         <img src={`http://localhost:5000/user_photo/${comment.user_id}`} className="w-10 h-10 rounded-full" alt="User" />
-
+                                        </a>
                                     </div>
                                     <div className="ml-4 w-full">
                                         <div className="flex items-center justify-between mt-1">
                                         <p className="text-base font-bold text-twilight-500">{comment.first_name} {comment.last_name}</p>
-                                        {post.user_id === userId && (
+                                        {comment.user_id === userId && (
                                             <button className="flex items-center rounded-full p-1 mr-2 text-sm text-twilight-400 hover:bg-purple-50 focus:outline-none"
                                                 onClick={() => handleDeleteComment(comment.id)}>    
                                                 <Trash size={16} className="" /> 
