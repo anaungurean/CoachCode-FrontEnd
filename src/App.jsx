@@ -14,6 +14,7 @@ import Community from './Scripts/CommunityFolder/CommunityPage';
 import UserProfile from './Scripts/AnotherProfileUser/AnotherProfile';
 import CreateCVPage from './Scripts/CreateCVFolder/CreateCVPage';
 import PostPage from './Scripts/CommunityFolder/PostPage';
+import VoiceChatBotPage from './Scripts/VoiceChatBotFolder/VoiceChatBotPage';
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/user-profile/:userId" element={<UserProfile />} />
         <Route path="/create-cv" element={<CreateCVPage />} />
         <Route path="/post/:idPost" element={<PostPage />} />
+        <Route path="/voice-chatbot" element={<VoiceChatBotPage />} />
       </Routes>
     </Router>
   );
