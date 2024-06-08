@@ -21,7 +21,7 @@ export default function NavBar() {
         <Link to="/problems" onClick={() => handleItemClick("Coding Practice")}>
           <SidebarItem icon={<BrainCircuit size={20} />} text="Coding Practice" activeItem={activeItem}  />
         </Link>
-        <Link to="/voice-chatbot" onClick={() => handleItemClick("Voice Chatbot")}>
+        <Link to="/bots" onClick={() => handleItemClick("Voice Chatbot")}>
         <SidebarItem icon={<Bot size={20} />} text="Voice Chatbot" activeItem={activeItem} active={activeItem} />
         <SidebarItem icon={<Landmark size={20} />} text="Salary Test" activeItem={activeItem}  />
         </Link>
