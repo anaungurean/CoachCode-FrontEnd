@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Mic, Send, Bot, User } from 'lucide-react';
 
 const EthanChat = () => {
     const [messages, setMessages] = useState([]);
     const [listening, setListening] = useState(false);
     const [inputText, setInputText] = useState('');
-    const [isMute, setIsMute] = useState(localStorage.getItem('isMute') === 'true');
     const messagesEndRef = useRef(null);
+    const speechSynthesisRef = useRef(window.speechSynthesis);
 
     const handleVoiceInput = () => {
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'en-US';
+        recognition.lang = 'ro-RO';
         recognition.start();
 
         recognition.onstart = () => setListening(true);
@@ -35,15 +35,44 @@ const EthanChat = () => {
             .then(response => response.json())
             .then(botMessage => {
                 setMessages(prevMessages => [...prevMessages, { text: botMessage, from: 'bot' }]);
-                console.log(messages);
-
-                if (!isMute) {
-                    const utterance = new SpeechSynthesisUtterance(botMessage);
-                    window.speechSynthesis.speak(utterance);
-                }
+                handleSpeech(botMessage);
             })
             .catch(error => console.error('Error:', error));
     };
+
+   const handleSpeech = (text) => {
+    let isMute = localStorage.getItem('isMute') === 'true'; 
+    console.log(isMute);
+
+    if (!isMute) {
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        // Filter voices by language and gender (female)
+        const voices = speechSynthesisRef.current.getVoices();
+        const englishVoices = voices.filter(voice => voice.lang.startsWith('en') && voice.gender === 'female');
+
+        // Choose the first available female English voice
+        if (englishVoices.length > 0) {
+            utterance.voice = englishVoices[0];
+        } else {
+            console.error("No female English voice available.");
+            return;
+        }
+
+        speechSynthesisRef.current.speak(utterance);
+
+        const checkMuteStatusInterval = setInterval(() => {
+            isMute = localStorage.getItem('isMute') === 'true';
+            if (isMute) {
+                speechSynthesisRef.current.cancel();
+                clearInterval(checkMuteStatusInterval);
+            }
+        }, 100);
+
+        utterance.onend = () => clearInterval(checkMuteStatusInterval);
+    }
+};
+
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
@@ -54,34 +83,7 @@ const EthanChat = () => {
     useEffect(() => {
         const defaultMessage = "Hi! I'm Ethan, your Code Review Expert. Have bugs? Share your code, I'll give feedback to boost your skills!";
         setMessages([{ text: defaultMessage, from: 'bot' }]);
-
-        const utterance = new SpeechSynthesisUtterance(defaultMessage);
-        window.speechSynthesis.speak(utterance);
-    }, []);
-
-    useEffect(() => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }, [messages]);
-
-    useEffect(() => {
-        localStorage.setItem('isMute', isMute);
-    }, [isMute]);
-
-    // Ascultă schimbările în localStorage
-    useEffect(() => {
-        const handleStorageChange = (event) => {
-            if (event.key === 'isMute') {
-                setIsMute(event.newValue === 'true');
-            }
-        };
-
-        window.addEventListener('storage', handleStorageChange);
-
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-        };
+        handleSpeech(defaultMessage);
     }, []);
 
     return (
