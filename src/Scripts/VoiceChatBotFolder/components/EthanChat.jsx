@@ -5,12 +5,13 @@ const EthanChat = () => {
     const [messages, setMessages] = useState([]);
     const [listening, setListening] = useState(false);
     const [inputText, setInputText] = useState('');
+    const [isThinking, setIsThinking] = useState(false);  
     const messagesEndRef = useRef(null);
     const speechSynthesisRef = useRef(window.speechSynthesis);
 
     const handleVoiceInput = () => {
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'ro-RO';
+        recognition.lang = 'en-EN';
         recognition.start();
 
         recognition.onstart = () => setListening(true);
@@ -25,6 +26,8 @@ const EthanChat = () => {
     const sendMessage = (message) => {
         setMessages([...messages, { text: message, from: 'user' }]);
         setInputText('');
+        setIsThinking(true); // Set isThinking to true when sending a message
+
         fetch('http://localhost:5000/chat', {
             method: 'POST',
             headers: {
@@ -34,45 +37,35 @@ const EthanChat = () => {
         })
             .then(response => response.json())
             .then(botMessage => {
+                setIsThinking(false); // Set isThinking to false when a response is received
                 setMessages(prevMessages => [...prevMessages, { text: botMessage, from: 'bot' }]);
                 handleSpeech(botMessage);
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                setIsThinking(false); // Ensure isThinking is set to false even on error
+            });
     };
 
-   const handleSpeech = (text) => {
-    let isMute = localStorage.getItem('isMute') === 'true'; 
-    console.log(isMute);
+    const handleSpeech = (text) => {
+        let isMute = localStorage.getItem('isMute') === 'true';
+        console.log(isMute);
 
-    if (!isMute) {
-        const utterance = new SpeechSynthesisUtterance(text);
+        if (!isMute) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            speechSynthesisRef.current.speak(utterance);
 
-        // Filter voices by language and gender (female)
-        const voices = speechSynthesisRef.current.getVoices();
-        const englishVoices = voices.filter(voice => voice.lang.startsWith('en') && voice.gender === 'female');
+            const checkMuteStatusInterval = setInterval(() => {
+                isMute = localStorage.getItem('isMute') === 'true';
+                if (isMute) {
+                    speechSynthesisRef.current.cancel();
+                    clearInterval(checkMuteStatusInterval);
+                }
+            }, 100);
 
-        // Choose the first available female English voice
-        if (englishVoices.length > 0) {
-            utterance.voice = englishVoices[0];
-        } else {
-            console.error("No female English voice available.");
-            return;
+            utterance.onend = () => clearInterval(checkMuteStatusInterval);
         }
-
-        speechSynthesisRef.current.speak(utterance);
-
-        const checkMuteStatusInterval = setInterval(() => {
-            isMute = localStorage.getItem('isMute') === 'true';
-            if (isMute) {
-                speechSynthesisRef.current.cancel();
-                clearInterval(checkMuteStatusInterval);
-            }
-        }, 100);
-
-        utterance.onend = () => clearInterval(checkMuteStatusInterval);
-    }
-};
-
+    };
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
@@ -81,10 +74,36 @@ const EthanChat = () => {
     };
 
     useEffect(() => {
-        const defaultMessage = "Hi! I'm Ethan, your Code Review Expert. Have bugs? Share your code, I'll give feedback to boost your skills!";
-        setMessages([{ text: defaultMessage, from: 'bot' }]);
-        handleSpeech(defaultMessage);
+        const storedMessages = JSON.parse(localStorage.getItem('messagesEthan'));
+        if (storedMessages) {
+            setMessages(storedMessages);
+        } else {
+            const defaultMessage = "Hi! I'm Ethan, your Code Review Expert. Have bugs? Share your code, I'll give feedback to boost your skills!";
+            setMessages([{ text: defaultMessage, from: 'bot' }]);
+            handleSpeech(defaultMessage);
+        }
     }, []);
+
+    useEffect(() => {
+        localStorage.setItem('messagesEthan', JSON.stringify(messages));
+    }, [messages]);
+
+    useEffect(() => {
+        const handleDeleteConversation = () => {
+            const defaultMessage = "Hi! I'm Ethan, your Code Review Expert. Have bugs? Share your code, I'll give feedback to boost your skills!";
+            setMessages([{ text: defaultMessage, from: 'bot' }]);
+        };
+
+        window.addEventListener('deleteConversationEthan', handleDeleteConversation);
+
+        return () => {
+            window.removeEventListener('deleteConversationEthan', handleDeleteConversation);
+        };
+    }, []);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
 
     return (
         <div className="relative mt-4 mr-4 border h-85p pl-4 pt-4 pb-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md">
@@ -101,6 +120,17 @@ const EthanChat = () => {
                         </div>
                     </div>
                 ))}
+                   {isThinking && (
+                    <div className="flex justify-start mr-4 transition-colors duration-500">
+                        <div className="bg-purple-100 text-twilight-500 p-2 rounded-xl m-2">
+                            <div className="text-sm font-semibold">Ethan</div>
+                            <div className="flex items-center justify-center">
+                                <Bot size={20} className="mr-2" />
+                                <div className="animate-pulse">Ethan is thinking...</div>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 <div ref={messagesEndRef} />
             </div>
             <div className="absolute inset-x-0 bottom-0 h-10p">

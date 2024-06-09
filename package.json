@@ -17,6 +17,7 @@
     "date-fns": "^3.6.0",
     "draft-js": "^0.11.7",
     "faker": "^6.6.6",
+    "framer-motion": "^11.2.10",
     "jwt-decode": "^4.0.0",
     "keyword-extractor": "^0.0.28",
     "lucide-react": "^0.294.0",

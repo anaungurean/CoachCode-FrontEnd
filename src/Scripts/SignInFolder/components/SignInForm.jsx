@@ -79,6 +79,7 @@ export default function SignInForm() {
           localStorage.setItem('selectedCompany', JSON.stringify(null));
           localStorage.setItem('jobs', JSON.stringify(null));
           localStorage.setItem('currentPage', JSON.stringify(1));
+          localStorage.setItem('isMute', false);
           const decodedToken = jwtDecode(data.token);
           const userId = decodedToken.user_id;
           localStorage.setItem('userId', JSON.stringify(userId));

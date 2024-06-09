@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Home, ChevronRight, LogOut, User, ChevronDown, ChevronUp, Bell, BellDot, ThumbsUp, MessageCircle, Volume2, Volume } from 'lucide-react';
+import { Home, ChevronRight, LogOut, User, ChevronDown, ChevronUp, Bell, BellDot, ThumbsUp, MessageCircle, Volume2, Volume, Trash } from 'lucide-react';
 import { formatDistanceToNowStrict } from 'date-fns';
 import PropTypes from 'prop-types';
 
@@ -69,6 +69,18 @@ const Breadcrumb = ({ items }) => {
     console.log(newIsMute);
   }
 
+ const handleDeleteConversation = () => {
+    if (botName === 'Ethan') {
+      localStorage.removeItem('messagesEthan');
+      const defaultMessage = "Hi! I'm Ethan, your Code Review Expert. Have bugs? Share your code, I'll give feedback to boost your skills!";
+      localStorage.setItem('messagesEthan', JSON.stringify([{ text: defaultMessage, from: 'bot' }]));
+
+      // Dispatch custom event
+      const event = new Event('deleteConversationEthan');
+      window.dispatchEvent(event);
+    }
+  }
+
   return (
     <nav className="flex justify-between items-center px-5 py-4 mt-4 mr-2 text-twilight-400 border border-gray-200 rounded-xl bg-white" aria-label="Breadcrumb">
       <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -101,6 +113,16 @@ const Breadcrumb = ({ items }) => {
             <div className="flex items-center">
               {isMute ? <Volume size={20} /> : <Volume2 size={20} />}
               {isMute ? <p className="text-base text-twilight-400"> Unmute {botName} </p> : <p className="text-base text-twilight-400 ml-1">Mute {botName} </p>}
+            </div>
+          </button>
+        )}
+
+        {currentPath.includes('voice-chat-bot') && (
+          <button className="bg-purple-100 p-2 rounded-full text-twilight-500 hover:bg-purple-200 focus:outline-none"
+            onClick={handleDeleteConversation}>
+            <div className="flex items-center">
+              <Trash size={20} />
+              <p className="text-base text-twilight-400 ml-1">Delete Conversation</p>
             </div>
           </button>
         )}
