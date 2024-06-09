@@ -24,6 +24,7 @@ function Popup({ togglePopup, setEnteredCode, setSelectedLanguage }) {
     }
     setEnteredCode(code);
     setSelectedLanguage(language);
+    localStorage.setItem('sentCode', false);
     showSuccessToast('Code submitted successfully');
     togglePopup(false);
     

@@ -38,7 +38,14 @@ function VoiceChatBotPage() {
           botName === "ethan" && (
             <>
               <ToastContainer />
-              <EthanChat openPopup={openPopup} selectedLanguage={selectedLanguage} enteredCode={enteredCode} />
+              <EthanChat 
+                openPopup={openPopup} 
+                selectedLanguage={selectedLanguage} 
+                enteredCode={enteredCode}
+                setSelectedLanguage={setSelectedLanguage}
+                setEnteredCode={setEnteredCode}    
+                
+             />
               {showPopup && <Popup 
                 togglePopup={setShowPopup} 
                 setEnteredCode={setEnteredCode} 

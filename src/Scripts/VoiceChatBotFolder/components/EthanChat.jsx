@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-const EthanChat = ({ openPopup, selectedLanguage, enteredCode }) => {
+const EthanChat = ({ openPopup, selectedLanguage, enteredCode, setSelectedLanguage, setEnteredCode }) => {
     const [messages, setMessages] = useState([]);
     const [listening, setListening] = useState(false);
     const [inputText, setInputText] = useState('');
@@ -28,12 +28,20 @@ const EthanChat = ({ openPopup, selectedLanguage, enteredCode }) => {
     };
 
     const sendMessage = (message) => {
-        setMessages([...messages, { text: message, from: 'user' }]);
+        const userMessage = {
+            text: message,
+            from: 'user',
+            code: enteredCode,
+            language: selectedLanguage,
+        };
+        setMessages([...messages, userMessage]);
+
         setInputText('');
         setIsThinking(true);
-        console.log(selectedLanguage, enteredCode);
-
-        const messageToSend = selectedLanguage && enteredCode ? `${message} ${selectedLanguage} ${enteredCode}` : message;
+        let messageToSend = message;
+        if (enteredCode) {
+            messageToSend = `${message}, code: ${enteredCode}`;
+         }
 
         fetch('http://localhost:5000/chatEthan', {
             method: 'POST',
@@ -50,8 +58,16 @@ const EthanChat = ({ openPopup, selectedLanguage, enteredCode }) => {
                 setIsThinking(false);
                 const { response: botMessage, conversation_history: updatedConversationHistory } = data;
                 setConversationHistory(updatedConversationHistory);
-                setMessages(prevMessages => [...prevMessages, { text: botMessage, from: 'bot' }]);
+                const botMessageObject = {
+                    text: botMessage,
+                    from: 'bot',
+                    code: '',
+                    language: '',
+                };
+                setMessages(prevMessages => [...prevMessages, botMessageObject]);
                 handleSpeech(botMessage);
+                setEnteredCode('');
+                setSelectedLanguage('');
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -61,8 +77,6 @@ const EthanChat = ({ openPopup, selectedLanguage, enteredCode }) => {
 
     const handleSpeech = (text) => {
         let isMute = localStorage.getItem('isMute') === 'true';
-        console.log(isMute);
-
         if (!isMute) {
             const utterance = new SpeechSynthesisUtterance(text);
             speechSynthesisRef.current.speak(utterance);
@@ -91,7 +105,7 @@ const EthanChat = ({ openPopup, selectedLanguage, enteredCode }) => {
             setMessages(storedMessages);
         } else {
             const defaultMessage = "Hi! I'm Ethan, your Code Review Expert. Have bugs? Share your code, I'll give feedback to boost your skills!";
-            setMessages([{ text: defaultMessage, from: 'bot' }]);
+            setMessages([{ text: defaultMessage, from: 'bot', code: '', language: '' }]);
             handleSpeech(defaultMessage);
         }
     }, []);
@@ -103,8 +117,8 @@ const EthanChat = ({ openPopup, selectedLanguage, enteredCode }) => {
     useEffect(() => {
         const handleDeleteConversation = () => {
             const defaultMessage = "Hi! I'm Ethan, your Code Review Expert. Have bugs? Share your code, I'll give feedback to boost your skills!";
-            setMessages([{ text: defaultMessage, from: 'bot' }]);
-            setConversationHistory([]);
+            setMessages([{ text: defaultMessage, from: 'bot', code: '', language: '' }]);
+            setConversationHistory(messages.map(message => message.text));
         };
 
         window.addEventListener('deleteConversationEthan', handleDeleteConversation);
@@ -120,7 +134,49 @@ const EthanChat = ({ openPopup, selectedLanguage, enteredCode }) => {
 
     const handleEntercode = () => {
         openPopup();
-    }
+    };
+
+    const renderCodeBlock = (text) => {
+        const codeBlockRegex = /```([a-zA-Z]+)\n([\s\S]+?)\n```/g;
+
+        let match;
+        const renderedBlocks = [];
+        let lastIndex = 0;
+
+        while ((match = codeBlockRegex.exec(text)) !== null) {
+            const beforeCode = text.substring(lastIndex, match.index);
+            if (beforeCode.trim() !== '') {
+                renderedBlocks.push(
+                    <span key={renderedBlocks.length}>
+                        {beforeCode}
+                    </span>
+                );
+            }
+
+            const language = match[1];
+            const code = match[2];
+            renderedBlocks.push(
+                <div key={renderedBlocks.length} className="mt-2 ml-2 mr-2">
+                    <SyntaxHighlighter language={language} style={docco} wrapLines={true}>
+                        {code}
+                    </SyntaxHighlighter>
+                </div>
+            );
+
+            lastIndex = codeBlockRegex.lastIndex;
+        }
+
+        const remainingText = text.substring(lastIndex);
+        if (remainingText.trim() !== '') {
+            renderedBlocks.push(
+                <span key={renderedBlocks.length}>
+                    {remainingText}
+                </span>
+            );
+        }
+
+        return renderedBlocks;
+    };
 
     return (
         <div className="relative mt-4 mr-4 border h-85p pl-4 pt-4 pb-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md">
@@ -128,28 +184,29 @@ const EthanChat = ({ openPopup, selectedLanguage, enteredCode }) => {
                 {messages.map((message, index) => (
                     <div key={index} className={`flex justify-${message.from === 'user' ? 'end' : 'start'} mr-4`}>
                         <div className={`bg-${message.from === 'user' ? 'gray-200' : 'purple-100'} text-twilight-500 p-2 rounded-xl m-2 
-                            w-${selectedLanguage && enteredCode && message.from === 'user' ? '3/4' : 'auto'}
+                            w-${message.language && message.code && message.from === 'user' ? '5/6' : 'auto'}
                         `}>
-                            <div className=" flex items-center text-sm font-semibold">{message.from === 'user' ? 'You' : 'Ethan'}</div>
-                            <div className=" flex items-column">
+                            <div className="flex items-center text-sm font-semibold">{message.from === 'user' ? 'You' : 'Ethan'}</div>
+                            <div className="flex items-column">
                                 {message.from === 'bot' && <Bot size={20} className="mr-2" />}
                                 {message.from === 'user' && <User size={20} className="mr-2" />}
-                                {message.text}
+                                {message.from === 'user' && <div>{message.text}</div>}
+                            </div>
+                            <div>
+                                {message.from === 'bot' && message.text &&
+                                    renderCodeBlock(message.text)}
                             </div>
                             <div className="flex items-center justify-center mt-2 ml-2 mr-2">
-                                {
-                                    selectedLanguage && enteredCode && message.from === 'user' && (
-                                        
-                                         <SyntaxHighlighter language={selectedLanguage} style={docco} wrapLines={true}>
-                                            {enteredCode}
-                                        </SyntaxHighlighter>
-                                     )
-                                }
+                                {message.language && message.code && message.from === 'user' && (
+                                    <SyntaxHighlighter language={message.language} style={docco} wrapLines={true}>
+                                        {message.code}
+                                    </SyntaxHighlighter>
+                                )}
                             </div>
                         </div>
                     </div>
                 ))}
-                   {isThinking && (
+                {isThinking && (
                     <div className="flex justify-start mr-4 transition-colors duration-500">
                         <div className="bg-purple-100 text-twilight-500 p-2 rounded-xl m-2">
                             <div className="text-sm font-semibold">Ethan</div>
@@ -199,7 +256,14 @@ const EthanChat = ({ openPopup, selectedLanguage, enteredCode }) => {
 EthanChat.propTypes = {
     openPopup: PropTypes.func.isRequired,
     selectedLanguage: PropTypes.string,
-    enteredCode: PropTypes.string
+    enteredCode: PropTypes.string,
+    setSelectedLanguage: PropTypes.func.isRequired,
+    setEnteredCode: PropTypes.func.isRequired,
+};
+
+EthanChat.defaultProps = {
+    selectedLanguage: '',
+    enteredCode: '',
 };
 
 export default EthanChat;
