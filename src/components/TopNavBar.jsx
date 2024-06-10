@@ -79,6 +79,16 @@ const Breadcrumb = ({ items }) => {
       const event = new Event('deleteConversationEthan');
       window.dispatchEvent(event);
     }
+
+    if (botName === 'Ava') {
+      localStorage.removeItem('messagesAva');
+      const defaultMessage = "Hi! I'm Ava, your friendly Job Search Advisor. Need a friend to ask for advice on crafting your CV, acing interviews, or navigating job offers? I'm here to help!";
+      localStorage.setItem('messagesAva', JSON.stringify([{ text: defaultMessage, from: 'bot' }]));
+
+      // Dispatch custom event
+      const event = new Event('deleteConversationAva');
+      window.dispatchEvent(event);
+    }
   }
 
   return (

@@ -5,7 +5,7 @@ import { Bot } from 'lucide-react';
 function BotsPage() {
   const breadcrumbItems = [
     { name: 'Home', link: '/' },
-    { name: 'Voice Bots', link: null },
+    { name: 'Voice Assistants', link: null },
   ];
 
 const bots = [
@@ -24,10 +24,10 @@ const bots = [
     subtitle: "Technical Interviewer",
     description: "Don't feel prepared for the next interview? Lucas offers realistic interview simulations, problem-solving practice, and valuable feedback to boost users' confidence and performance in technical interviews, ensuring they stand out to potential employers.",
   },
-  {
+   {
     name: "Ava",
-    subtitle: "Code Crafting Assistant",
-    description: "Struggling with coding challenges? Meet Ava, the Code Crafting Assistant. Need coding best practices, real-time feedback, or innovative solutions? Ava empowers users to write cleaner, maintainable code that meets industry standards.",
+    subtitle: "Job Search Advisor",
+    description: "Need a friend to ask for advice? Ava, the Job Search Advisor, is here to help. Whether it's crafting the perfect CV, acing interviews, or navigating job offers, Ava provides friendly, expert advice and practical tips to boost your job search success.",
   },
 ];
 
@@ -58,7 +58,7 @@ const bots = [
         <div className="mr-4 flex-grow">
           <div className="flex items-center bg-gradient-to-r from-twilight-100 to-purple-100 px-4 py-3 rounded-2xl cursor-pointer text-twilight-500 mt-4">
             <Bot size={20} className="text-twilight-500 mr-2" />
-            <h3 className="text-lg font-semibold">Select the bot based on your needs</h3>
+            <h3 className="text-lg font-semibold">Select the assistant based on your needs</h3>
           </div>
           <div className="grid gap-8 grid-cols-2 grid-rows-2 h-85p mt-4">
             {bots.map((bot, index) => (
