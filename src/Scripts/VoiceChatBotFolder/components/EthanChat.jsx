@@ -75,10 +75,26 @@ const EthanChat = ({ openPopup, selectedLanguage, enteredCode, setSelectedLangua
             });
     };
 
-    const handleSpeech = (text) => {
-        let isMute = localStorage.getItem('isMute') === 'true';
-        if (!isMute) {
-            const utterance = new SpeechSynthesisUtterance(text);
+  const handleSpeech = (text) => {
+    let isMute = localStorage.getItem('isMute') === 'true';
+    if (!isMute) {
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        const setVoice = () => {
+            // Get the list of available voices
+            const voices = window.speechSynthesis.getVoices();
+
+            // Find the specific voice by name
+            const targetVoiceName = "Microsoft Andrew Online (Natural) - English (United States)";
+            const targetVoice = voices.find(voice => voice.name === targetVoiceName);
+
+            // Set the voice to the specific voice if found
+            if (targetVoice) {
+                utterance.voice = targetVoice;
+            } else {
+                console.warn(`Voice "${targetVoiceName}" not found. Using default voice.`);
+            }
+
             speechSynthesisRef.current.speak(utterance);
 
             const checkMuteStatusInterval = setInterval(() => {
@@ -90,8 +106,18 @@ const EthanChat = ({ openPopup, selectedLanguage, enteredCode, setSelectedLangua
             }, 100);
 
             utterance.onend = () => clearInterval(checkMuteStatusInterval);
+        };
+
+        // Check if voices are already loaded
+        if (window.speechSynthesis.getVoices().length !== 0) {
+            setVoice();
+        } else {
+            // Add event listener for voices changed event
+            window.speechSynthesis.onvoiceschanged = setVoice;
         }
-    };
+    }
+};
+
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {

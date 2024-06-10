@@ -89,6 +89,17 @@ const Breadcrumb = ({ items }) => {
       const event = new Event('deleteConversationAva');
       window.dispatchEvent(event);
     }
+
+    if (botName === 'Mia') {
+      localStorage.removeItem('messagesMia');
+      const defaultMessage = "Hi! I'm Mia, HR Interview! Are you ready to take a mock HR interview? Please type 'Yes' or 'No' to start.";
+      localStorage.setItem('messagesMia', JSON.stringify([{ text: defaultMessage, from: 'bot' }]));
+
+      const event = new Event('deleteConversationMia');
+      window.dispatchEvent(event);
+
+    }
+
   }
 
   return (

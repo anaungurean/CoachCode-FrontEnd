@@ -68,9 +68,26 @@ const AvaChat = () => {
     };
 
     const handleSpeech = (text) => {
-        let isMute = localStorage.getItem('isMute') === 'true';
-        if (!isMute) {
-            const utterance = new SpeechSynthesisUtterance(text);
+    let isMute = localStorage.getItem('isMute') === 'true';
+    if (!isMute) {
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        const setVoice = () => {
+            // Get the list of available voices
+            const voices = window.speechSynthesis.getVoices();
+            console.log(voices);
+
+            // Find the specific voice by name
+            const targetVoiceName = "Microsoft Jenny Online (Natural) - English (United States)";
+            const targetVoice = voices.find(voice => voice.name === targetVoiceName);
+            console.log(targetVoice);
+            // Set the voice to the specific voice if found
+            if (targetVoice) {
+                utterance.voice = targetVoice;
+            } else {
+                console.warn(`Voice "${targetVoiceName}" not found. Using default voice.`);
+            }
+
             speechSynthesisRef.current.speak(utterance);
 
             const checkMuteStatusInterval = setInterval(() => {
@@ -82,8 +99,18 @@ const AvaChat = () => {
             }, 100);
 
             utterance.onend = () => clearInterval(checkMuteStatusInterval);
+        };
+
+        // Check if voices are already loaded
+        if (window.speechSynthesis.getVoices().length !== 0) {
+            setVoice();
+        } else {
+            // Add event listener for voices changed event
+            window.speechSynthesis.onvoiceschanged = setVoice;
         }
-    };
+    }
+};
+
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {

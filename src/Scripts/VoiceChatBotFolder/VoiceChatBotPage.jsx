@@ -3,6 +3,7 @@ import Breadcrumb from '../../components/TopNavBar';
 import { useParams } from 'react-router-dom';
 import EthanChat from './components/EthanChat';
 import AvaChat from './components/AvaChat';
+import MiaChat from './components/MiaChat';
 import Popup from './components/PopUp';
 import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
@@ -64,8 +65,12 @@ function VoiceChatBotPage() {
           botName === "Ava" && (
             <AvaChat> </AvaChat>
           )
-
          }
+          {
+            botName === "Mia" && (
+              <MiaChat> </MiaChat>
+            )
+          }
       </div>
     </div>
   );
