@@ -85,7 +85,7 @@ const EthanChat = ({ openPopup, selectedLanguage, enteredCode, setSelectedLangua
             const voices = window.speechSynthesis.getVoices();
 
             // Find the specific voice by name
-            const targetVoiceName = "Microsoft Andrew Online (Natural) - English (United States)";
+            const targetVoiceName = "Microsoft Guy Online (Natural) - English (United States)";
             const targetVoice = voices.find(voice => voice.name === targetVoiceName);
 
             // Set the voice to the specific voice if found

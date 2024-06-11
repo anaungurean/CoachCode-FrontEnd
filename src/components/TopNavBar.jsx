@@ -107,6 +107,16 @@ const Breadcrumb = ({ items }) => {
       const event = new Event('deleteConversationLucas');
       window.dispatchEvent(event);
   }
+
+    if (botName === 'Ana') {
+      localStorage.removeItem('messagesAna');
+      const defaultMessage = "Hi! I'm Ana. Have questions about CoachCode? I'm here to help!";
+      localStorage.setItem('messagesAna', JSON.stringify([{ text: defaultMessage, from: 'bot' }]));
+
+      const event = new Event('deleteConversationAna');
+      window.dispatchEvent(event);
+    }
+
 }
 
   return (
@@ -135,7 +145,7 @@ const Breadcrumb = ({ items }) => {
 
       <div className="flex items-center space-x-2 relative z-50">
         
-        {currentPath.includes('voice-chat-bot') && (
+        {( currentPath.includes('voice-chat-bot') || currentPath.includes('help') )&& (
           <button className="bg-purple-100 p-2 rounded-full text-twilight-500 hover:bg-purple-200 focus:outline-none"
             onClick={handleSoundClick}>
             <div className="flex items-center">
@@ -145,7 +155,8 @@ const Breadcrumb = ({ items }) => {
           </button>
         )}
 
-        {currentPath.includes('voice-chat-bot') && (
+        {( currentPath.includes('voice-chat-bot') || currentPath.includes('help') )
+         && (
           <button className="bg-purple-100 p-2 rounded-full text-twilight-500 hover:bg-purple-200 focus:outline-none"
             onClick={handleDeleteConversation}>
             <div className="flex items-center">
