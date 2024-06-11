@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Mic, Send, Bot, User } from 'lucide-react';
     
 
-const MiaChat = () => {
+const LucasChat = () => {
     const [messages, setMessages] = useState([]);
     const [listening, setListening] = useState(false);
     const [inputText, setInputText] = useState('');
@@ -40,7 +40,7 @@ const sendMessage = (message) => {
     setMessages([...messages, userMessage]);
     setInputText('');
 
-    let storedMessages = JSON.parse(localStorage.getItem('messagesMia'));
+    let storedMessages = JSON.parse(localStorage.getItem('messagesLucas'));
     let lastBotMessage = '';
     if (storedMessages && storedMessages.length > 0) {
         for (let i = storedMessages.length - 1; i >= 0; i--) {
@@ -52,7 +52,7 @@ const sendMessage = (message) => {
     }
      storedMessages = [...storedMessages, userMessage];
 
-    if (lastBotMessage === "Hi! I'm Mia, HR Interview! Are you ready to take a mock HR interview? Please type 'Yes' or 'No' to start." || lastBotMessage === 'I didn\'t get that. Please type "Yes" or "No" to start the mock HR interview.') {
+    if (lastBotMessage === "Hi! I'm Lucas, Technical Interview! Are you ready to take a mock Technical interview? Please type 'Yes' or 'No' to start." || lastBotMessage === 'I didn\'t get that. Please type "Yes" or "No" to start the mock Technical interview.') {
         if (message.toLowerCase() === 'yes') {
             const botMessageObject = {
                 text: 'Great! First, I need to know for which position you are applying. Please type the job title.',
@@ -62,19 +62,19 @@ const sendMessage = (message) => {
             handleSpeech('Great! First, I need to know for which position you are applying. Please type the job title.');
         } else if (message.toLowerCase() === 'no') {
             const botMessageObject = {
-                text: 'No problem! If you change your mind, I\'ll be here to help you prepare for your HR interview.',
+                text: 'No problem! If you change your mind, I\'ll be here to help you prepare for your Technical interview.',
                 from: 'bot',
             };
             setMessages(prevMessages => [...prevMessages, botMessageObject]);
-            handleSpeech('No problem! If you change your mind, I\'ll be here to help you prepare for your HR interview.');
+            handleSpeech('No problem! If you change your mind, I\'ll be here to help you prepare for your Technical interview.');
             setFinishedInterview(true);
         } else {
             const botMessageObject = {
-                text: 'I didn\'t get that. Please type "Yes" or "No" to start the mock HR interview.',
+                text: 'I didn\'t get that. Please type "Yes" or "No" to start the mock Technical interview.',
                 from: 'bot',
             };
             setMessages(prevMessages => [...prevMessages, botMessageObject]);
-            handleSpeech('I didn\'t get that. Please type "Yes" or "No" to start the mock HR interview.');
+            handleSpeech('I didn\'t get that. Please type "Yes" or "No" to start the mock Technical interview.');
         }
     } else if (lastBotMessage === 'Great! First, I need to know for which position you are applying. Please type the job title.') {
         console.log(message);
@@ -92,11 +92,11 @@ const sendMessage = (message) => {
         const number = parseInt(message);
         if (number === 3 || number === 5 || number === 10 || number === 15) {
             const botMessageObject = {
-                text: `Great! You have selected ${number} questions. Let's start the mock HR interview for the position of ${jobTitle}.`,
+                text: `Great! You have selected ${number} questions. Let's start the mock Technical interview for the position of ${jobTitle}.`,
                 from: 'bot',
             };
             setMessages(prevMessages => [...prevMessages, botMessageObject]);
-            handleSpeech(`Great! You have selected ${number} questions. Let's start the mock HR interview for the position of ${jobTitle}.`);
+            handleSpeech(`Great! You have selected ${number} questions. Let's start the mock Technical interview for the position of ${jobTitle}.`);
             fetchQuestion(jobTitle, number);
             
         } else {
@@ -120,12 +120,12 @@ const sendMessage = (message) => {
             currentQuestionIndex.current += 1;
         } else {
             const botMessageObject = {
-                text: 'That\'s all the questions for now. In few seconds, I will provide HR feedback for you. Please wait',
+                text: 'That\'s all the questions for now. In few seconds, I will provide Technical feedback for you. Please wait',
                 from: 'bot',
             };
             setMessages(prevMessages => [...prevMessages, botMessageObject]);
             storedMessages = [...storedMessages, botMessageObject];
-            handleSpeech('That\'s all the questions for now. In few seconds, I will provide HR feedback for you. Please wait');
+            handleSpeech('That\'s all the questions for now. In few seconds, I will provide Technical feedback for you. Please wait');
             console.log(storedMessages);
             fetchFeedback(storedMessages);
         }
@@ -136,7 +136,7 @@ const sendMessage = (message) => {
 const fetchFeedback = async (interviewData) => {
     setIsThinking(true);
     try {
-        const response = await fetch('http://localhost:5000/generateFeedbackHR', {
+        const response = await fetch('http://localhost:5000/generateFeedbackTechnical', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ const fetchFeedback = async (interviewData) => {
 
         const data = await response.json();
         if (response.ok) {
-            console.log('HR Feedback generated:', data.feedback);
+            console.log('Technical Feedback generated:', data.feedback);
             setIsThinking(false);
 
             const botMessageObject = {
@@ -158,10 +158,10 @@ const fetchFeedback = async (interviewData) => {
             setFinishedInterview(true);
 
          } else {
-            console.error('Error generating HR feedback:', data.error);
+            console.error('Error generating Technical feedback:', data.error);
         }
     } catch (error) {
-        console.error('Error fetching HR feedback:', error);
+        console.error('Error fetching Technical feedback:', error);
     }
 };
 
@@ -170,7 +170,7 @@ const fetchFeedback = async (interviewData) => {
    const fetchQuestion = async (jobTitle, numberOfQuestions) => {
     setIsThinking(true);
     try {
-        const response = await fetch('http://localhost:5000/generateHRQuestions', {
+        const response = await fetch('http://localhost:5000/generateTechnicalQuestions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ const fetchFeedback = async (interviewData) => {
 
         const data = await response.json();
         if (response.ok) {
-            console.log('HR Questions generated:', data.questions);
+            console.log('Technical Questions generated:', data.questions);
             setIsThinking(false);
             setGeneratedQuestions(data.questions);
             console.log(data.questions[0]);
@@ -193,10 +193,10 @@ const fetchFeedback = async (interviewData) => {
             currentQuestionIndex.current += 1;
         
         } else {
-            console.error('Error generating HR questions:', data.error);
+            console.error('Error generating Technical questions:', data.error);
         }
     } catch (error) {
-        console.error('Error fetching HR questions:', error);
+        console.error('Error fetching Technical questions:', error);
     }
 };
 
@@ -211,7 +211,7 @@ const fetchFeedback = async (interviewData) => {
 
         const setVoice = () => {
             const voices = window.speechSynthesis.getVoices();
-            const targetVoiceName = "Microsoft Ava Online (Natural) - English (United States)";
+            const targetVoiceName = "Microsoft Andrew Online (Natural) - English (United States)";
             const targetVoice = voices.find(voice => voice.name === targetVoiceName);
              if (targetVoice) {
                 utterance.voice = targetVoice;
@@ -248,11 +248,11 @@ const fetchFeedback = async (interviewData) => {
     };
 
     useEffect(() => {
-        const storedMessages = JSON.parse(localStorage.getItem('messagesMia'));
+        const storedMessages = JSON.parse(localStorage.getItem('messagesLucas'));
         if (storedMessages) {
             setMessages(storedMessages);
         } else {
-            const defaultMessage = "Hi! I'm Mia, HR Interview! Are you ready to take a mock HR interview? Please type 'Yes' or 'No' to start.";
+            const defaultMessage = "Hi! I'm Lucas, Technical Interview! Are you ready to take a mock Technical interview? Please type 'Yes' or 'No' to start.";
             setMessages([{ text: defaultMessage, from: 'bot' }]);
             handleSpeech(defaultMessage);
         }
@@ -260,12 +260,12 @@ const fetchFeedback = async (interviewData) => {
 
 
     useEffect(() => {
-        localStorage.setItem('messagesMia', JSON.stringify(messages));
+        localStorage.setItem('messagesLucas', JSON.stringify(messages));
     }, [messages]);
 
     useEffect(() => {
         const handleDeleteConversation = () => {
-            const defaultMessage = "Hi! I'm Mia, HR Interview! Are you ready to take a mock HR interview? Please type 'Yes' or 'No' to start.";
+            const defaultMessage = "Hi! I'm Lucas, Technical Interview! Are you ready to take a mock Technical interview? Please type 'Yes' or 'No' to start.";
             setMessages([{ text: defaultMessage, from: 'bot'}]);
             setConversationHistory(messages.map(message => message.text));
             setJobTitle('');
@@ -275,10 +275,10 @@ const fetchFeedback = async (interviewData) => {
 
         };
 
-        window.addEventListener('deleteConversationMia', handleDeleteConversation);
+        window.addEventListener('deleteConversationLucas', handleDeleteConversation);
 
         return () => {
-            window.removeEventListener('deleteConversationMia', handleDeleteConversation);
+            window.removeEventListener('deleteConversationLucas', handleDeleteConversation);
         };
     }, []);
 
@@ -312,7 +312,7 @@ const renderBotMessage = (text) => {
                         <div className={`bg-${message.from === 'user' ? 'gray-200' : 'purple-100'} text-twilight-500 p-2 rounded-xl m-2 
                                 ${message.from === 'user' ? 'ml-40' : 'mr-40'}
                               `}>
-                            <div className="flex items-center text-sm font-semibold">{message.from === 'user' ? 'You' : 'Mia'}</div>
+                            <div className="flex items-center text-sm font-semibold">{message.from === 'user' ? 'You' : 'Lucas'}</div>
                             <div className="flex items-column">
                                 {message.from === 'bot' && <Bot size={20} className="mr-2" />}
                                 {message.from === 'user' && <User size={20} className="mr-2" />}
@@ -329,10 +329,10 @@ const renderBotMessage = (text) => {
                 {isThinking && (
                     <div className="flex justify-start mr-4 transition-colors duration-500">
                         <div className="bg-purple-100 text-twilight-500 p-2 rounded-xl m-2">
-                            <div className="text-sm font-semibold">Mia</div>
+                            <div className="text-sm font-semibold">Lucas</div>
                             <div className="flex items-center justify-center">
                                 <Bot size={20} className="mr-2" />
-                                <div className="animate-pulse">Mia is thinking...</div>
+                                <div className="animate-pulse">Lucas is thinking...</div>
                             </div>
                         </div>
                     </div>
@@ -374,4 +374,4 @@ const renderBotMessage = (text) => {
 };
 
  
-export default MiaChat;
+export default LucasChat;

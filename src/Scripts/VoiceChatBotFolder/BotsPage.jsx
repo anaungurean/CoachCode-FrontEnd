@@ -22,12 +22,12 @@ const bots = [
   {
     name: "Lucas",
     subtitle: "Technical Interviewer",
-    description: "Don't feel prepared for the next interview? Lucas offers realistic interview simulations, problem-solving practice, and valuable feedback to boost users' confidence and performance in technical interviews, ensuring they stand out to potential employers.",
+    description: "Don't feel prepared for the next interview? Lucas offers technical interview simulations and valuable feedback to boost users' confidence and performance, ensuring they stand out to potential employers.",
   },
    {
     name: "Ava",
     subtitle: "Job Search Advisor",
-    description: "Need a friend to ask for advice? Ava, the Job Search Advisor, is here to help. Whether it's crafting the perfect CV, acing interviews, or navigating job offers, Ava provides friendly, expert advice and practical tips to boost your job search success.",
+    description: "Need a friend to ask for advice? Ava, the Job Search Advisor, is here to help. Whether it's crafting the perfect CV or acing interviews, Ava provides friendly, expert advice to boost your job search success.",
   },
 ];
 
@@ -43,6 +43,7 @@ const bots = [
     } else if (botName === "Ava") {
       window.location.href = '/voice-chat-bot/ava';
     }
+
 
     localStorage.setItem('botName', botName);
   };

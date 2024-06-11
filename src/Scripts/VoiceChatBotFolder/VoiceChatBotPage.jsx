@@ -4,9 +4,11 @@ import { useParams } from 'react-router-dom';
 import EthanChat from './components/EthanChat';
 import AvaChat from './components/AvaChat';
 import MiaChat from './components/MiaChat';
+import LucasChat from './components/LucasChat';
 import Popup from './components/PopUp';
 import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
+
 
 
 function VoiceChatBotPage() {
@@ -69,6 +71,11 @@ function VoiceChatBotPage() {
           {
             botName === "Mia" && (
               <MiaChat> </MiaChat>
+            )
+          }
+          {
+            botName === "Lucas" && (
+              <LucasChat> </LucasChat>
             )
           }
       </div>

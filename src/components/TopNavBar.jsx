@@ -97,10 +97,17 @@ const Breadcrumb = ({ items }) => {
 
       const event = new Event('deleteConversationMia');
       window.dispatchEvent(event);
-
     }
 
+    if (botName === 'Lucas') {
+      localStorage.removeItem('messagesLucas');
+      const defaultMessage = "Hi! I'm Lucas, your Technical Interviewer. Are you ready to take a mock technical interview? Please type 'Yes' or 'No' to start.";
+      localStorage.setItem('messagesLucas', JSON.stringify([{ text: defaultMessage, from: 'bot' }]));
+
+      const event = new Event('deleteConversationLucas');
+      window.dispatchEvent(event);
   }
+}
 
   return (
     <nav className="flex justify-between items-center px-5 py-4 mt-4 mr-2 text-twilight-400 border border-gray-200 rounded-xl bg-white" aria-label="Breadcrumb">
