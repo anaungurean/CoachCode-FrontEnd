@@ -17,6 +17,7 @@ import PostPage from './Scripts/CommunityFolder/PostPage';
 import VoiceChatBotPage from './Scripts/VoiceChatBotFolder/VoiceChatBotPage';
 import BotsPage from './Scripts/VoiceChatBotFolder/BotsPage';
 import HelpPage from './Scripts/HelpFolder/HelpPage';
+import HomePage from './Scripts/HomeFolder/HomePage';
 
 export default function App() {
   return (
@@ -40,6 +41,7 @@ export default function App() {
          <Route path="/bots" element={<BotsPage />} />
         <Route path="/voice-chat-bot/:botName" element={<VoiceChatBotPage />} />
         <Route path="/help" element={<HelpPage />} />
+        <Route path="/home" element={<HomePage />} />
        </Routes>
     </Router>
   );

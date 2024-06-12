@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Home, HeartHandshake, BrainCircuit, Bot, Settings, Users, FileText  } from "lucide-react";
+import { Home, HeartHandshake, BrainCircuit, Bot, BadgeHelp      , Users, FileText  } from "lucide-react";
 import Sidebar, { SidebarItem } from "./Sidebar";
 import { Link } from 'react-router-dom';
 
@@ -15,27 +15,27 @@ export default function NavBar() {
   return (
     <div className="flex">
       <Sidebar>
-        <Link to="/" onClick={() => handleItemClick("Home")}>
-          <SidebarItem icon={<Home size={20} />} text="Home" activeItem={activeItem}  />
+        <Link to="/home" onClick={() => handleItemClick("Home")}>
+          <SidebarItem icon={<Home size={24} />} text="Home" activeItem={activeItem}  />
         </Link>
         <Link to="/problems" onClick={() => handleItemClick("Coding Practice")}>
-          <SidebarItem icon={<BrainCircuit size={20} />} text="Coding Practice" activeItem={activeItem}  />
+          <SidebarItem icon={<BrainCircuit size={24} />} text="Coding Practice" activeItem={activeItem}  />
         </Link>
         <Link to="/bots" onClick={() => handleItemClick("Voice Assistants")}>
-        <SidebarItem icon={<Bot size={20} />} text="Voice Assistants" activeItem={activeItem} />
+        <SidebarItem icon={<Bot size={24} />} text="Voice Assistants" activeItem={activeItem} />
         </Link>
         <Link to="/search-job" onClick={() => handleItemClick("Search jobs")}>
-          <SidebarItem icon={<HeartHandshake size={20} />} text="Search jobs" activeItem={activeItem} />
+          <SidebarItem icon={<HeartHandshake size={24} />} text="Search jobs" activeItem={activeItem} />
         </Link>
          <Link to="/community" onClick={() => handleItemClick("Community")}>
-          <SidebarItem icon={<Users size={20} />} text="Community" activeItem={activeItem} />
+          <SidebarItem icon={<Users size={24} />} text="Community" activeItem={activeItem} />
         </Link>
         <Link to = "/create-cv" onClick = {() => handleItemClick("Create CV")} >
-          <SidebarItem icon={<FileText size={20} />} text="Create CV" activeItem={activeItem} />
+          <SidebarItem icon={<FileText size={24} />} text="Create CV" activeItem={activeItem} />
         </Link>
         <hr className="my-3" />
         <Link to="/help" onClick={() => handleItemClick("Help")}>
-        <SidebarItem icon={<Settings size={20} />} text="Help" activeItem={activeItem}  />
+        <SidebarItem icon={<BadgeHelp size={24} />} text="Help" activeItem={activeItem}  />
         </Link>
         
 

@@ -1,12 +1,18 @@
 /* eslint-disable react/prop-types */
-import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react"
+import { ChevronFirst, ChevronLast } from "lucide-react"
 import logo from "../assets/Logo.png"
 import { createContext, useContext, useState } from "react"
-import { UserRound } from 'lucide-react';
+import { Moon, Sun } from "lucide-react"
 
 const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
+    const [isDarkMode, setIsDarkMode] = useState('false')
+
+    const toggleTheme = () => {
+        setIsDarkMode((curr) => (curr === 'true' ? 'false' : 'true'));
+       
+    };
     const [expanded, setExpanded] = useState(true);
     return (
         <>
@@ -23,16 +29,16 @@ export default function Sidebar({ children }) {
                         <ul className="flex-1 px-3">{children}</ul>
                     </SidebarContext.Provider>
 
-                    <div className="border-t flex p-3">
-                        <UserRound size={30} />
-                        <div className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"} `}>
-                            <div className="leading-4">
-                                <h4 className="font-semibold">Ungurean Ana-Maria</h4>
-                                <span className="text-xs text-gray-600">anamariaungurean01@gmail.com</span>
-                            </div>
-                            <MoreVertical size={20} />
-                        </div>
-                    </div>
+                   <div className="flex  p-2 border-t ">
+                        <button onClick={toggleTheme} className={`ml-2 flex items-row p-1.5 rounded-lg ${isDarkMode === 'true' ? 'bg-purple-100' : 'bg-purple-200'}  ` }  >
+                            {isDarkMode === "true" ? <Sun /> : <Moon />}
+                            <p  className="ml-1"> 
+                                {isDarkMode === "true" ? "Light" : "Dark"} Mode
+                            </p>
+                        </button>
+
+                 </div>
+
                 </nav>
             </aside>
         </>
