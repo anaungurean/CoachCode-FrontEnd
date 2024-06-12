@@ -51,6 +51,7 @@ const AnaChat = () => {
             .then(data => {
                 setIsThinking(false);
                 let botMessage = data.response;
+                console.log(botMessage);
                
                 setMessages(prevMessages => [...prevMessages, { text: botMessage, from: 'bot' }]);
                 handleSpeech(botMessage);
@@ -147,9 +148,14 @@ const AnaChat = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
- 
- 
- 
+const styleText = (text) => {
+    return text.split('\n').map((line, index) => {
+        line = line.replace(/【.*?】/g, ''); // Remove characters between 【 and 】
+        line = line.replace(/\*\*(.*?)\*\*/g, '<span class="font-semibold">$1</span>'); // Make words between ** and ** bold
+        return <div key={index} dangerouslySetInnerHTML={{ __html: line }}></div>;
+    });
+}
+
 
     return (
         <div className="relative mt-4 mr-4 border h-85p pl-4 pt-4 pb-4 border-gray-300 rounded-lg bg-white bg-opacity-80 shadow-md backdrop-blur-md">
@@ -161,12 +167,13 @@ const AnaChat = () => {
                         `}>
                             <div className="flex items-center text-sm font-semibold">{message.from === 'user' ? 'You' : 'Ana'}</div>
                             <div className="flex items-column">
+                                <div className="flex items-top">
                                 {message.from === 'bot' && <Bot size={20} className="mr-2" />}
                                 {message.from === 'user' && <User size={20} className="mr-2" />}
+                                </div>
                                 {message.from === 'user' && <div>{message.text}</div>}
-                                {message.from === 'bot' &&  <div>{message.text}</div> }
-                            </div>
-                           
+                                {message.from === 'bot' &&  <div>{styleText(message.text)}</div>}
+                            </div>      
                         </div>
                     </div>
                 ))}
