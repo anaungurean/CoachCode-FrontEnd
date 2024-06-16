@@ -9,8 +9,7 @@ const AnaChat = () => {
     const [isThinking, setIsThinking] = useState(false);
     const [, setConversationHistory] = useState([]);
     const messagesEndRef = useRef(null);
-    const speechSynthesisRef = useRef(window.speechSynthesis);
-    localStorage.setItem('botName', 'Ana');
+    const token = localStorage.getItem('authToken');
 
     const handleVoiceInput = () => {
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -41,6 +40,7 @@ const AnaChat = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
             },
             body: JSON.stringify({
                 message: messageToSend,
@@ -51,8 +51,6 @@ const AnaChat = () => {
             .then(data => {
                 setIsThinking(false);
                 let botMessage = data.response;
-                console.log(botMessage);
-               
                 setMessages(prevMessages => [...prevMessages, { text: botMessage, from: 'bot' }]);
                 handleSpeech(botMessage);
  
@@ -63,49 +61,56 @@ const AnaChat = () => {
             });
     };
 
-    const handleSpeech = (text) => {
-    let isMute = localStorage.getItem('isMute') === 'true';
-    if (!isMute) {
+  const handleSpeech = (text) => {
+        let isMute = localStorage.getItem('isMute') === 'true';
+        if (isMute) return;
+
+        
         const utterance = new SpeechSynthesisUtterance(text);
+        const speechSynthesisRef = window.speechSynthesis;
 
         const setVoice = () => {
-            // Get the list of available voices
-            const voices = window.speechSynthesis.getVoices();
-            console.log(voices);
-
-            // Find the specific voice by name
+            const voices = speechSynthesisRef.getVoices();
             const targetVoiceName = "Microsoft Ana Online (Natural) - English (United States)";
             const targetVoice = voices.find(voice => voice.name === targetVoiceName);
-            console.log(targetVoice);
-            // Set the voice to the specific voice if found
+
             if (targetVoice) {
                 utterance.voice = targetVoice;
             } else {
                 console.warn(`Voice "${targetVoiceName}" not found. Using default voice.`);
             }
 
-            speechSynthesisRef.current.speak(utterance);
+            speechSynthesisRef.speak(utterance);
 
             const checkMuteStatusInterval = setInterval(() => {
-                isMute = localStorage.getItem('isMute') === 'true';
-                if (isMute) {
-                    speechSynthesisRef.current.cancel();
+                const isMuteNow = localStorage.getItem('isMute') === 'true';
+                if (isMuteNow) {
+                    speechSynthesisRef.cancel();
                     clearInterval(checkMuteStatusInterval);
                 }
             }, 100);
 
             utterance.onend = () => clearInterval(checkMuteStatusInterval);
+
+            const handleBeforeUnload = () => {
+                speechSynthesisRef.cancel();
+                clearInterval(checkMuteStatusInterval);
+            };
+
+            window.addEventListener('beforeunload', handleBeforeUnload);
+
+            utterance.onend = () => {
+                clearInterval(checkMuteStatusInterval);
+                window.removeEventListener('beforeunload', handleBeforeUnload);
+            };
         };
 
-        // Check if voices are already loaded
-        if (window.speechSynthesis.getVoices().length !== 0) {
+        if (speechSynthesisRef.getVoices().length !== 0) {
             setVoice();
         } else {
-            // Add event listener for voices changed event
-            window.speechSynthesis.onvoiceschanged = setVoice;
+            speechSynthesisRef.onvoiceschanged = setVoice;
         }
-    }
-};
+        };
 
 
     const handleKeyPress = (e) => {
@@ -148,13 +153,16 @@ const AnaChat = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-const styleText = (text) => {
-    return text.split('\n').map((line, index) => {
-        line = line.replace(/【.*?】/g, ''); // Remove characters between 【 and 】
-        line = line.replace(/\*\*(.*?)\*\*/g, '<span class="font-semibold">$1</span>'); // Make words between ** and ** bold
-        return <div key={index} dangerouslySetInnerHTML={{ __html: line }}></div>;
-    });
-}
+ 
+
+
+    const styleText = (text) => {
+        return text.split('\n').map((line, index) => {
+            line = line.replace(/【.*?】/g, '');  
+            line = line.replace(/\*\*(.*?)\*\*/g, '<span class="font-semibold">$1</span>');  
+            return <div key={index} dangerouslySetInnerHTML={{ __html: line }}></div>;
+        });
+    }
 
 
     return (
@@ -207,6 +215,7 @@ const styleText = (text) => {
                         onKeyPress={handleKeyPress}
                         placeholder="Type your message here..."
                         className="flex-grow bg-white rounded-xl p-2 ml-2 outline-none"
+                        disabled={isThinking}
                     />
                     <button onClick={() => sendMessage(inputText)} title='Send message'>
                         <div className="flex items-center justify-center h-8 w-8 rounded-full bg-twilight-300 text-white ml-2 mr-2">

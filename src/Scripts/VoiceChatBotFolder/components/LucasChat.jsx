@@ -9,14 +9,13 @@ const LucasChat = () => {
     const [isThinking, setIsThinking] = useState(false);
     const [, setConversationHistory] = useState([]);
     const messagesEndRef = useRef(null);
-    const speechSynthesisRef = useRef(window.speechSynthesis);
     const [jobTitle, setJobTitle] = useState('');
     const [generatedQuestions, setGeneratedQuestions] = useState([{}]);
     const currentQuestionIndex = useRef(0);
     const [finishedInterview, setFinishedInterview] = useState(false);
+    const token = localStorage.getItem('authToken');
 
-   
- 
+
     const handleVoiceInput = () => {
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.lang = 'en-US';
@@ -52,7 +51,7 @@ const sendMessage = (message) => {
     }
      storedMessages = [...storedMessages, userMessage];
 
-    if (lastBotMessage === "Hi! I'm Lucas, Technical Interview! Are you ready to take a mock Technical interview? Please type 'Yes' or 'No' to start." || lastBotMessage === 'I didn\'t get that. Please type "Yes" or "No" to start the mock Technical interview.') {
+    if (lastBotMessage === 'Hi! I\'m Lucas, Technical Interview! Are you ready to take a mock Technical interview? Please type "Yes" or "No" to start.' || lastBotMessage === 'I didn\'t get that. Please type "Yes" or "No" to start the mock Technical interview.') {
         if (message.toLowerCase() === 'yes') {
             const botMessageObject = {
                 text: 'Great! First, I need to know for which position you are applying. Please type the job title.',
@@ -140,6 +139,7 @@ const fetchFeedback = async (interviewData) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({ interviewData }),
         });
@@ -174,13 +174,13 @@ const fetchFeedback = async (interviewData) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                 'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({ jobTitle, numberOfQuestions }),
         });
 
         const data = await response.json();
         if (response.ok) {
-            console.log('Technical Questions generated:', data.questions);
             setIsThinking(false);
             setGeneratedQuestions(data.questions);
             console.log(data.questions[0]);
@@ -203,42 +203,57 @@ const fetchFeedback = async (interviewData) => {
 
 
 
+  const handleSpeech = (text) => {
+        let isMute = localStorage.getItem('isMute') === 'true';
+        if (isMute) return;
 
-    const handleSpeech = (text) => {
-    let isMute = localStorage.getItem('isMute') === 'true';
-    if (!isMute) {
+        
         const utterance = new SpeechSynthesisUtterance(text);
+        const speechSynthesisRef = window.speechSynthesis;
 
         const setVoice = () => {
-            const voices = window.speechSynthesis.getVoices();
-            const targetVoiceName = "Microsoft Andrew Online (Natural) - English (United States)";
+            const voices = speechSynthesisRef.getVoices();
+            const targetVoiceName = "Microsoft Andrew Online (Natural) - English (United States)";            
             const targetVoice = voices.find(voice => voice.name === targetVoiceName);
-             if (targetVoice) {
+
+            if (targetVoice) {
                 utterance.voice = targetVoice;
             } else {
                 console.warn(`Voice "${targetVoiceName}" not found. Using default voice.`);
             }
 
-            speechSynthesisRef.current.speak(utterance);
+            speechSynthesisRef.speak(utterance);
 
             const checkMuteStatusInterval = setInterval(() => {
-                isMute = localStorage.getItem('isMute') === 'true';
-                if (isMute) {
-                    speechSynthesisRef.current.cancel();
+                const isMuteNow = localStorage.getItem('isMute') === 'true';
+                if (isMuteNow) {
+                    speechSynthesisRef.cancel();
                     clearInterval(checkMuteStatusInterval);
                 }
             }, 100);
 
             utterance.onend = () => clearInterval(checkMuteStatusInterval);
+
+            const handleBeforeUnload = () => {
+                speechSynthesisRef.cancel();
+                clearInterval(checkMuteStatusInterval);
+            };
+
+            window.addEventListener('beforeunload', handleBeforeUnload);
+
+            utterance.onend = () => {
+                clearInterval(checkMuteStatusInterval);
+                window.removeEventListener('beforeunload', handleBeforeUnload);
+            };
         };
 
-        if (window.speechSynthesis.getVoices().length !== 0) {
+        if (speechSynthesisRef.getVoices().length !== 0) {
             setVoice();
         } else {
-            window.speechSynthesis.onvoiceschanged = setVoice;
+            speechSynthesisRef.onvoiceschanged = setVoice;
         }
-    }
-};
+        };
+
 
 
     const handleKeyPress = (e) => {
@@ -252,7 +267,7 @@ const fetchFeedback = async (interviewData) => {
         if (storedMessages) {
             setMessages(storedMessages);
         } else {
-            const defaultMessage = "Hi! I'm Lucas, Technical Interview! Are you ready to take a mock Technical interview? Please type 'Yes' or 'No' to start.";
+            const defaultMessage = 'Hi! I\'m Lucas, Technical Interview! Are you ready to take a mock Technical interview? Please type "Yes" or "No" to start.';
             setMessages([{ text: defaultMessage, from: 'bot' }]);
             handleSpeech(defaultMessage);
         }
@@ -265,7 +280,7 @@ const fetchFeedback = async (interviewData) => {
 
     useEffect(() => {
         const handleDeleteConversation = () => {
-            const defaultMessage = "Hi! I'm Lucas, Technical Interview! Are you ready to take a mock Technical interview? Please type 'Yes' or 'No' to start.";
+            const defaultMessage = 'Hi! I\'m Lucas, Technical Interview! Are you ready to take a mock Technical interview? Please type "Yes" or "No" to start.';
             setMessages([{ text: defaultMessage, from: 'bot'}]);
             setConversationHistory(messages.map(message => message.text));
             setJobTitle('');
@@ -288,14 +303,21 @@ const fetchFeedback = async (interviewData) => {
 
 const renderBotMessage = (text) => {
     return text.split('\n').map((line, index) => {
+
+        if (/^\d/.test(line.trim())) {
+            return (
+                <div key={index} className=" italic">{line}</div>
+            );
+        }
+
         
-        // Replace phrases between " " with italicized versions
         line = line.replace(/"(.*?)"/g, '<span class="italic">$1</span>');
+
         line = line.replace(/Question/g, '<span class="font-semibold"> ⮚ Question</span>');
         line = line.replace(/Answer/g, '<span class="font-semibold"> ⮚ Answer</span>');
-        line = line.replace(/\plus/g, '<span class="font-bold">+</span>');
-         line = line.replace(/minus/g, '<span class="font-bold">-</span>');
-         // Render the line with HTML content
+        line = line.replace(/\plus/g, ' <em span class="font-semibold">Plus</em>');
+        line = line.replace(/minus/g, '<em span class="font-semibold">Minus</em>');
+         
         return (
             <div key={index} dangerouslySetInnerHTML={{ __html: line }} />
         );
@@ -314,14 +336,16 @@ const renderBotMessage = (text) => {
                               `}>
                             <div className="flex items-center text-sm font-semibold">{message.from === 'user' ? 'You' : 'Lucas'}</div>
                             <div className="flex items-column">
+                                <div className="flex items-top">
                                 {message.from === 'bot' && <Bot size={20} className="mr-2" />}
                                 {message.from === 'user' && <User size={20} className="mr-2" />}
-                            </div>
+                                </div>
                             <div>
                                 {message.from === 'bot' && message.text &&
                                     renderBotMessage(message.text)    
                                 }
                                 {message.from === 'user' && message.text}
+                            </div>
                             </div>
                         </div>
                     </div>

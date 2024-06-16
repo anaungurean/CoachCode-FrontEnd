@@ -26,8 +26,8 @@ const bots = [
   },
    {
     name: "Ava",
-    subtitle: "Job Search Advisor",
-    description: "Need a friend to ask for advice? Ava, the Job Search Advisor, is here to help. Whether it's crafting the perfect CV or acing interviews, Ava provides friendly, expert advice to boost your job search success.",
+    subtitle: "Career Advisor",
+    description: "Need a friend to ask for advice? Ava, the Career Advisor, is here to help. Whether it's crafting the perfect CV or acing interviews, Ava provides friendly, expert advice to boost your job search success.",
   },
 ];
 
