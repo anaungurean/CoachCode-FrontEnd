@@ -7,6 +7,7 @@ export default function SignInForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+ 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,7 +34,7 @@ export default function SignInForm() {
       if (data.firstName) {
         console.log(data.firstName);
         localStorage.setItem('firstName', data.firstName);
-        window.location.href = '/problems';
+        window.location.href = '/home';
 
       } else {
         throw new Error('Name not provided.');
@@ -80,6 +81,7 @@ export default function SignInForm() {
           localStorage.setItem('jobs', JSON.stringify(null));
           localStorage.setItem('currentPage', JSON.stringify(1));
           localStorage.setItem('isMute', false);
+          localStorage.setItem('activeItem', 'Home');
           const decodedToken = jwtDecode(data.token);
           const userId = decodedToken.user_id;
           localStorage.setItem('userId', JSON.stringify(userId));
@@ -107,7 +109,7 @@ export default function SignInForm() {
           <div>
             <label className="text-lg font-medium text-twilight-400">Email</label>
             <input
-              className="w-full border-2 border-twilight-200 rounded-xl p-4 mt-1 bg-transparent"
+              className="w-full border-2 border-twilight-200 rounded-xl p-4 mt-1 bg-twilight-100/10"
               type="email"
               name="email"
               value={email}
@@ -115,11 +117,12 @@ export default function SignInForm() {
               placeholder="Enter your email"
             />
           </div>
+          
           <div>
             <label className="text-lg font-medium text-twilight-400">Password</label>
             <input
               type="password"
-              className="w-full border-2 border-twilight-200 rounded-xl p-4 mt-1 bg-transparent"
+              className="w-full border-2 border-twilight-200 rounded-xl p-4 mt-1 bg-twilight-100/10"
               name="password"
               value={password}
               onChange={handleChange}
