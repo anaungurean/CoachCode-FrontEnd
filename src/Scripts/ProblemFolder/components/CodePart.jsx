@@ -25,8 +25,8 @@ function CodePart(problem) {
   const [isHovered, setIsHovered] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [solution, setSolution] = useState(null);
-  const tests = problem.problem.tests;
-  const input_variables = problem.problem.input_variables;
+  const tests = problem.problem.tests || [];
+  const input_variables = problem.problem.input_variables || [];
   
   useEffect(() => {
     const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -41,21 +41,20 @@ function CodePart(problem) {
 
   const handleLanguageSelect = (language) => {
   setSelectedLanguage(language);
-  
-  if (language.value === 'python') {
-      setSolution(problem.problem.solution.python);
-    }
-    else if (language.value === 'java') {
-      setSolution(problem.problem.solution.java);
-    }
-  
-
-  for (let i = 0; i < problem.problem.base_code.length; i++) {
+    for (let i = 0; i < problem.problem.base_code.length; i++) {
     if (language.value === problem.problem.base_code[i].language) {
       setCode(problem.problem.base_code[i].base_code);
       break;
     }
   }
+  
+  if (language.value === 'python' && problem.problem.solution.python) {
+      setSolution(problem.problem.solution.python);
+    }
+    else if (language.value === 'java' && problem.problem.solution.java) {
+      setSolution(problem.problem.solution.java);
+    }
+  
 };
 
 
@@ -110,12 +109,17 @@ function CodePart(problem) {
         const response = await fetch(url, options);
         const result = await response.json();
         await checkStatus(result.token);
+        
       } catch (error) {
         console.error(error);
       }
     };
         
     for (let i = 0; i < tests.length; i++) {
+      console.log('input');
+      console.log(tests[i].input);
+      console.log('output');
+      console.log(tests[i].output_python);
 
       if (selectedLanguage.value === 'python') {
         await runCode(selectedLanguage, code, tests[i].input, tests[i].output_python);
@@ -147,7 +151,9 @@ function CodePart(problem) {
       const response = await fetch(url, options);
       const result = await response.json();
       const statusId = result.status?.id;
-      
+      console.log('stdout');
+      console.log (atob(result.stdout))
+       
 
 
       if (statusId === 1 || statusId === 2) {

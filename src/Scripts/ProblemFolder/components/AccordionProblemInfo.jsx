@@ -147,6 +147,7 @@ export default function AccordionProblemInfo({ related_topics, companies, simila
         </AccordionBody>
       </Accordion>
 
+      { similar_questions_array.length > 1 &&
       <Accordion open={openSimilarQuestions} className="mr-4" animate={CUSTOM_ANIMATION} icon={<Icon id={3} open={openSimilarQuestions} />}>
         <div className="flex items-center">
           <ShieldQuestion size={20} className="mr-2 text-twilight-300" />
@@ -167,6 +168,7 @@ export default function AccordionProblemInfo({ related_topics, companies, simila
           ))}
         </AccordionBody>
       </Accordion>
+      }
 
       {hints && hints.map((hint, index) => (
         <Accordion

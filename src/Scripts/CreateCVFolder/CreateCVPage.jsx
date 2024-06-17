@@ -9,7 +9,7 @@ function CreateCVPage() {
   const [cvData, setCVData] = useState(null);
 
   const breadcrumbItems = [
-    { name: 'Home', link: '/' },
+    { name: 'Home', link: '/home' },
     { name: 'Create CV', link: null },
   ];
 
@@ -19,8 +19,7 @@ function CreateCVPage() {
 
   const fetchCVData = () => {
     const token = localStorage.getItem('authToken');
-
-
+    
     fetch('http://localhost:5000/get_cv_data', {
       method: 'GET',
       headers: {
@@ -56,7 +55,8 @@ function CreateCVPage() {
             <h3 className="text-lg font-semibold">
               {cvData ? 
                 'Need to update your CV? No problem! You can do it right here.' : 
-                'Don\'t have a CV yet? No problem! You can create it right here.'}
+                'Don\'t have a CV yet? No problem! You can create it right here.'
+              }
             </h3>
           </div>
           { cvData && (

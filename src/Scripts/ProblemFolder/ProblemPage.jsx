@@ -10,9 +10,8 @@ import Popup from './components/PopUp';
 function ProblemPage() {
   const { id } = useParams();  
   const [problem, setProblem] = useState(null);  
-  const [isPopupOpen, setIsPopupOpen] = useState(false); // State for managing popup visibility
-  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false); // State for tracking answer correctness
-
+  const [isPopupOpen, setIsPopupOpen] = useState(false);  
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);  
   useEffect(() => {
     fetchProblem(id);  
   }, [id]); 
@@ -34,6 +33,9 @@ function ProblemPage() {
     })
     .then(data => {
       setProblem(data); 
+      console.log(typeof data.solution);
+      console.log(data.solution);
+
     })
     .catch(error => {
       console.error('Error fetching data:', error);

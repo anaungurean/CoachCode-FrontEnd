@@ -14,7 +14,7 @@ function Form(cvData) {
     linkedin: cvData.cvData.linkedin,
     github: cvData.cvData.github,
     description: cvData.cvData.description,
-    schools: cvData.cvData.schools || [{ school: '', degree: '', graduation_year: '', city: '' }],
+    schools: cvData.cvData.schools || [{ school: '', degree: '', graduation_year: '', city: '', description: '' }],
     workExperiences: cvData.cvData.workExperiences|| [{ position: '', company: '', location: '', startDate: '', endDate: '', responsibilities: '' }],
     projects: cvData.cvData.projects || [{ name: '', description: '', technologies: '', link: '' }],
     technicalSkills_languages: cvData.cvData.technical_skills_languages,
@@ -194,6 +194,11 @@ function Form(cvData) {
             const updatedProjects = [...formData.projects];
             updatedProjects[index].description = data.rephrasedText;
             setFormData({ ...formData, projects: updatedProjects });
+          }
+          if (field.includes('schools')){
+            const updatedSchools = [...formData.schools];
+            updatedSchools[index].description = data.rephrasedText;
+            setFormData({ ...formData, schools: updatedSchools });
           }
         }
 
@@ -422,6 +427,7 @@ function Form(cvData) {
                     <Check size={20} className='text-twilight-500 rounded-3xl absolute right-2 bg-twilight-100 shadow-lg ring-1 ring-twilight-500' />
                 )}
               </div>
+              
               </div>
 
               <div className="flex flex-col">
@@ -472,10 +478,34 @@ function Form(cvData) {
                 )}
               </div>
               </div>
-               
-            </div>
-            </div>
-          ))}
+              </div>
+          <div className='flex flex-col mt-2'>
+                  <label htmlFor={`description${index}`} className="font-medium text-base">Description:</label>
+                  <div className='flex items-center justify-between relative'>
+                  <textarea
+                    id={`description${index}`}
+                    value={school.description}
+                    onChange={(e) => handleSchoolChange(index, 'description', e.target.value)}
+                    className="p-2 border border-twilight-300 rounded text-twilight-500 bg-purple-50 w-full"
+                    placeholder='- Learned about algorithms and data structures'
+                  />
+                  {school.description && school.description.length > 2 && (
+                      <Check size={20} className='text-twilight-500 rounded-3xl absolute right-2 bg-twilight-100 shadow-lg ring-1 ring-twilight-500' />
+                  )}
+                </div>
+                <button 
+                onClick={() => rephraseText(formData.schools[index].description, `schools`, index)}            
+                  className="w-1/4 mt-2 bg-gradient-to-r from-twilight-300 to-twilight-100 text-white font-semibold py-2 px-2 rounded active:scale-[.98] active:duration-75 transition-all hover:scale-[1.02] ease-in-out"
+                >
+                  <div className="flex items-center">
+                    <BrainCircuit size={20} className="mr-2" />
+                    Make it to sound better with AI
+                  </div>
+                </button>
+
+              </div>
+              </div>               
+           ))}
           
           <div className="flex w-full  mt-4">
             <button

@@ -12,6 +12,7 @@ function ProblemDetailedInfo({ problem }) {
   const companiesArray = problem.companies.split(',');
   const nonEmptyCompanies = companiesArray.filter(company => company.trim() !== '');
   const firstTwoCompanies = nonEmptyCompanies.slice(0, 3);
+  const hints = problem.hints || []
 
 
   let difficultyColorClass = '';
@@ -144,52 +145,53 @@ function ProblemDetailedInfo({ problem }) {
           </div>
         </div>
 
-        <AccordionProblemInfo related_topics={problem.related_topics} companies={problem.companies} similar_questions={problem.similar_questions} hints={problem.hints} />
 
+        <AccordionProblemInfo related_topics={problem.related_topics} companies={problem.companies} similar_questions={problem.similar_questions} hints={hints} />
         </div>
   );
 }
 
 ProblemDetailedInfo.propTypes = {
   problem: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    related_topics: PropTypes.string.isRequired,
-    difficulty: PropTypes.string.isRequired,
-    companies: PropTypes.string.isRequired,
-    similar_questions: PropTypes.string.isRequired,
-    asked_by_faang: PropTypes.bool.isRequired,
+    id: PropTypes.number,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    related_topics: PropTypes.string,
+    difficulty: PropTypes.string,
+    companies: PropTypes.string,
+    similar_questions: PropTypes.string,
+    asked_by_faang: PropTypes.bool,
     is_solved: PropTypes.bool,
     tests: PropTypes.arrayOf(
       PropTypes.shape({
-        input: PropTypes.string.isRequired,
-        output_python: PropTypes.string.isRequired,
-        output_java: PropTypes.string.isRequired
+        input: PropTypes.string,
+        output_python: PropTypes.string,
+        output_java: PropTypes.string
       })
-    ).isRequired,
+    ),
     input_variables: PropTypes.arrayOf(
       PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        value: PropTypes.string.isRequired
+        name: PropTypes.string,
+        value: PropTypes.string
       })
-    ).isRequired,
-    solution: PropTypes.arrayOf(
-      PropTypes.shape({
-        python: PropTypes.string.isRequired,
-        java: PropTypes.string.isRequired
-      })
-    ).isRequired,
+    ),
+    solution: PropTypes.shape({
+      python: PropTypes.string,
+      java: PropTypes.string
+    }),
+  
     hints : PropTypes.arrayOf(
-      PropTypes.string.isRequired
-    ).isRequired,
-      base_code: PropTypes.arrayOf(
+      PropTypes.string
+    ),
+    base_code: PropTypes.arrayOf(
       PropTypes.shape({
-        language: PropTypes.string.isRequired,
-        base_code: PropTypes.string.isRequired
+        language: PropTypes.string,
+        base_code: PropTypes.string
       })
-    ).isRequired
-  }).isRequired
+    )
+  })
 };
+
+
 
 export default ProblemDetailedInfo;

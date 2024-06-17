@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 function Solution({ togglePopup, isAnswerCorrect, problem }) {
   const [showPopup, setShowPopup] = useState(false);
-  const solution = problem.solution.python;
+  const solution = problem.solution.python || 'No solution available for this problem.'
  
   const handleButtonClick = () => {
     setShowPopup(!showPopup);
