@@ -35,16 +35,12 @@ function Solution({ togglePopup, isAnswerCorrect, problem }) {
       {showPopup && ( 
         <div className="p-4">
           <div>
-            <h3 className="text-lg font-semibold text-twilight-500">Here is the solution!</h3>
+            <h3 className="text-lg font-semibold text-twilight-500">Here is the solution in Python!</h3>
             <p className="text-twilight-400">We highly recommend you to understand the solution and try to solve the problem again.</p>
-              <div className="select-none pointer-events-none">
+              <div className="mt-4">
                 <pre className="bg-gray-100 p-4 rounded-lg mt-4">{solution}</pre>
             </div>
-             <ul className="list-disc pl-4 mt-2">
-              <li className="text-twilight-400"><span className="font-semibold">Programming language:</span> Python</li>
-              <li className="text-twilight-400"><span className="font-semibold">Time:</span> 0.007 ms</li>
-              <li className="text-twilight-400"><span className="font-semibold">Memory:</span> 3292 MB</li>
-            </ul>
+            
            </div>
         </div>
       )}

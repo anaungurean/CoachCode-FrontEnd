@@ -6,7 +6,7 @@ import FilterJob from './components/FilterJob';
 function SearchJobPage() {
 
     const breadcrumbItems = [
-        { name: 'Home', link: '/' },
+        { name: 'Home', link: '/Home' },
         { name: 'Search Jobs', link:null },
       ];
 

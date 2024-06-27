@@ -11,12 +11,17 @@ function ProblemsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [problemsPerPage] = useState(9);
   const [totalPages, setTotalPages] = useState(1);  
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchProblems();
   }, []);
 
   const fetchProblems = () => {
+
+    if (originalProblems.length == 0) {
+      setIsLoading(true)
+    }
     const token = localStorage.getItem('authToken');  
     fetch('http://localhost:5000/problems', {
       headers: {
@@ -31,6 +36,7 @@ function ProblemsPage() {
       })
       .then(data => {
         setOriginalProblems(data);
+        setIsLoading(false);
         setFilteredProblems(data);  
         setTotalPages(Math.ceil(data.length / problemsPerPage));
       })
@@ -50,7 +56,7 @@ function ProblemsPage() {
   };
 
    const breadcrumbItems = [
-    { name: 'Home', link: '/' },
+    { name: 'Home', link: '/Home' },
     { name: 'Coding Practice', link:null },
   ];
 
@@ -62,6 +68,19 @@ function ProblemsPage() {
       <div className='w-5/6'>
         <Breadcrumb items={breadcrumbItems} />
         <FilterComponent onFilter={handleFilter} problems={originalProblems} />
+        {isLoading && 
+                <div className="text-center mt-4 mr-4 py-4 bg-white border border-twilight-100 rounded-2xl overflow-hidden text-twilight-500 font-semibold text-xl">
+                    <div className="flex justify-center items-center flex-row">
+                        <button type="button" className="text-twilight-100 px-4 py-2 rounded" disabled>
+                            <svg className="animate-spin h-8 w-8" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="twilight-100" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="twilight-500" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                        </button>
+                         The problems are loading...
+                    </div>
+                </div>
+        }
         <div className="p-4"> 
             <div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -71,9 +90,11 @@ function ProblemsPage() {
                     <ProblemCard key={problem.id} problem={problem} />
                   ))}
               </div>
+              {originalProblems.length > 0 && !isLoading && (
               <div className="mt-4">
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
               </div>
+              )}
             </div>
         </div>
       </div>
@@ -82,3 +103,4 @@ function ProblemsPage() {
 }
 
 export default ProblemsPage;
+ 

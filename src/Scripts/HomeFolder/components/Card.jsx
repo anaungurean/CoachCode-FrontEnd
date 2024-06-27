@@ -7,7 +7,7 @@ const Card = () => {
     const [colleagues, setColleagues] = useState(1900);
 
     useEffect(() => {
-        const duration = 1000; // Durata animatiei in milisecunde
+        const duration = 1000; 
         
         const increment = (startValue, finalValue, setter) => {
             let currentValue = startValue;

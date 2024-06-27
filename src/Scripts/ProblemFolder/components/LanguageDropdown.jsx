@@ -18,7 +18,7 @@ export default function LanguageDropdown({ onLanguageSelect }) {
 
   const handleLanguageSelect = (language) => {
     setSelectedLanguage(language);
-    onLanguageSelect(language); // Notify parent component of selected language
+    onLanguageSelect(language);  
   }
 
   return (
@@ -50,7 +50,7 @@ export default function LanguageDropdown({ onLanguageSelect }) {
                       active ? 'bg-twilight-100/10 text-twilight-400' : 'text-twilight-500',
                       'block px-4 py-2 text-sm'
                     )}
-                    onClick={() => handleLanguageSelect(language)} // Call handleLanguageSelect with selected language
+                    onClick={() => handleLanguageSelect(language)}  
                   
                   >
                     {language.name}

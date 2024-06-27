@@ -309,8 +309,8 @@ const renderBotMessage = (text) => {
         line = line.replace(/"(.*?)"/g, '<span class="italic">$1</span>');
         line = line.replace(/Question/g, '<span class="font-semibold"> ⮚ Question</span>');
         line = line.replace(/Answer/g, '<span class="font-semibold"> ⮚ Answer</span>');
-        line = line.replace(/\Plus/g, '<em class="font-semibold">Plus</em>');
-        line = line.replace(/Minus/g, '<em class="font-semibold">Minus</em>');
+        line = line.replace(/\plus/g, '<em class="font-semibold">Plus</em>');
+        line = line.replace(/minus/g, '<em class="font-semibold">Minus</em>');
          return (
             <div key={index} dangerouslySetInnerHTML={{ __html: line }} />
         );

@@ -39,7 +39,7 @@ function VoiceChatBotPage() {
   return (
     <div className="flex h-screen">
       <div className="w-1/6">
-        <NavBar />
+        <NavBar/>
       </div>
       <div className="flex flex-col w-5/6 h-full ">
          <Breadcrumb items={breadcrumbItems} /> 

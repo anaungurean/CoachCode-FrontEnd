@@ -95,6 +95,14 @@ function TestResults({ memory, time, passedTests, failedTests, compilationError,
                 </div>
                 <p className='ml-4 text-lg font-semibold'>{compilationError}</p>
               </div>
+             <div className="flex justify mt-3 justify-end ml-1">
+                <button 
+                    className="flex items-center justify-center gap-x-1.5 rounded-md bg-green-800 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-red-600 hover:bg-red-900"
+                    onClick={ () => window.open('http://localhost:5173/voice-chat-bot/ethan', '_blank') }
+                  >
+                    Ask Ethan for help
+                </button>
+              </div>
             </div>
           ) : executionError ? (
             <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
@@ -104,6 +112,14 @@ function TestResults({ memory, time, passedTests, failedTests, compilationError,
                   <IoAlertCircleOutline size={24} className="mr-2 ml-4 text-red-800" />
                 </div>
                 <p className='ml-4 text-lg font-semibold'>{executionError}</p>
+              </div>
+              <div className="flex justify mt-3 justify-end ml-1">
+                <button 
+                    className="flex items-center justify-center gap-x-1.5 rounded-md bg-red-800 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-red-600 hover:bg-red-900"
+                    onClick={ () => window.open('http://localhost:5173/voice-chat-bot/ethan', '_blank') }
+                  >
+                    Ask Ethan for help
+                </button>
               </div>
             </div>
           ) : failedTests > 0 ? (

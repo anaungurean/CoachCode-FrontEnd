@@ -36,7 +36,7 @@ function SubmissionsPage() {
   };
   
    const breadcrumbItems = [
-    { name: 'Home', link: '/' },
+    { name: 'Home', link: '/Home' },
     { name: 'My Submissions', link:null },
   ];
 
@@ -50,6 +50,7 @@ function SubmissionsPage() {
       <div className='w-5/6'>
                 <Breadcrumb items={breadcrumbItems} />
         <div className="mt-4 mr-4">
+           
           <SubmissionDetails SubmissionsDetails={submissions} />
         </div>
       </div>
@@ -59,3 +60,17 @@ function SubmissionsPage() {
 
 
 export default SubmissionsPage;
+
+
+        // <div className="mt-4 mr-4">
+        //    {
+        //     submissions.length > 0 ? (
+        //       <SubmissionDetails submissions={submissions} />
+        //     ) : (
+        //       <div className="flex items-center justify-center h-64">
+        //         <h3 className="text-2xl text-gray-500">No submissions yet!</h3>
+        //       </div>
+        //     )
+        //    }
+          
+        // </div>

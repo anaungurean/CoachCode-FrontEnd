@@ -27,6 +27,7 @@ function CodePart(problem) {
   const [solution, setSolution] = useState(null);
   const tests = problem.problem.tests || [];
   const input_variables = problem.problem.input_variables || [];
+  const [isLoading, setIsLoading] = useState(false);
   
   useEffect(() => {
     const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -87,6 +88,7 @@ function CodePart(problem) {
       showErrorToast('Please select a language.');
       return;
     }
+        setIsLoading(true);
 
     const runCode = async (selectedLanguage, code, input, expectedOutput) => {
       const url = 'https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&fields=*';
@@ -116,11 +118,7 @@ function CodePart(problem) {
     };
         
     for (let i = 0; i < tests.length; i++) {
-      console.log('input');
-      console.log(tests[i].input);
-      console.log('output');
-      console.log(tests[i].output_python);
-
+ 
       if (selectedLanguage.value === 'python') {
         await runCode(selectedLanguage, code, tests[i].input, tests[i].output_python);
       }
@@ -132,6 +130,7 @@ function CodePart(problem) {
 
      setTimeout(() => {
       setSubmitted(true);
+      setIsLoading(false);
     }, 1000);
 
 
@@ -151,10 +150,6 @@ function CodePart(problem) {
       const response = await fetch(url, options);
       const result = await response.json();
       const statusId = result.status?.id;
-      console.log('stdout');
-      console.log (atob(result.stdout))
-       
-
 
       if (statusId === 1 || statusId === 2) {
         setTimeout(() => {
@@ -162,9 +157,11 @@ function CodePart(problem) {
         }, 1000);
       } else if (statusId === 3) {
         setPassedTests(prevState => prevState + 1);
+              console.log('result' + atob(result.stdout))
 
       } else if (statusId === 4) {
         setFailedTests(prevState => prevState + 1);
+
   
       } else if (statusId === 6) {
         setCompilationError(atob(result.compile_output));
@@ -244,6 +241,19 @@ function CodePart(problem) {
           />
       </div>
     )}
+   {isLoading && 
+                <div className="text-center mt-4 mr-4 py-4 bg-white border border-twilight-100 rounded-2xl overflow-hidden text-twilight-500 font-semibold text-xl">
+                    <div className="flex justify-center items-center flex-row">
+                        <button type="button" className="text-twilight-100 px-4 py-2 rounded" disabled>
+                            <svg className="animate-spin h-8 w-8" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="twilight-100" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="twilight-500" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                        </button>
+                         The tests are running...
+                    </div>
+                </div>
+        }
     <div> 
     <TestCase
         input_variables={input_variables}

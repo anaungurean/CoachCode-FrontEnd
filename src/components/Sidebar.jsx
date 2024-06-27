@@ -1,51 +1,85 @@
-/* eslint-disable react/prop-types */
-import { ChevronFirst, ChevronLast } from "lucide-react"
-import logo from "../assets/Logo.png"
-import { createContext, useContext, useState } from "react"
-import { Moon, Sun } from "lucide-react"
+import { Sun } from "lucide-react";
+import logo from "../assets/Logo.png";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const SidebarContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export default function Sidebar({ children }) {
-    const [isDarkMode, setIsDarkMode] = useState('false')
+   const [expanded, setExpanded] = useState(true);
 
-    const toggleTheme = () => {
-        setIsDarkMode((curr) => (curr === 'true' ? 'false' : 'true'));
-       
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 1300) {
+        setExpanded(false); 
+      }
+      else if (window.innerHeight <= 700) {
+        setExpanded(false); 
+      }
+      else {
+        setExpanded(true);  
+      }
     };
-    const [expanded, setExpanded] = useState(true);
-    return (
-        <>
-            <aside className="fixed top-3 bottom-3 left-2">
-                <nav className={`h-full flex flex-col bg-white border-r shadow-sm ${expanded ? 'w-52' : 'w-16'} rounded-2xl transition-all`}>
-                    <div className="p-4 pb-2 flex justify-between items-center rounded-2xl">
-                        <img src={logo} className={`overflow-hidden transition-all ${expanded ? "w-32" : "w-0"}`} alt="Logo" />
-                        <button onClick={() => setExpanded((curr) => !curr)} className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100">
-                            {expanded ? <ChevronFirst /> : <ChevronLast />}
-                        </button>
-                    </div>
 
-                    <SidebarContext.Provider value={{ expanded }}>
-                        <ul className="flex-1 px-3">{children}</ul>
-                    </SidebarContext.Provider>
+    handleResize();
 
-                   <div className="flex  p-2 border-t ">
-                        <button onClick={toggleTheme} className={`ml-2 flex items-row p-1.5 rounded-lg ${isDarkMode === 'true' ? 'bg-purple-100' : 'bg-purple-200'}  ` }  >
-                            {isDarkMode === "true" ? <Sun /> : <Moon />}
-                            <p  className="ml-1"> 
-                                {isDarkMode === "true" ? "Light" : "Dark"} Mode
-                            </p>
-                        </button>
+    window.addEventListener("resize", handleResize);
 
-                 </div>
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-                </nav>
-            </aside>
-        </>
-    );
+  
+  return (
+    <aside className="fixed top-3 bottom-3 left-2">
+      <nav
+        className={`h-full flex flex-col bg-white border-r shadow-sm ${
+          expanded ? "w-52" : "w-16"
+        } rounded-2xl transition-all`}
+      >
+        <div className="p-4 pb-2 flex justify-between items-center rounded-2xl">
+          <img
+            src={logo}
+            className={`overflow-hidden transition-all ${
+              expanded ? "w-32" : "w-0"
+            }`}
+            alt="Logo"
+          />
+
+        </div>
+
+        <SidebarContext.Provider value={{ expanded }}>
+          <ul className="flex-1 px-3">{children}</ul>
+        </SidebarContext.Provider>
+
+        <div className="flex p-2 border-t">
+        {!expanded && (
+            <button
+            className={`ml-2 flex items-center p-1.5 rounded-lg bg-purple-100 text-twilight-600"
+            hover:bg-purple-300 focus:outline-none focus:ring focus:ring-purple-300 transition-colors duration-300`}
+            >
+            <Sun size={20} className="text-twilight-600" />
+            </button>
+        )}
+        {expanded && (
+            <button
+            className={`ml-2 flex items-center p-1.5 rounded-lg bg-purple-100 hover:bg-purple-300 focus:outline-none focus:ring focus:ring-purple-300 transition-colors duration-300`}
+            >
+            <Sun size={20} className="text-twilight-500" /> 
+            <span className="ml-1">Light Mode</span>
+            </button>
+        )}
+        </div>
+
+
+      </nav>
+    </aside>
+  );
 }
 
 
+ 
+ 
+// eslint-disable-next-line react/prop-types
 export function SidebarItem({ icon, text, activeItem }) {
   const { expanded } = useContext(SidebarContext);
   const isActive = activeItem === text;
@@ -63,3 +97,5 @@ export function SidebarItem({ icon, text, activeItem }) {
     </li>
   );
 }
+   
+
