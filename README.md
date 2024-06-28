@@ -2,8 +2,7 @@
 
 Acest proiect include o aplicație front-end construită folosind React cu Vite și JavaScript. Mai jos găsiți detalii despre structura directoarelor și modulele principale ale front-end-ului.
 
-## Structura Fișierelor Front-end
-
+ 
 ## Modulele Principale ale Front-end-ului
 
 ### 1. Auth
