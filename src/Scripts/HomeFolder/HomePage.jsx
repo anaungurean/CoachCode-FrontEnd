@@ -9,6 +9,7 @@ import Card from './components/Card';
 
 function HomePage() {
   const firstName = localStorage.getItem('firstName');
+  localStorage.setItem('activeItem', 'Home');
   const breadcrumbItems = [
     { name: 'Home', link: '/Home' },
   ];

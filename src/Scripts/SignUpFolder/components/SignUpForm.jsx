@@ -150,7 +150,7 @@ export default function SignUpForm() {
     </form>
     <div className="mt-4 flex items-center justify-center">
       <p className="text-md md:text-lg lg:text-xl font-medium text-twilight-500">Already have an account?</p>
-      <Link to="/" className="ml-2 font-medium text-md md:text-lg lg:text-xl text-twilight-400 underline hover:underline-offset-4">Sign In</Link>
+      <Link to="/login" className="ml-2 font-medium text-md md:text-lg lg:text-xl text-twilight-400 underline hover:underline-offset-4">Sign In</Link>
     </div>
   </div>
 );

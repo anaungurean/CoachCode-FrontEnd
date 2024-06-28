@@ -18,12 +18,13 @@ import VoiceChatBotPage from './Scripts/VoiceChatBotFolder/VoiceChatBotPage';
 import BotsPage from './Scripts/VoiceChatBotFolder/BotsPage';
 import HelpPage from './Scripts/HelpFolder/HelpPage';
 import HomePage from './Scripts/HomeFolder/HomePage';
+import WelcomePage from './Scripts/WelcomeFolder/WelcomePage';
 
 export default function App() {
   return (
     <Router>
       <Routes>  
-        <Route path="/" element={<SignInPage />} /> 
+        <Route path="/" element={<WelcomePage />} /> 
         <Route path="/signup" element={<SignUpPage />} /> 
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/validate-code" element={<ValidateCodePage />} />
@@ -42,6 +43,7 @@ export default function App() {
         <Route path="/voice-chat-bot/:botName" element={<VoiceChatBotPage />} />
         <Route path="/help" element={<HelpPage />} />
         <Route path="/home" element={<HomePage />} />
+        <Route path="/login" element={<SignInPage />} />
        </Routes>
     </Router>
   );

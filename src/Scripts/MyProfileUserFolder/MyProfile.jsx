@@ -12,6 +12,7 @@ import CVComponent from './components/CVComponent';
 function MyProfile() {
     const [profile, setProfile] = useState(null);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
+    localStorage.setItem('activeItem', '');
 
     useEffect(() => {
         fetchProfile();

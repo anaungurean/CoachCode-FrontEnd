@@ -83,9 +83,9 @@ const Chat = () => {
                     </button>
                     <input
                         type="text"
-                        value={inputText} // Bind the input value to the inputText state
-                        onChange={(e) => setInputText(e.target.value)} // Update inputText state on change
-                        onKeyPress={handleKeyPress} // Add the onKeyPress event handler
+                        value={inputText} 
+                        onChange={(e) => setInputText(e.target.value)}  
+                        onKeyPress={handleKeyPress}  
                         className="h-10 w-full ml-2 rounded-xl bg-purple-50 text-base text-twilight-300 px-2 border-2 border-gray-100 focus:outline-none focus:border-twilight-300 focus:border-2"
                         placeholder="Type a message..."
                     />

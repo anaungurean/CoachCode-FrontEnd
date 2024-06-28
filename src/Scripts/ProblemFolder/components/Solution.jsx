@@ -37,7 +37,7 @@ function Solution({ togglePopup, isAnswerCorrect, problem }) {
           <div>
             <h3 className="text-lg font-semibold text-twilight-500">Here is the solution in Python!</h3>
             <p className="text-twilight-400">We highly recommend you to understand the solution and try to solve the problem again.</p>
-              <div className="mt-4">
+              <div className="select-none pointer-events-none">
                 <pre className="bg-gray-100 p-4 rounded-lg mt-4">{solution}</pre>
             </div>
             

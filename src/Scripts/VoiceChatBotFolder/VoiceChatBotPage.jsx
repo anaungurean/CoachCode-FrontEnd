@@ -24,7 +24,7 @@ function VoiceChatBotPage() {
   const botName = capitalizeFirstLetter(useParams().botName);
 
   const breadcrumbItems = [
-    { name: 'Home', link: '/' },
+    { name: 'Home', link: '/Home' },
     { name: 'Voice Assistants', link: '/bots' },
     { name: `${botName}`, link: null },
   ];

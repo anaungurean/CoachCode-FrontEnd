@@ -4,7 +4,7 @@ import { Bot } from 'lucide-react';
 
 function BotsPage() {
   const breadcrumbItems = [
-    { name: 'Home', link: '/' },
+    { name: 'Home', link: '/Home' },
     { name: 'Voice Assistants', link: null },
   ];
 
@@ -75,10 +75,9 @@ const bots = [
                 </div>
                 <p className="mt-2 text-gray-700 mr-8">{bot.description}</p>
                 <div className="flex justify-end mt-4 mr-8 ">
-                  <button className="bg-purple-100 text-twilight-500 font-semibold ring-1 ring-twilight-100 py-2 px-2 rounded active:scale-[.98] active:duration-75 transition-all hover:scale-[1.02] ease-in-out hover:bg-twilight-100"
-                        onClick={() => handleClick(bot.name)}
+                  <button 
+                      className="bg-purple-100 text-twilight-500 font-semibold ring-1 ring-twilight-100 py-2 px-2 rounded active:scale-[.98] active:duration-75 transition-all hover:scale-[1.02] ease-in-out hover:bg-twilight-100"                        onClick={() => handleClick(bot.name)}
                         >  
-                      
                       Talk with {bot.name}
                    </button>
                 </div>
