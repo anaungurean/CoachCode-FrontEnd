@@ -5,15 +5,11 @@ This project includes a front-end application built using React with Vite and Ja
 ## **Documentation**
 [Licenta_Final.pdf](https://github.com/user-attachments/files/16427196/Licenta_Final.pdf)
 
-## **Presentaion**
+## **Presentation**
 [prezentare.pdf](https://github.com/user-attachments/files/16427217/prezentare.pdf)
 
 ## **Demo**
-
-
-
-
-
+https://www.youtube.com/watch?v=yQLhxI329-s
 
 ## **Main Front-End Modules**
 
