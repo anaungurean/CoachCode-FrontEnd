@@ -1,48 +1,58 @@
-# Proiect CoachCode FrontEnd React
+# **Project CoachCode FrontEnd React**
 
-Acest proiect include o aplicație front-end construită folosind React cu Vite și JavaScript. Mai jos găsiți detalii despre structura directoarelor și modulele principale ale front-end-ului.
+This project includes a front-end application built using React with Vite and JavaScript. It serves as **my thesis project for my university degree**. Below are details about the directory structure and main modules of the front-end.
 
- 
-## Modulele Principale ale Front-end-ului
+## **Documentation**
+[Licenta_Final.pdf](https://github.com/user-attachments/files/16427196/Licenta_Final.pdf)
 
-### 1. Auth
+## **Presentaion**
+[prezentare.pdf](https://github.com/user-attachments/files/16427217/prezentare.pdf)
 
-Directorul `Auth` conține componente pentru gestionarea autentificării utilizatorilor.
+## **Demo**
 
-### 2. Chatbot
 
-Directorul `Chatbot` include componente pentru funcționalitățile de chat.
 
-### 3. Coding Practice
 
-Directorul `CodingPractice` oferă componente pentru practica de codare, inclusiv listări de exerciții   și detalii despre exerciții .
 
-### 4. CommunityFolder și HelpFolder
 
-Aceste directoare, `CommunityFolder` și `HelpFolder`, conțin componente pentru interacțiunea în comunitate și resurse de ajutor. 
+## **Main Front-End Modules**
 
-### 5. ProblemFolder
+### **1. Auth**
 
-Directorul `ProblemFolder` include componente pentru gestionarea și afișarea problemelor tehnice sau întrebărilor. 
+The `Auth` directory contains components for user authentication management.
 
-### Constants, Lib și Scripts
+### **2. Chatbot**
 
-- **constants/** conține fișiere de configurare sau constante globale, cum ar fi rutele aplicației (`routes.js`) sau setări pentru API-uri (`api.js`).
-- **lib/** include funcții de utilitate și module pentru gestionarea autentificării (`auth.js`), utilități generale (`utils.js`).
-- **assets/** conține fișiere statice, cum ar fi imagini (`images/`) și stiluri (`styles/main.css`).
+The `Chatbot` directory includes components for chat functionalities.
 
-## Deploy Front-end
+### **3. Coding Practice**
 
-Pentru a face deploy-ul aplicației front-end:
+The `CodingPractice` directory provides components for coding practice, including exercise listings and exercise details.
 
-1. **Instalare dependințe**: Asigurați-vă că aveți toate dependințele instalate. Utilizați `npm install` sau `yarn install` în directorul proiectului pentru a instala pachetele necesare.
+### **4. CommunityFolder and HelpFolder**
 
-2. **Configurare API-uri**: Verificați și actualizați fișierele din directorul `constants/` pentru a specifica API-urile backend-ului.
+These directories, `CommunityFolder` and `HelpFolder`, contain components for community interaction and help resources.
 
-3. **Pornire server de dezvoltare**: Folosiți `npm run dev` sau `yarn dev` pentru a porni serverul de dezvoltare Vite.
+### **5. ProblemFolder**
 
-4. **Build pentru producție**: Pentru a construi aplicația pentru producție, rulați `npm run build` sau `yarn build`. Aceasta va crea o versiune optimizată a aplicației în directorul `dist/`.
+The `ProblemFolder` directory includes components for managing and displaying technical issues or questions.
 
-5. **Deploy**: Implementați aplicația pe serverul de producție folosind fișierele din directorul `dist/`.
+### **Constants, Lib, and Scripts**
 
- 
+- **constants/** contains configuration files or global constants, such as the application routes (`routes.js`) or API settings (`api.js`).
+- **lib/** includes utility functions and modules for handling authentication (`auth.js`), and general utilities (`utils.js`).
+- **assets/** contains static files, such as images (`images/`) and styles (`styles/main.css`).
+
+## **Front-End Deployment**
+
+To deploy the front-end application:
+
+1. **Install dependencies**: Ensure that all dependencies are installed. Use `npm install` or `yarn install` in the project directory to install the required packages.
+
+2. **Configure APIs**: Check and update the files in the `constants/` directory to specify the backend APIs.
+
+3. **Start development server**: Use `npm run dev` or `yarn dev` to start the Vite development server.
+
+4. **Build for production**: To build the application for production, run `npm run build` or `yarn build`. This will create an optimized version of the application in the `dist/` directory.
+
+5. **Deploy**: Deploy the application to the production server using the files from the `dist/` directory.
