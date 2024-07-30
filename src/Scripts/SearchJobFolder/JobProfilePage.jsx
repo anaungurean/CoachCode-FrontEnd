@@ -26,7 +26,7 @@ function JobProfilePage() {
         const options = {
             method: 'GET',
             headers: {
-                "X-RapidAPI-Key": "9a1bd40802msh777c1751e2ffaf8p13386djsn864b3c521aa9",
+                "X-RapidAPI-Key": "API_KEY",
                 "X-RapidAPI-Host": "linkedin-api8.p.rapidapi.com"
             }
         };

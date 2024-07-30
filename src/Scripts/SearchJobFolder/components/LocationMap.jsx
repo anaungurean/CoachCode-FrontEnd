@@ -44,7 +44,7 @@ function LocationMap({ location }) {
       </div>
 
       <div className="overflow-hidden mr-4 ">
-        <LoadScript googleMapsApiKey="AIzaSyAiPRV87qnlMEYTB6wUjK7bc7o1SVp0R8Q">
+        <LoadScript googleMapsApiKey="API_KEY">
           <GoogleMap mapContainerStyle={mapStyles} zoom={15} center={coordinates}>
             {coordinates && <Marker position={coordinates} />}
           </GoogleMap>

@@ -97,7 +97,7 @@ function TestResults({ memory, time, passedTests, failedTests, compilationError,
               </div>
              <div className="flex justify mt-3 justify-end ml-1">
                 <button 
-                    className="flex items-center justify-center gap-x-1.5 rounded-md bg-green-800 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-red-600 hover:bg-red-900"
+                    className="flex items-center justify-center gap-x-1.5 rounded-md bg-red-800 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-red-600 hover:bg-red-900"
                     onClick={ () => window.open('http://localhost:5173/voice-chat-bot/ethan', '_blank') }
                   >
                     Ask Ethan for help
@@ -125,7 +125,7 @@ function TestResults({ memory, time, passedTests, failedTests, compilationError,
           ) : failedTests > 0 ? (
             <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
               <p className="font-bold text-xl">Failed Tests</p>
-              <p className='text-lg'>Your code passed only {passedTests}/{passedTests + failedTests} tests. Please review your code and try again.</p>
+              <p className='text-lg'>Your code didn`t passed all the tests. Please review your code and try again.</p>
               <div className="flex w-full h-6 mt-4 overflow-hidden font-sans text-base font-medium rounded-full flex-start bg-blue-gray-50">
                 <div className={`flex items-center justify-center w-full h-full overflow-hidden text-white break-all rounded-full ${loading ? 'bg-yellow-800 animate-pulse' : 'bg-yellow-900'}`}>
                   {loading ? 'Loading...' : `${(passedTests / (passedTests + failedTests)) * 100}% Completed`}
@@ -151,7 +151,7 @@ function TestResults({ memory, time, passedTests, failedTests, compilationError,
           ) : failedTests === 0 ? (
             <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
               <p className="font-bold text-xl">All tests passed</p>
-              <p className='text-lg'>Your code passed all {passedTests + failedTests} tests. Great job! 🎉</p>
+              <p className='text-lg'>Your code passed all  tests. Great job! 🎉</p>
               <div className="flex w-full h-6 mt-4 overflow-hidden font-sans text-base font-medium rounded-full flex-start bg-blue-gray-50">
                 <div className={`flex items-center justify-center w-full h-full overflow-hidden text-white break-all rounded-full ${loading ? 'bg-green-800 animate-pulse' : 'bg-green-900'}`}>
                   {loading ? 'Loading...' : '100% Completed'}
